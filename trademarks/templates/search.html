@@ -1,0 +1,10 @@
+<h1> {{ text }} <h1 />
+<ul>
+    {% for poll in array %}
+    <li><h3>{{ poll.word }} [{{ poll.ipa }}]: {{ poll.meaning }}</li>
+    {% endfor %}
+</ul>
+<form action="{% url 'home' %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Go back" />
+</form>

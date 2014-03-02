@@ -120,7 +120,7 @@ class DoubleMetaphon:
                 while self.word[self.current + 1] in 'CKQ':
                     self.current += 1
                 if not self.word[self.current] in 'EI':
-                    self.current -= 1
+                    self.current += 1
                 continue
             
             #Case 'D'
@@ -163,7 +163,7 @@ class DoubleMetaphon:
                             self.current += 2
                             continue
 
-                    elif (self.word[self.current - 2] in 'BHD' or self.word[self.current - 3] in 'BHD' 
+                    if (self.word[self.current - 2] in 'BHD' or self.word[self.current - 3] in 'BHD' 
                         or self.word[self.current - 4] in 'BH'):
                         self.current += 2
                         continue
@@ -191,7 +191,8 @@ class DoubleMetaphon:
                     continue
 
                 elif self.searchOfString(self.current + 1, 2, 'LI') and not self.slavoGermanic():
-                    self.addLetter('KL', 'L')
+                    self.addLetter('KL')
+                    #self.extraAdd('L')
                     self.current += 2
                     continue
 
@@ -423,7 +424,7 @@ class DoubleMetaphon:
                 continue
 
             #Case 'T'
-            elif self.word[self.current] == 'T':    
+            elif self.word[self.current] == 'T':
                 if self.searchOfString(self.current, 4, 'TION'):
                     self.addLetter('X')
                     self.current += 3
@@ -559,4 +560,4 @@ class DoubleMetaphon:
         return self.transcription
 
 if __name__ == '__main__':
-    print( DoubleMetaphon("ABCDEFGHIJKLMNOPQRSTUVWXYZ") )
+    print( DoubleMetaphon("tight") )

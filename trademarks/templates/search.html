@@ -6,10 +6,10 @@
     {% endblock %}
 {% block results %}
         <div id="results">
-        {% for poll in array %}
-              <div class="lang" id="lang1">
-                    <div class="lang_link">EN</div>
-                         <div class="wordline">
+                <div class="lang" id="lang1">
+                        <div class="lang_link">EN</div>
+                        {% for poll in array %}
+                        <div class="wordline">
                               <div class="cell word">
                                      {{ poll.word }}
                               </div>
@@ -20,9 +20,10 @@
                                      {{ poll.meaning }}
                               </div>
                               <div class="cell percent">99%</div>
-                         </div> 
-              </div>
-        {% endfor %}                       
+                         </div>
+                    {% endfor %}  
+                     
+              </div>                     
         </div>
     
 {% endblock %}

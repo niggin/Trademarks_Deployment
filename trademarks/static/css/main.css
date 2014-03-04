@@ -1,24 +1,15 @@
-html, body {
-	margin: 0;
-	padding: 0;
-	background-color: #fff;
+* { 
+	padding: 0; 
+	margin: 0; 
 }
 
-#header {
-	/*height: 160px;*/
-	/*background-color: #181818;*/
-	/*border-bottom: 1px solid #111;*/
-	-webkit-b/*ox-shadow: 0px 2px 3px rgba(100, 100, 100, 0.9);
-	-moz-box-shadow:    0px 2px 3px rgba(100, 100, 100, 0.9);
-	box-shado*/w:         0px 2px 3px rgba(100, 100, 100, 0.7);
+html, body {
+	background-color: #fff;
+	height: 100%; width: 100%;
 }
 
 #logo {
 	position: absolute;
-	margin-left: calc(50% - 340px);
-	width: 681px;
-	/*height: 162px;*/
-	/*background-image: url('../images/logo.png');*/
 	z-index: 100;
 	text-align: left;
 	margin-left: calc(50% - 400px);
@@ -40,15 +31,18 @@ html, body {
 }
 
 #content {
-	display: block;
-    position: absolute;
-    height: auto;
+    min-height: 100%;
+    padding: 50px 0;
+    margin-bottom: -50px;
 	top: 85px;
-	bottom: 50px;
+	bottom: 150px;
 	left: 0;
 	right: 0;
 	text-align: center;
 	/*border: 2px solid black;*/
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 #search {
@@ -56,7 +50,8 @@ html, body {
 	position: relative;
 	height: 30px;
 	width: 740px;
-	margin-left: calc(50% - 365px);
+	margin: 0 auto;
+	margin-top: 35px !important;
 	z-index: 100;
 }
 
@@ -90,7 +85,7 @@ html, body {
 #search button {
 	position: absolute;
 	border: 0;
-	height: 32px;
+	height: 30px;
 	width: 80px;
 	margin-left: -45px;
 	text-align: center;
@@ -115,12 +110,10 @@ html, body {
 }
 
 #results {
-	display: block;
-	position: relative;
-	min-height: 130px;
+	/*border: 1px solid red;*/
 	width: 730px;
-	margin-top: 30px;
-	margin-left: calc(50% - 365px);
+	margin: 0 auto;
+	margin-top: 30px !important;
     overflow: inherit;
     font: normal 12px/20px 'sans', 'trebuchet MS', 'Tahoma';
     letter-spacing: 1px;
@@ -179,11 +172,8 @@ html, body {
 }
 
 #footer {
-	display: block;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
+    position: relative;
+	width: 100%;
 	/*border-top: 1px solid #111;*/
 	height: 50px;
 	text-align: center;

@@ -1,10 +1,28 @@
-<h1> {{ text }} <h1 />
-<ul>
-    {% for poll in array %}
-    <li><h3>{{ poll.word }} [{{ poll.ipa }}]: {{ poll.meaning }}</li>
-    {% endfor %}
-</ul>
-<form action="{% url 'home' %}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="Go back" />
-</form>
+{% extends "index.html"%}
+    {% block content %}
+        {% with forsearch as forsearch %}
+            {{ block.super }}
+        {% endwith %}
+    {% endblock %}
+{% block results %}
+        <div id="results">
+        {% for poll in array %}
+              <div class="lang" id="lang1">
+                    <div class="lang_link">EN</div>
+                         <div class="wordline">
+                              <div class="cell word">
+                                     {{ poll.word }}
+                              </div>
+                              <div class="cell transcipt">
+                                     [{{ poll.ipa }}]
+                              </div>
+                              <div class="cell translate">
+                                     {{ poll.meaning }}
+                              </div>
+                              <div class="cell percent">99%</div>
+                         </div> 
+              </div>
+        {% endfor %}                       
+        </div>
+    
+{% endblock %}

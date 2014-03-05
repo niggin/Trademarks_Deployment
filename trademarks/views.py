@@ -14,9 +14,18 @@ def search(request):
     if p == '':
         te = list()
     else: 
-        te = list(Word.objects.filter(ipa=p))
-        te += [item for item in list(Word.objects.filter(ipa__startswith=p)) if item not in te]
-        te += [item for item in list(Word.objects.filter(ipa__contains=p)) if item not in te]
+        raw = list(Word.objects.filter(ipa__contains=p))
+        raw2 = list()
+        for i in [0,1,2]:
+            raw2.append(list())
+        for item in raw: 
+            if item.ipa == p:
+                raw2[0].append(item)
+            elif item.ipa.startswith(p):
+                raw2[1].append(item)
+            else:
+                raw2[2].append(item)
+        te = raw2[0] + raw2[1] + raw2[2]
     p = input + ': [' + p + ']'
     context = {'text' : p, 'array' : te, 'forsearch': input}
     return render(request, 'search.html', context)

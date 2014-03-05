@@ -1,6 +1,5 @@
 {% extends "base.html" %}
     {% block content %}
-                <div id="content">
                         <div id="search">
                                 <div id="lang"></div>
                                 <form action="{% url 'search' %}" method="get">
@@ -12,5 +11,4 @@
         {% block results %}
 
         {% endblock %}
-                </div>
     {% endblock %}

@@ -6,6 +6,20 @@
     {% endblock %}
 {% block results %}
         <div id="results">
+                <div class="lang" id="results-header">
+                                         <div class="wordline">
+                                                <div class="cell word">
+                                                        LANG
+                                                </div>
+                                                <div class="cell transcript">
+                                                        [transcription]
+                                                </div>
+                                                <div class="cell translate">
+                                                        LANG
+                                                </div>
+                                                <div class="cell percent">%</div>
+                                        </div>    
+                                </div>
                 <div class="lang" id="lang1">
                         <div class="lang_link">EN</div>
                         {% for poll in array %}

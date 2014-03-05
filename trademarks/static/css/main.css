@@ -10,34 +10,22 @@ html, body {
 
 #logo {
 	position: absolute;
+	margin: -20px 0 0 78px;
 	z-index: 100;
-	text-align: left;
-	margin-left: calc(50% - 400px);
 	color: #d83c3c;
 	text-transform: uppercase;
 	text-shadow: inset 1px 1px 1px rgba(70, 70, 70, 0.7);
 	font: bold 48px/30px 'lucida sans', 'trebuchet MS', 'Tahoma';
-	margin-top: 30px;
-}
-
-#menu {
-	position: absolute;
-	/*margin-top: 117px;*/
-	width: 100%;
-	height: 42px;
-	/*background-color: #222;*/
-	/*border-top: 1px solid #111;*/
-	z-index: 10;
 }
 
 #content {
+	width: 900px;
     min-height: 100%;
     padding: 50px 0;
     margin-bottom: -50px;
 	top: 85px;
 	bottom: 150px;
-	left: 0;
-	right: 0;
+	margin-left: calc(50% - 450px);
 	text-align: center;
 	/*border: 2px solid black;*/
 	-webkit-box-sizing: border-box;
@@ -68,7 +56,7 @@ html, body {
 	border-left: 1px solid #bbb;
 	border-top: 1px solid #bbb;
 	border-bottom: 1px solid #bbb;
-	width: 610px;
+	width: 620px;
 	padding-left: 40px;
 	height: 28px;
 	float: left;
@@ -87,7 +75,7 @@ html, body {
 	border: 0;
 	height: 30px;
 	width: 80px;
-	margin-left: -45px;
+	margin-left: -40px;
 	text-align: center;
 	overflow: visible;
 	padding: 0;
@@ -111,7 +99,7 @@ html, body {
 
 #results {
 	/*border: 1px solid red;*/
-	width: 730px;
+	width: 738px;
 	margin: 0 auto;
 	margin-top: 30px !important;
     overflow: inherit;
@@ -119,6 +107,14 @@ html, body {
     letter-spacing: 1px;
     color: #333;
 
+}
+
+#results #results-header {
+	border-top: 0;
+	padding-top: 0;
+	padding-bottom: 2px;
+	color: #d83c3c;
+	font-weight: bold;
 }
 
 #results .lang_link {
@@ -134,22 +130,18 @@ html, body {
 	-moz-border-radius-bottomleft: 5px;
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
-	/*border-left: 1px solid #ddd;*/
 	border-top: 1px solid #ddd;
-	/*border-bottom: 1px solid #ddd;*/
 	padding: 5px 0 0 5px;
 	z-index: 100;
 	cursor: pointer;
-}
-
-#results .lang_link:hover {
 	text-decoration: underline;
 }
 
 #results .lang {
 	position: relative;
+	margin-left: 26px;
 	border-top: 1px solid #ddd;
-	width: calc(100% - 30px);
+	width: calc(100% - 58px);
 	padding: 15px;
 	display: table;
 	z-index: 10;
@@ -169,20 +161,39 @@ html, body {
 #results .cell {
 	display: table-cell;
 	width: 25%;
+	/*border: 1px solid red;*/
+}
+
+#results .word, #results .transcript {
+	width: 25%;
+	text-align: left;
+}
+
+#results .translate {
+	width: 45%;
+	text-align: left;
+}
+
+#results .percent {
+	text-align: right;
+	width: 5%;
 }
 
 #footer {
+	border-top: 1px solid #ddd;
     position: relative;
-	width: 100%;
-	/*border-top: 1px solid #111;*/
+	width: 740px;
+	margin: 0 auto;
 	height: 50px;
 	text-align: center;
 	z-index: 100;
 }
 
 #about {
+	/*border: 1px solid red;*/
 	margin: 0 auto;
 	width: 400px;
+	height: 30px;
 	color: #aaa;
 	word-spacing: 30px;
 	text-transform: uppercase;

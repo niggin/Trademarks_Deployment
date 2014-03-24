@@ -3,7 +3,7 @@
                         <div id="search">
                                 <div id="lang"></div>
                                 <form action="{% url 'search' %}" method="get">
-                                        {% csrf_token %}
+                                        {#{% csrf_token %}#}
                                         <input type="text" name="findme" placeholder="Trade word" value="{{ forsearch }}"/>
                                         <button type="submit">Trade it!</button>
                                 </form>

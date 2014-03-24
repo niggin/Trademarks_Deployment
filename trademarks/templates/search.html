@@ -17,27 +17,31 @@
                                                 <div class="cell translate">
                                                         translation
                                                 </div>
-                                                <div class="cell percent">%</div>
+                                                <div class="cell percent">
+                                                    <div id="percent-button" onclick="sort();">%</div>
+                                                </div>
                                         </div>    
                                 </div>
+        {% for lang in langs %}
                 <div class="lang" id="lang1">
-                        <div class="lang_link">EN</div>
-                        {% for poll in array %}
-                        <div class="wordline">
-                              <div class="cell word">
+                        <div class="lang_link">{{ lang }}</div>
+                        {% load search_extra %}
+                            {% for poll in array|get_item:lang %}
+                            <div class="wordline">
+                                   <div class="cell word">
                                      {{ poll.word }}
-                              </div>
-                              <div class="cell transcript">
+                                   </div>
+                                   <div class="cell transcript">
                                      [{{ poll.ipa }}]
-                              </div>
-                              <div class="cell translate">
+                                   </div>
+                                   <div class="cell translate">
                                      {{ poll.meaning }}
-                              </div>
-                              <div class="cell percent">99%</div>
-                         </div>
-                    {% endfor %}  
-                     
-              </div>                     
+                                   </div>
+                                   <div class="cell percent">99%</div>
+                             </div>
+                            {% endfor %}  
+                 </div>           
+        {% endfor %}          
         </div>
     
 {% endblock %}

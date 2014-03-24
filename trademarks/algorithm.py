@@ -1,4 +1,6 @@
-﻿class DoubleMetaphon:
+﻿# coding: utf-8
+
+class DoubleMetaphon:
     '''
         @version: Version 1.1 from 18.03.2014
         @author: Alex Kuzmin
@@ -7,7 +9,9 @@
 
     def __init__(self, word):
         self.length = len(word) + 4 #about extra '+4' see the first 4 symbols ('####') of the next line
-        self.word = '####' + word.upper() + '########' #for safe indexing
+        print (word)
+        self.word = '####' + word.decode('utf-8').upper() + '########' #for safe indexing
+        print (self.word)
         self.current = 4 # Attention! (because of 4 safe index in the begin of self.word)
         self.transcription = "" #the first answer
         self.extraTranscription = "" #the second answer
@@ -538,7 +542,7 @@
                     self.current += 1
 
             #Russian language
-            elif 'А' <= self.word[self.current] <= 'Я':
+            elif u'А' <= self.word[self.current] <= u'Я':
                 
                 #Case Vowel
                 if self.isVowel(self.word[self.current]):
@@ -548,162 +552,162 @@
                     continue
 
                 #Case 'Б'
-                elif self.word[self.current] == 'Б':
+                elif self.word[self.current] == u'Б':
                     self.addLetter('P')
                     
-                    while self.word[self.current] == 'Б' or self.word[self.current] == 'П':
+                    while self.word[self.current] == u'Б' or self.word[self.current] == u'П':
                         self.current += 1
                     continue
 
                 #Case 'В'
-                elif self.word[self.current] == 'В':
+                elif self.word[self.current] == u'В':
                     self.addLetter('F')
                     
-                    while self.word[self.current] == 'В' or self.word[self.current] == 'Ф':
+                    while self.word[self.current] == u'В' or self.word[self.current] == u'Ф':
                         self.current += 1
                     continue
 
                 #Case 'Г'
-                elif self.word[self.current] == 'Г':
+                elif self.word[self.current] == u'Г':
                     self.addLetter('K')
                     
-                    while self.word[self.current] == 'Г' or self.word[self.current] == 'К':
+                    while self.word[self.current] == u'Г' or self.word[self.current] == u'К':
                         self.current += 1
                     continue
 
                 #Case 'Д'
-                elif self.word[self.current] == 'Д':
-                    if self.word[self.current + 1] == 'C':
+                elif self.word[self.current] == u'Д':
+                    if self.word[self.current + 1] == u'C':
                         self.addLetter('X')
                         self.current += 2
                         continue
                     else:
                         self.addLetter('T')
                     
-                    while self.word[self.current] == 'Д' or self.word[self.current] == 'Т':
+                    while self.word[self.current] == u'Д' or self.word[self.current] == u'Т':
                         self.current += 1
                     continue
 
                 #Case 'Ж'
-                elif self.word[self.current] == 'Ж':
+                elif self.word[self.current] == u'Ж':
                     self.addLetter('J')
                     
-                    while self.word[self.current] == 'Ж':
+                    while self.word[self.current] == u'Ж':
                         self.current += 1
                     continue
 
                 #Case 'З'
-                elif self.word[self.current] == 'З':
+                elif self.word[self.current] == u'З':
                     self.addLetter('S')
                     
-                    while self.word[self.current] == 'З' or self.word[self.current] == 'С':
+                    while self.word[self.current] == u'З' or self.word[self.current] == u'С':
                         self.current += 1
                     continue
 
                 #Case 'К'
-                elif self.word[self.current] == 'К':
+                elif self.word[self.current] == u'К':
                     self.addLetter('K')
                     
-                    while self.word[self.current] == 'К' or self.word[self.current] == 'Г':
+                    while self.word[self.current] == u'К' or self.word[self.current] == u'Г':
                         self.current += 1
                     continue
 
                 #Case 'Л'
-                elif self.word[self.current] == 'Л':
+                elif self.word[self.current] == u'Л':
                     self.addLetter('L')
                     
-                    while self.word[self.current] == 'Л':
+                    while self.word[self.current] == u'Л':
                         self.current += 1
                     continue
 
                 #Case 'М'
-                elif self.word[self.current] == 'М':
+                elif self.word[self.current] == u'М':
                     self.addLetter('M')
                     
-                    while self.word[self.current] == 'М':
+                    while self.word[self.current] == u'М':
                         self.current += 1
                     continue
 
                 #Case 'Н'
-                elif self.word[self.current] == 'Н':
+                elif self.word[self.current] == u'Н':
                     self.addLetter('N')
                     
-                    while self.word[self.current] == 'Н':
+                    while self.word[self.current] == u'Н':
                         self.current += 1
                     continue
 
                 #Case 'П'
-                elif self.word[self.current] == 'П':
+                elif self.word[self.current] == u'П':
                     self.addLetter('P')
                     
-                    while self.word[self.current] == 'Б' or self.word[self.current] == 'П':
+                    while self.word[self.current] == u'Б' or self.word[self.current] == u'П':
                         self.current += 1
                     continue
 
                 #Case 'Р'
-                elif self.word[self.current] == 'Р':
+                elif self.word[self.current] == u'Р':
                     self.addLetter('R')
                     
-                    while self.word[self.current] == 'Р':
+                    while self.word[self.current] == u'Р':
                         self.current += 1
                     continue
 
                 #Case 'С'
-                elif self.word[self.current] == 'С':
+                elif self.word[self.current] == u'С':
                     self.addLetter('S')
                     
-                    while self.word[self.current] == 'С' or self.word[self.current] == 'З':
+                    while self.word[self.current] == u'С' or self.word[self.current] == u'З':
                         self.current += 1
                     continue
 
                 #Case 'Т'
-                elif self.word[self.current] == 'Т':
+                elif self.word[self.current] == u'Т':
                     self.addLetter('T')
                     
-                    while self.word[self.current] == 'Т' or self.word[self.current] == 'Д':
+                    while self.word[self.current] == u'Т' or self.word[self.current] == u'Д':
                         self.current += 1
                     continue
 
                 #Case 'Ф'
-                elif self.word[self.current] == 'Ф':
+                elif self.word[self.current] == u'Ф':
                     self.addLetter('F')
                     
-                    while self.word[self.current] == 'Ф' or self.word[self.current] == 'В':
+                    while self.word[self.current] == u'Ф' or self.word[self.current] == u'В':
                         self.current += 1
                     continue
 
                 #Case 'Х'
-                elif self.word[self.current] == 'Х':
+                elif self.word[self.current] == u'Х':
                     self.addLetter('H')
                     
-                    while self.word[self.current] == 'Х':
+                    while self.word[self.current] == u'Х':
                         self.current += 1
                     continue
 
                 #Case 'Ц'
-                elif self.word[self.current] == 'Ц':
+                elif self.word[self.current] == u'Ц':
                     self.addLetter('TS')
-                    while self.word[self.current] == 'Ц':
+                    while self.word[self.current] == u'Ц':
                         self.current += 1
                     continue
 
                 #Case 'Ч'
-                elif self.word[self.current] == 'Ч':
-                    if self.word[self.current + 1] == 'Т' and self.word[self.current + 1] == 'Н':
+                elif self.word[self.current] == u'Ч':
+                    if self.word[self.current + 1] == u'Т' and self.word[self.current + 1] == u'Н':
                         self.addLetter('X')
                         self.current += 2
                         continue
 
                     self.addLetter('X')
-                    while self.word[self.current] == 'Ч':
+                    while self.word[self.current] == u'Ч':
                         self.current += 1
                     continue
 
                 #Case 'Ш' or 'Щ'
-                elif self.word[self.current] == 'Ш' or self.word[self.current] == 'Щ':
+                elif self.word[self.current] == u'Ш' or self.word[self.current] == u'Щ':
                     self.addLetter('X')
                     
-                    while self.word[self.current] == 'Ш' or self.word[self.current] == 'Щ':
+                    while self.word[self.current] == u'Ш' or self.word[self.current] == u'Щ':
                         self.current += 1
                     continue
 
@@ -730,7 +734,7 @@
         None
 
     def isVowel(self, letter):
-        if letter in "AEIOUY" or letter in "АУОЫИЭЯЮЕЁ":
+        if letter in "AEIOUY" or letter in u"АУОЫИЭЯЮЕЁ":
             return True
         else:
             return False

@@ -9,9 +9,7 @@ class DoubleMetaphon:
 
     def __init__(self, word):
         self.length = len(word) + 4 #about extra '+4' see the first 4 symbols ('####') of the next line
-        print (word)
-        self.word = '####' + word.decode('utf-8').upper() + '########' #for safe indexing
-        print (self.word)
+        self.word = '####' + word.upper() + '########' #for safe indexing
         self.current = 4 # Attention! (because of 4 safe index in the begin of self.word)
         self.transcription = "" #the first answer
         self.extraTranscription = "" #the second answer

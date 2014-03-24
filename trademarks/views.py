@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from trademarks.models import Word
-from trademarks.eng_eng import *
+from trademarks.algorithm import *
 
 def home(request):
     context = {'forsearch': ''}

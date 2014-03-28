@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-    {% block content %}
-                        <div id="search">
-                                <div id="lang"></div>
-                                <form action="{% url 'search' %}" method="get">
-                                        {#{% csrf_token %}#}
-                                        <input type="text" name="findme" placeholder="Trade word" value="{{ forsearch }}"/>
-                                        <button type="submit">Trade it!</button>
-                                </form>
-                        </div>
-        {% block results %}
+{% block content %}
+<div id="search">
+    <div id="lang"></div>
+    <form action="{% url 'search' %}" method="get">
+        {#{% csrf_token %}#}
+        <input type="text" name="findme" placeholder="Trade word" value="{{ forsearch }}"/>
+        <button type="submit">Trade it!</button>
+    </form>
+</div>
+{% block results %}
 
-        {% endblock %}
-    {% endblock %}
+{% endblock %}
+{% endblock %}

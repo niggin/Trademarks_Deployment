@@ -16,17 +16,18 @@ def search(request):
     except:
         sorting = '0'
     p = DoubleMetaphon(input).transcription
-    data = dict()
+    
     final = dict()
     langs = list()
     if p != '':
         raw = list(Word.objects.filter(ipa__contains=p))
         if sorting == '0':
-             for item in raw:
+            data = dict()
+            for item in raw:
                 if item.lang not in data:
                     langs.append(item.lang)
                     data[item.lang] = list()
-                    for i in [0,1,2]:
+                    for i in range(3):
                         data[item.lang].append(list())
                 if item.ipa == p:
                     data[item.lang][0].append([item, metric(p,item.ipa)])
@@ -35,8 +36,8 @@ def search(request):
                 else:
                     data[item.lang][2].append([item, metric(p,item.ipa)])
                 for lang in langs:
-                    #for i in [0,1,2]:
-                        #data[lang][i].sort(key=lambda l:int(l[1]), reverse = True)
+                    for array in data[lang]:
+                        array.sort(key=lambda l:int(l[1]), reverse = True)
                     final[lang] = data[lang][0] + data[lang][1] + data[lang][2]
         else:
             langs = ['all']

@@ -29,6 +29,6 @@ def search(request):
             else:
                 data[item.lang][2].append(item)
         for lang in langs:
-            final[lang] = data[lang][1] + data[lang][1] + data[lang][2]
-    context = {'array' : final, 'forsearch': input, 'langs' : langs}
+            final[lang] = data[lang][0] + data[lang][1] + data[lang][2]
+    context = {'array' : final, 'forsearch': input, 'langs' : langs, 'debug' : p}
     return render(request, 'search.html', context)

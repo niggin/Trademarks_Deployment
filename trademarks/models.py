@@ -9,10 +9,3 @@ class Word(models.Model):
         return self.word
     def __unicode__(self):
         return self.word
-    def serialize(self):
-        return {
-            "word": self.word,
-            "ipa": self.ipa,
-            "meaning": self.meaning,
-            "lang": self.lang
-        }

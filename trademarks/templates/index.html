@@ -1,81 +1,14 @@
 {% extends "base.html" %}
-{% block scripts %}
-<script>
-    function vote(kind) {
-        $.getJSON("/search_sortbymatch", { findme: kind }, function(json) {
-            var group = document.getElementById('results');
-            group.setAttribute("style", "display:block");
-            for (var VAR in json['array']) {
-                var baselang = document.createElement("div");
-                baselang.setAttribute("class", "lang");
-                baselang.setAttribute("id", "lang1");
-                var lang = document.createElement("div");
-                lang.setAttribute("class", "lang_link");
-                lang.innerHTML = VAR;
-                baselang.appendChild(lang);
-                for (var i = 0; i < json['array'][VAR].length; i++) {
-                    var word = document.createElement("div");
-                    word.setAttribute("class", "wordline");
-                    var input = document.createElement("div");
-                    input.setAttribute("class", "cell word");
-                    input.innerHTML = json['array'][VAR][i][0]['word'];
-                    word.appendChild(input);
-                    input = document.createElement("div");
-                    input.setAttribute("class", "cell transcript");
-                    input.innerHTML = "[" + json['array'][VAR][i][0]['ipa'] + "]";
-                    word.appendChild(input);
-                    input = document.createElement("div");
-                    input.setAttribute("class", "cell translate");
-                    input.innerHTML = json['array'][VAR][i][0]['meaning'];
-                    word.appendChild(input);
-                    input = document.createElement("div");
-                    input.setAttribute("class", "cell percent");
-                    input.innerHTML = json['array'][VAR][i][1] + "%";
-                    word.appendChild(input);
-                    baselang.appendChild(word);
-                }
-                group.appendChild(baselang);
-            }
-        });
-    }
-
-    function addClickHandlers() {
-        $("#start").click(function() { vote("push") });
-        $("#search_button").click(function() { vote(document.getElementById('findme1').value) });
-        $("#findme1").keyup(function(event) {
-            if (event.keyCode == 13) {
-                $("#search_button").click();
-            }
-        });
-    }
-
-    $(document).ready(addClickHandlers);
-</script>
-{% endblock %}
 {% block content %}
 <div id="search">
     <div id="lang"></div>
-    <input type="text" name="findme2" id="findme1" placeholder="Trade word" value="{{ forsearch }}"/>
-    <button type="submit" id="search_button">Trade it!</button>
+    <form action="{% url 'search' %}" method="get">
+        {#{% csrf_token %}#}
+        <input type="text" name="findme" placeholder="Trade word" value="{{ forsearch }}"/>
+        <button type="submit">Trade it!</button>
+    </form>
 </div>
 {% block results %}
-<div id="results" style = "display:none">
-    <div class="lang" id="results-header">
-        <div class="wordline">
-            <div class="cell word">
-                word
-            </div>
-            <div class="cell transcript">
-                [transcription]
-            </div>
-            <div class="cell translate">
-                translation
-            </div>
-            <div class="cell percent">
-                <div id="percent-button"onclick=" func(); ">{#<a href="{% url 'search' %}?findme={{ forsearch }}&matchsort=1" color="#d83c3c">%</a>#}%</div>
-            </div>
-        </div>    
-    </div>
-</div>
+
 {% endblock %}
 {% endblock %}

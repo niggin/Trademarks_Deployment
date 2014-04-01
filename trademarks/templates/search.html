@@ -7,21 +7,21 @@
 {% block results %}
         <div id="results">
                 <div class="lang" id="results-header">
-                                         <div class="wordline">
-                                                <div class="cell word">
-                                                        word
-                                                </div>
-                                                <div class="cell transcript">
-                                                        [transcription]
-                                                </div>
-                                                <div class="cell translate">
-                                                        translation
-                                                </div>
-                                                <div class="cell percent">
-                                                    <div id="percent-button" onclick="sort();">%</div>
-                                                </div>
-                                        </div>    
-                                </div>
+                      <div class="wordline">
+                              <div class="cell word">
+                                    <div title="choose results language" class="menu_button">Aa</div>
+                              </div>
+                              <div class="cell transcript">
+                                   <div title="show / hide transcriptions" class="menu_button transcript_button">[]</div>
+                              </div>
+                              <div class="cell translate">
+                                    <div title="choose translation language" class="menu_button">Aa</div>
+                              </div>
+                              <div class="cell percent">
+                                    <div title="sort by percentage" onclick="sort();" class="menu_button percent_button">%</div>
+                              </div>
+                      </div> 
+                </div>   
                 <div class="lang" id="lang1">
                         <div class="lang_link">EN</div>
                         {% for poll in array %}

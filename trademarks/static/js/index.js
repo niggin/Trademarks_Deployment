@@ -1,5 +1,6 @@
 ﻿function fetch(kind) {
     $.getJSON("/search_sortbymatch", { findme: kind }, function (json) {
+        cleanup();
         var group = document.getElementById('output');
         group.innerHTML = "";
         group.setAttribute("style", "display:block");
@@ -105,6 +106,7 @@ function sortByMatch() {
 
 function cleanup() {
     document.getElementById("results-header").setAttribute("style", "display:none");
+    document.getElementById("tohide").innerHTML = "";
 }
 
 $(document).ready(addClickHandlers);

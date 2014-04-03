@@ -7,13 +7,11 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
         <script type="text/javascript" language="JavaScript" src="{% static 'js/jquery.js' %}"></script>
         <script type="text/javascript" language="JavaScript" src="{% static 'js/main.js' %}"></script>
-        <script type="text/javascript" language="JavaScript" src="{% static 'js/css_browser_selector.js' %}"></script>
         {% block scripts %}
         {% endblock %}
         <title>Trademarks</title>
     </head>
     <body>
-        <div id="wrapper">
             <div id="content">
                 <a href="/"><div id="logo">SITE TITLE</div></a>
                 {% block content %}
@@ -21,7 +19,6 @@
                 {% endblock %}
                 
             </div>
-        </div>
         <div id="footer">
             <div id="about">
                 <a href="#">Services</a> <a href="#">About</a> <a href="http://trademarks-dev-group.tumblr.com">Blog</a> <a href="#">Contact</a>

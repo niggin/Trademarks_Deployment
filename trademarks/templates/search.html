@@ -1,67 +1,45 @@
 {% extends "index.html"%}
-{% block content %}
-    {% with forsearch as forsearch %}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
-{% block scripts %}
-<script type="text/javascript">
-    function func() 
-    {
-        if ({{ sort }} == 0)
-        {
-            sort();
-            window.location = "{% url 'search' %}?findme={{ forsearch }}&matchsort=1";
-        }
-        else
-        {
-            window.location = "{% url 'search' %}?findme={{ forsearch }}";
-        }
-    }
-    if ({{ sort }} == 1)
-    {
-        window.onload = sort;
-    }
-</script>
-{% endblock %}
+    {% block content %}
+        {% with forsearch as forsearch %}
+            {{ block.super }}
+        {% endwith %}
+    {% endblock %}
 {% block results %}
-<div id="results">
-    <div class="lang" id="results-header">
-        <div class="wordline">
-            <div class="cell word">
-                word
-            </div>
-            <div class="cell transcript">
-                [transcription]
-            </div>
-            <div class="cell translate">
-                translation
-            </div>
-            <div class="cell percent">
-                <div id="percent-button"onclick=" func(); ">{#<a href="{% url 'search' %}?findme={{ forsearch }}&matchsort=1" color="#d83c3c">%</a>#}%</div>
-            </div>
-        </div>    
-    </div>
-    {% for lang in langs %}
-    <div class="lang" id="lang1">
-        <div class="lang_link">{{ lang }}</div>
-        {% load search_extra %}
-        {% for poll in array|get_item:lang %}
-        <div class="wordline">
-            <div class="cell word">
-                {{ poll.0.word }}
-            </div>
-            <div class="cell transcript">
-                [{{ poll.0.ipa }}]
-            </div>
-            <div class="cell translate">
-                {{ poll.0.meaning }}
-            </div>
-            <div class="cell percent">{{ poll.1 }}%</div>
+        <div id="results">
+                <div class="lang" id="results-header">
+                      <div class="wordline">
+                              <div class="cell word">
+                                    <div title="choose results language" class="menu_button">Aa</div>
+                              </div>
+                              <div class="cell transcript">
+                                   <div title="show / hide transcriptions" class="menu_button transcript_button">[]</div>
+                              </div>
+                              <div class="cell translate">
+                                    <div title="choose translation language" class="menu_button">Aa</div>
+                              </div>
+                              <div class="cell percent">
+                                    <div title="sort by percentage" onclick="sort();" class="menu_button percent_button">%</div>
+                              </div>
+                      </div> 
+                </div>   
+                <div class="lang" id="lang1">
+                        <div class="lang_link">EN</div>
+                        {% for poll in array %}
+                        <div class="wordline">
+                              <div class="cell word">
+                                     {{ poll.word }}
+                              </div>
+                              <div class="cell transcript">
+                                     [{{ poll.ipa }}]
+                              </div>
+                              <div class="cell translate">
+                                     {{ poll.meaning }}
+                              </div>
+                              <div class="cell percent">99%</div>
+                         </div>
+                    {% endfor %}  
+                     
+              </div>                     
         </div>
-        {% endfor %}  
-    </div>           
-    {% endfor %}          
-</div>
     
 {% endblock %}

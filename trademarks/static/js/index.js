@@ -10,7 +10,7 @@
             baselang.setAttribute("id", "lang1");
             var lang = document.createElement("div");
             lang.setAttribute("class", "lang_link");
-            lang.innerHTML = VAR;
+            lang.id = VAR;
             baselang.appendChild(lang);
             for (var i = 0; i < json['array'][VAR].length; i++) {
                 var word = document.createElement("div");
@@ -92,7 +92,7 @@ function sortByMatch() {
         baselang.setAttribute("id", "lang1");
         var lang = document.createElement("div");
         lang.setAttribute("class", "lang_link");
-        lang.innerHTML = "all";
+        lang.id = "all";
         baselang.appendChild(lang);
         for (i = 0; i < myArray.length; i++) {
             baselang.appendChild(myArray[i]);

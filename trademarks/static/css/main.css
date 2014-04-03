@@ -201,12 +201,16 @@ html, body {
 	z-index: 10;
 }
 
-#results #en .lang_link {
+#results #en.lang_link {
 	background: url('../images/flags/en.ico') no-repeat 50% 50%;
 }
 
-#results #ru .lang_link {
+#results #ru.lang_link {
 	background: url('../images/flags/ru.ico') no-repeat 50% 50%;
+}
+
+#results #all.lang_link {
+	background: url('../images/lang.ico') no-repeat 50% 50%;
 }
 
 #results .focused {

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 {% load staticfiles %}
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
-    <head>
+        <head>
         	<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
                 <meta http-equiv="content-type" content="text/html; charset=utf-8" /> 	
         	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
@@ -10,7 +10,6 @@
         	<title>Trademarks</title>
         </head>
         <body>
-        <div id="wrapper">
             <div id="content">
                 <a href="/"><div id="logo">SITE TITLE</div></a>
                 {% block content %}
@@ -18,11 +17,10 @@
                 {% endblock %}
                 
             </div>
-        </div>
-        <div id="footer">
-            <div id="about">
-                <a href="#">Services</a> <a href="#">About</a> <a href="http://trademarks-dev-group.tumblr.com">Blog</a> <a href="#">Contact</a>
-            </div>
-        </div>
-    </body>
+                <div id="footer">
+                        <div id="about">
+                                <a href="#">Services</a> <a href="#">About</a> <a href="#">Blog</a> <a href="#">Contact</a>
+                        </div>
+                </div>
+        </body>
 </html>

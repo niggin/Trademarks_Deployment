@@ -38,7 +38,7 @@ function loadToggles() {
 }
 
 function sort() {
-    var $sort_b = $("#percent-button");
+    var $sort_b = $(".percent_button");
     $sort_b.toggleClass('active');
     sortByMatch();
 }

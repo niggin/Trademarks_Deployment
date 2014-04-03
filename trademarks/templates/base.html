@@ -2,14 +2,17 @@
 {% load staticfiles %}
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
     <head>
-        	<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
-                <meta http-equiv="content-type" content="text/html; charset=utf-8" /> 	
-        	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-                <script type="text/javascript" language="JavaScript" src="{% static 'js/jquery.js' %}"></script>
-                <script type="text/javascript" language="JavaScript" src="{% static 'js/main.js' %}"></script>
-        	<title>Trademarks</title>
-        </head>
-        <body>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" /> 	
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+        <script type="text/javascript" language="JavaScript" src="{% static 'js/jquery.js' %}"></script>
+        <script type="text/javascript" language="JavaScript" src="{% static 'js/main.js' %}"></script>
+        <script type="text/javascript" language="JavaScript" src="{% static 'js/css_browser_selector.js' %}"></script>
+        {% block scripts %}
+        {% endblock %}
+        <title>Trademarks</title>
+    </head>
+    <body>
         <div id="wrapper">
             <div id="content">
                 <a href="/"><div id="logo">SITE TITLE</div></a>

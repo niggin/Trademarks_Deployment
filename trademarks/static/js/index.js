@@ -38,7 +38,11 @@
             cleanup();
         } else {
             document.getElementById("results-header").setAttribute("style", "");
+            $(".lang_link").click(function () {
+                $(this).focuseOn();
+            }); 
         }
+        
     });
 }
 
@@ -94,6 +98,9 @@ function sortByMatch() {
         }
         group.appendChild(baselang);
     }
+    $(".lang_link").click(function () {
+        $(this).focuseOn();
+    });
 }
 
 function cleanup() {

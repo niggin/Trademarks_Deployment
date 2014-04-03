@@ -1,14 +1,34 @@
 {% extends "base.html" %}
+{% block scripts %}
+    {% load staticfiles %}
+    <script type="text/javascript" language="JavaScript" src="{% static 'js/index.js' %}"></script>
+{% endblock %}
 {% block content %}
 <div id="search">
     <div id="lang"></div>
-    <form action="{% url 'search' %}" method="get">
-        {#{% csrf_token %}#}
-        <input type="text" name="findme" placeholder="Trade word" value="{{ forsearch }}"/>
-        <button type="submit">Trade it!</button>
-    </form>
+    <input type="text" name="findme2" id="findme1" placeholder="Trade word" value="{{ forsearch }}"/>
+    <button type="submit" id="search_button">Trade it!</button>
 </div>
 {% block results %}
-
+<div id="results">
+    <div class="lang" id="results-header" style="display: none">
+        <div class="wordline">
+            <div class="cell word">
+                word
+            </div>
+            <div class="cell transcript">
+                [transcription]
+            </div>
+            <div class="cell translate">
+                translation
+            </div>
+            <div class="cell percent">
+                <div id="percent-button" onclick="sort();">%</div>
+            </div>
+        </div>    
+    </div>
+    <div id="output"></div>
+    <div id="tohide" style="display:none"></div>
+</div>
 {% endblock %}
 {% endblock %}

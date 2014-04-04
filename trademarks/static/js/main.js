@@ -46,9 +46,20 @@ function loadToggles() {
 }
 
 function sort() {
-    var $sort_b = $("#percent_button");
+    document.getElementById("loading").setAttribute("style", "");
+    document.getElementById("output").setAttribute("style", "display:none");
+    var $sort_b = $(".percent_button");
     $sort_b.toggleClass('active');
-    sortByMatch();
+    //sortByMatch();
+    $.ajax({
+        complete: function() {
+            document.getElementById("loading").setAttribute("style", "display:none");
+            document.getElementById("output").setAttribute("style", "display:block");
+        },
+        success: function() {
+            sortByMatch();
+        }
+    });
 }
 
 function fetch(kind) {
@@ -148,11 +159,16 @@ function sortByMatch() {
     }
 
     getready();
+    
 }
 
 function cleanup() {
     document.getElementById("results-header").setAttribute("style", "display:none");
-    document.getElementById("tohide").innerHTML = "";
+    if (document.getElementById("tohide").innerHTML) {
+        document.getElementById("tohide").innerHTML = "";
+        var $sort_b = $(".percent_button");
+        $sort_b.toggleClass('active');
+    }
     document.getElementById("output").innerHTML = "";
 }
 

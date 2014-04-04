@@ -116,6 +116,17 @@ html, body {
 	font-weight: bold;
 }
 
+#results #loader {
+	width: 800px;
+	height: 800px;
+	margin: 0 auto;
+    background-image: url('../images/load.gif')
+}
+
+#results #output, #results #tohide {
+	display: none;
+}
+
 /**
  * Result header buttons
  */

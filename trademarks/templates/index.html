@@ -5,7 +5,7 @@
 {% block content %}
 <div id="search">
     <div id="lang"></div>
-    <input type="text" name="findme2" id="findme1" placeholder="Trade word" value="{{ forsearch }}"/>
+    <input type="text" name="findme2" id="findme" placeholder="Trade word" value="{{ forsearch }}"/>
     <button type="submit" id="search_button">Trade it!</button>
 </div>
 {% block results %}
@@ -22,11 +22,11 @@
                 <div title="choose translation language" class="menu_button">Aa</div>
             </div>
             <div class="cell percent">
-                <div title="sort by percentage" onclick="sort();" class="menu_button percent_button">%</div>
+                <div title="sort by percentage" class="menu_button percent_button">%</div>
             </div>
         </div>    
     </div>
-    <div id="loading" style="display:none"><img src="{% static 'images/load.gif' %}"/></div>
+    <div id="loader" style="display: none"></div>
     <div id="output"></div>
     <div id="tohide" style="display:none"></div>
 </div>

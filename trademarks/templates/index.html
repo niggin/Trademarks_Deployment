@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block scripts %}
     {% load staticfiles %}
-    <script type="text/javascript" language="JavaScript" src="{% static 'js/index.js' %}"></script>
 {% endblock %}
 {% block content %}
 <div id="search">
@@ -27,6 +26,7 @@
             </div>
         </div>    
     </div>
+    <div id="loading" style="display:none"><img src="{% static 'images/load.gif' %}"/></div>
     <div id="output"></div>
     <div id="tohide" style="display:none"></div>
 </div>

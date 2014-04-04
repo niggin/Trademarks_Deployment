@@ -52,13 +52,18 @@ function sort() {
 }
 
 function fetch(kind) {
+    cleanup();
+    document.getElementById("loading").setAttribute("style", "");
     var request = $.ajax({
         url: "/search_sortbymatch",
         type: "GET",
         data: { findme: kind },
         dataType: "json",
+        complete: function() {
+            document.getElementById("loading").setAttribute("style", "display:none");
+        },
         success: function(json) {
-            cleanup();
+            
             var group = document.getElementById('output');
             group.innerHTML = "";
             group.setAttribute("style", "display:block");
@@ -96,7 +101,7 @@ function fetch(kind) {
             if (jQuery.isEmptyObject(json['array'])) {
                 cleanup();
             } else {
-                getreadey();
+                getready();
             }
         }
     });
@@ -106,6 +111,7 @@ function fetch(kind) {
 function sortByMatch() {
     var source = document.getElementById('output');
     var tohide = document.getElementById("tohide");
+    
     if (tohide.innerHTML != "") {
         source.innerHTML = "";
         source.innerHTML = tohide.innerHTML;
@@ -140,15 +146,17 @@ function sortByMatch() {
         }
         group.appendChild(baselang);
     }
-    getreadey();
+
+    getready();
 }
 
 function cleanup() {
     document.getElementById("results-header").setAttribute("style", "display:none");
     document.getElementById("tohide").innerHTML = "";
+    document.getElementById("output").innerHTML = "";
 }
 
-function getreadey() {
+function getready() {
     document.getElementById("results-header").setAttribute("style", "");
     $(".lang_link").click(function () {
         $(this).focuseOn();

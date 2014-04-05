@@ -116,6 +116,19 @@ html, body {
 	font-weight: bold;
 }
 
+#results #loader {
+	position: absolute;
+	width: 738px;
+	height: 128px;
+	margin: 0 auto;
+	margin-top: 100px !important;
+    background: url('../images/preloader.gif') no-repeat 50% 50%;
+}
+
+#results #output, #results #tohide {
+	display: none;
+}
+
 /**
  * Result header buttons
  */
@@ -201,12 +214,16 @@ html, body {
 	z-index: 10;
 }
 
-#results #en .lang_link {
+#results #en.lang_link {
 	background: url('../images/flags/en.ico') no-repeat 50% 50%;
 }
 
-#results #ru .lang_link {
+#results #ru.lang_link {
 	background: url('../images/flags/ru.ico') no-repeat 50% 50%;
+}
+
+#results #all.lang_link {
+	background: url('../images/flags/all.png') no-repeat 50% 50%;
 }
 
 #results .focused {

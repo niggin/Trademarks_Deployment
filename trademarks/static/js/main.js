@@ -50,16 +50,16 @@ function loadToggles() {
 }
 
 function sort() {
-    $("#output").css("display", "none");
     $(".percent_button").toggleClass('active');
     $.ajax({
         beforeSend: function() {
-            $("#output").css("display", "block");
+            $("#output").css("display", "none");
             $("#loader").css("display", "");
         },
         success: function() {
             sortByMatch();
             $("#loader").css("display", "none");
+            $("#output").css("display", "block");
         }
     });
 }
@@ -72,11 +72,10 @@ function fetch(kind) {
         data: { findme: kind },
         dataType: "json",
         beforeSend: function() { 
+            $("#output").css("display", "none");
             $("#loader").css("display", "");
         },
         success: function (data) {
-            $("#output").html("").css("display", "block");
-
             for (var lang in data['array']) {
                
                 var $baselang = $("<div/>", { class: "lang", id: "lang1" });
@@ -97,9 +96,9 @@ function fetch(kind) {
                 cleanup();
             } else {
                 getReady();
-                $("#results-header").css("display", "");
             }
             $("#loader").css("display", "none");
+            $("#output").css("display", "block");
         }
     });
 }
@@ -155,7 +154,6 @@ function sortByMatch() {
 
 function cleanup() {
     $("#results-header").css("display", "none");
-    $("#loader").css("display", "none");
     if ($("#tohide").html().localeCompare("")) {
         $("#tohide").html("");
         $(".percent_button").toggleClass('active');

@@ -60,7 +60,7 @@ def search_sortbymatch(request):
     final = dict()
     langs = list()
     if p != '':
-        if len(p)<3:
+        if len(p)<2:
             raw = list(Word.objects.filter(ipa=p))
         else:
             raw = list(Word.objects.filter(ipa__contains=p))

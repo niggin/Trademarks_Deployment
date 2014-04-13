@@ -5,6 +5,7 @@ $(document).ready(function() {
 	 */
 
 	$("#search_button").click(function () {
+	    $("#selected_lang").html($("#curr_lang").val());
         fetch($("#findme").val());
 	});
 
@@ -57,7 +58,7 @@ function sort() {
             $("#loader").css("display", "");
         },
         success: function() {
-            sortByMatch();
+            sortByMatch($("#selected_lang").html());
             $("#loader").css("display", "none");
             $("#output").css("display", "block");
         }
@@ -69,7 +70,7 @@ function fetch(kind) {
     var request = $.ajax({
         url: "/search_sortbymatch",
         type: "GET",
-        data: { findme: kind },
+        data: { findme: kind, lang: $("#selected_lang").html() },
         dataType: "json",
         beforeSend: function() { 
             $("#output").css("display", "none");
@@ -104,10 +105,10 @@ function fetch(kind) {
 }
 
 
-function sortByMatch() {
+function sortByMatch(lang_skip) {
     var $source = $("#output");
     var $tohide = $("#tohide");
-
+    
     if ($tohide.html().localeCompare("")) {
         $source.html($tohide.html());
         $tohide.html("");
@@ -117,8 +118,15 @@ function sortByMatch() {
 
         for (var item in langs) {
             var temparray = $.makeArray(langs[item].children);
+            
             for (var i = 1; i < temparray.length; i++) {
-                allwords.push(temparray[i]);
+                if (temparray[0].id == lang_skip) {
+                    var toarray = temparray[i].cloneNode(true);
+                    toarray.children[2].innerHTML = temparray[i].children[0].innerHTML;
+                    allwords.push(toarray);
+                } else {
+                    allwords.push(temparray[i]);
+                }
             }
         }
 

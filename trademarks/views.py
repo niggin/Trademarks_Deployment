@@ -51,6 +51,7 @@ def search(request):
 
 def search_sortbymatch(request):
     input = request.GET['findme']
+    lang_skip = request.GET['lang']
     try:
         sorting = request.GET['matchsort']
     except:
@@ -72,6 +73,8 @@ def search_sortbymatch(request):
                     data[item.lang] = list()
                     for i in range(3):
                         data[item.lang].append(list())
+                if item.lang == lang_skip:
+                    item.meaning = ''
                 if item.ipa == p:
                     data[item.lang][0].append([item.serialize(), metric(p,item.ipa)])
                 elif item.ipa.startswith(p):

@@ -5,11 +5,16 @@
 {% block content %}
 <div id="search">
     <div id="lang"></div>
-    <input type="text" name="findme2" id="findme" placeholder="Trade word" value="{{ forsearch }}"/>
+    <input type="text" name="findme2" id="findme" placeholder="Trade word" value="{{ forsearch }}" autofocus/>
     <button type="submit" id="search_button">Trade it!</button>
 </div>
 {% block results %}
 <div id="results">
+    <select id="curr_lang">
+        <option value="ru">russian</option>
+        <option value="en">english</option>
+    </select>
+    <div id="selected_lang" style="display: none">ru</div>
     <div class="lang" id="results-header" style="display:none">
         <div class="wordline">
             <div class="cell word">

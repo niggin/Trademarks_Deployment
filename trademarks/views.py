@@ -59,7 +59,7 @@ def search_sortbymatch(request):
     langs = list()
     position = dict()
     fromcache = cache.get(str(request.user.id) + "findme")
-    if not fromcache or input != fromcache:
+    if not fromcache or input + lang_skip != fromcache:
         final = dict()
         if p != '':
             if len(p)<1:
@@ -77,12 +77,13 @@ def search_sortbymatch(request):
                 final[lang].sort(key=lambda l:int(l[1]), reverse = True)
                 position[lang] = 10
         cache.set(str(request.user.id) + "array", final)
-        cache.set(str(request.user.id) + "findme", input)
+        cache.set(str(request.user.id) + "findme", input + lang_skip)
         cache.set(str(request.user.id) + "position", position)
         cache.set(str(request.user.id) + "langs", langs)
     else:
         final = cache.get(str(request.user.id) + "array")
         position = cache.get(str(request.user.id) + "position")
+        langs = cache.get(str(request.user.id) + "langs")
     output = dict()
     for i in range(len(langs)):
         output[langs[i]] = final[langs[i]][position[langs[i]]-10:position[langs[i]]]

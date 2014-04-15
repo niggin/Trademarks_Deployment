@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
 	loadToggles();
 	/*
 	 Lang onclick event
@@ -81,7 +81,7 @@ function fetch(kind) {
                
                 var $baselang = $("<div/>", { class: "lang", id: "lang1" });
                 var $lang1 = $("<div/>", { class: "lang_link", id: lang }).appendTo($baselang);
-
+                $("<button/>", { type: "button", text: "load more", onclick: "fetch_more(" + lang + ")" }).appendTo($baselang);
                 for (var i = 0; i < data['array'][lang].length; i++) {
                     var $word = $("<div/>", { class: "wordline" });
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
@@ -119,7 +119,7 @@ function sortByMatch(lang_skip) {
         for (var item in langs) {
             var temparray = $.makeArray(langs[item].children);
             
-            for (var i = 1; i < temparray.length; i++) {
+            for (var i = 2; i < temparray.length; i++) {
                 if (temparray[0].id == lang_skip) {
                     var toarray = temparray[i].cloneNode(true);
                     toarray.children[2].innerHTML = temparray[i].children[0].innerHTML;
@@ -173,5 +173,28 @@ function getReady() {
     $("#results-header").css("display", "");
     $(".lang_link").click(function () {
         $(this).focuseOn();
+    });
+}
+
+function fetch_more(lang_out) {
+    var request = $.ajax({
+        url: "/load_more",
+        type: "GET",
+        data: { lang:lang_out.id },
+        dataType: "json",
+        success: function(data) {
+            for (var lang in data['array']) {
+                var $baselang = $("#" + lang).parent();
+                for (var i = 0; i < data['array'][lang].length; i++) {
+                    var $word = $("<div/>", { class: "wordline" });
+                    var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
+                    $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['ipa'] + "] " + data['array'][lang][i][0]['transcription']).appendTo($word);
+                    $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
+                    $input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1] + "%").appendTo($word);
+                    $baselang.append($word);
+                }
+                console.log(data);
+            }
+        }
     });
 }

@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^$', views.home, name='home'),
     url(r'^search$', views.search, name='search'),
     url(r'^search_sortbymatch$', views.search_sortbymatch, name='search_sortbymatch'),
+    url(r'^load_more$', views.load_more, name='load_more'),
 )

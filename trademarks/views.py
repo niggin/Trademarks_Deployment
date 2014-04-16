@@ -76,6 +76,8 @@ def search_sortbymatch(request):
             for lang in langs:
                 final[lang].sort(key=lambda l:int(l[1]), reverse = True)
                 position[lang] = 10
+                if len(final[lang]) < 10:
+                    position[lang] = len(final[lang])
         cache.set(str(request.user.id) + "array", final)
         cache.set(str(request.user.id) + "findme", input + lang_skip)
         cache.set(str(request.user.id) + "position", position)
@@ -86,7 +88,7 @@ def search_sortbymatch(request):
         langs = cache.get(str(request.user.id) + "langs")
     output = dict()
     for i in range(len(langs)):
-        output[langs[i]] = final[langs[i]][position[langs[i]]-10:position[langs[i]]]
+        output[langs[i]] = final[langs[i]][max(0,position[langs[i]]-10):position[langs[i]]]
     context = {'forsearch': input, 'langs': langs,
                'debug': p, 'array': output}
     json_out = json.dumps(context)
@@ -98,8 +100,16 @@ def load_more(request):
     position = cache.get(str(request.user.id) + "position")
     update_lang = request.GET['lang']
     output = dict()
-    position[update_lang] += 10
-    output[update_lang] = final[update_lang][position[update_lang]-10:position[update_lang]]
+    delta = 10
+    if position[update_lang] + 10 < len(final[update_lang]):
+        position[update_lang] += 10
+    elif position[update_lang] < len(final[update_lang]):
+        delta = len(final[update_lang]) - position[update_lang]
+        position[update_lang] = len(final[update_lang])
+    else:
+        delta = 0
+    output[update_lang] = final[update_lang][position[update_lang]-delta:position[update_lang]]
     context = {'array': output}
+    cache.set(str(request.user.id) + "position", position)
     json_out = json.dumps(context)
     return HttpResponse(json_out, content_type='application/json')

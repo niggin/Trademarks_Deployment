@@ -23,6 +23,10 @@ http://dev.mysql.com/downloads/
 4. MySQL Connector  
 Связующее звено между Django и MySQL.  
 https://dev.mysql.com/downloads/connector/python/1.1.html  
+5. Django Axes  
+Модуль бана после нескольких неудачных попыток логина:  
+https://pypi.python.org/pypi/django-axes/  
+pip install django-axes  
 
 Первый запуск:  
 0. Установите все необходимые пакеты и скачайте содержимое репозитория  

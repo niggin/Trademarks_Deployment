@@ -85,7 +85,8 @@ function fetch(kind) {
                 for (var i = 0; i < data['array'][lang].length; i++) {
                     var $word = $("<div/>", { class: "wordline" });
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
-                    $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['ipa'] + "] " + data['array'][lang][i][0]['transcription']).appendTo($word);
+                    $input = $("<div/>", { class: "cell transcript" }).html(/*"[" + data['array'][lang][i][0]['ipa'] + "] " + data['array'][lang][i][0]['transcription']*/
+                        "[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
                     $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
                     $input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1] + "%").appendTo($word);
                     $baselang.append($word);
@@ -188,7 +189,8 @@ function fetch_more(lang_out) {
                 for (var i = 0; i < data['array'][lang].length; i++) {
                     var $word = $("<div/>", { class: "wordline" });
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
-                    $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['ipa'] + "] " + data['array'][lang][i][0]['transcription']).appendTo($word);
+                    $input = $("<div/>", { class: "cell transcript" }).html(/*"[" + data['array'][lang][i][0]['ipa'] + "] " + data['array'][lang][i][0]['transcription']*/
+                        "[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
                     $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
                     $input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1] + "%").appendTo($word);
                     $baselang.append($word);

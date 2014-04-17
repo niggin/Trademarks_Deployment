@@ -13,7 +13,7 @@ def home(request):
     context = {'forsearch': ''}
     return render(request, 'index.html', context)
 
-def search(request):
+"""def search(request):
     input = request.GET['findme']
     try:
         sorting = request.GET['matchsort']
@@ -49,7 +49,7 @@ def search(request):
             data.sort(key = lambda l:l[1], reverse = True)
             final = {'all': data}
     context = {'array' : final, 'forsearch': input, 'langs' : langs, 'debug' : p + sorting, 'sort' : sorting}
-    return render(request, 'search.html', context)
+    return render(request, 'search.html', context)"""
 
 def search_sortbymatch(request):
     input = request.GET['findme']
@@ -78,12 +78,12 @@ def search_sortbymatch(request):
                 position[lang] = 10
                 if len(final[lang]) < 10:
                     position[lang] = len(final[lang])
-        cache.set(str(request.user.id) + "array", final)
+        cache.set(input + lang_skip, final)
         cache.set(str(request.user.id) + "findme", input + lang_skip)
         cache.set(str(request.user.id) + "position", position)
         cache.set(str(request.user.id) + "langs", langs)
     else:
-        final = cache.get(str(request.user.id) + "array")
+        final = cache.get(input + lang_skip)
         position = cache.get(str(request.user.id) + "position")
         langs = cache.get(str(request.user.id) + "langs")
     output = dict()
@@ -95,7 +95,7 @@ def search_sortbymatch(request):
     return HttpResponse(json_out, content_type='application/json')
 
 def load_more(request):
-    final = cache.get(str(request.user.id) + "array")
+    final = cache.get(cache.get(str(request.user.id) + "findme"))
     langs = cache.get(str(request.user.id) + "langs")
     position = cache.get(str(request.user.id) + "position")
     update_lang = request.GET['lang']

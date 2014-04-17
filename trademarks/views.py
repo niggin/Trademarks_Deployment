@@ -53,50 +53,52 @@ def home(request):
 
 def search_sortbymatch(request):
     input = request.GET['findme']
-    lang_skip = request.GET['lang']
+    lang_skip = request.GET['lang_skip']
+    shown_langs = request.GET.getlist('shown_langs[]')
+    print >>sys.stderr, shown_langs
     p = DoubleMetaphon(input).transcription
     
     langs = list()
     position = dict()
     fromcache = cache.get(str(request.user.id) + "findme")
-    if not fromcache or input + lang_skip != fromcache:
+    if not fromcache or input + lang_skip + ''.join(shown_langs) != fromcache:
         final = dict()
         if p != '':
             if len(p)<1:
-                raw = list(Word.objects.filter(ipa=p))
+                raw = list(Word.objects.filter(ipa=p, lang__in=shown_langs))
             else:
-                raw = list(Word.objects.filter(ipa__contains=p))
+                raw = list(Word.objects.filter(ipa__contains=p, lang__in=shown_langs))
+            for item in shown_langs:
+                final[item] = list()
             for item in raw:
-                if item.lang not in final:
-                    langs.append(item.lang)
-                    final[item.lang] = list()
                 if item.lang == lang_skip:
                     item.meaning = ''
                 final[item.lang].append([item.serialize(), metric(p,item.ipa)])
-            for lang in langs:
-                final[lang].sort(key=lambda l:int(l[1]), reverse = True)
-                position[lang] = 10
-                if len(final[lang]) < 10:
-                    position[lang] = len(final[lang])
-        cache.set(input + lang_skip, final)
-        cache.set(str(request.user.id) + "findme", input + lang_skip)
+            for lang in shown_langs:
+                if len(final[lang])>0:
+                    final[lang].sort(key=lambda l:int(l[1]), reverse = True)
+                    position[lang] = min(10,len(final[lang]))
+                else:
+                    final.pop(lang)
+        cache.set(input + lang_skip + ''.join(shown_langs), final)
+        cache.set(str(request.user.id) + "findme", input + lang_skip + ''.join(shown_langs))
         cache.set(str(request.user.id) + "position", position)
-        cache.set(str(request.user.id) + "langs", langs)
     else:
-        final = cache.get(input + lang_skip)
+        final = cache.get(fromcache)
         position = cache.get(str(request.user.id) + "position")
-        langs = cache.get(str(request.user.id) + "langs")
     output = dict()
-    for i in range(len(langs)):
-        output[langs[i]] = final[langs[i]][max(0,position[langs[i]]-10):position[langs[i]]]
-    context = {'forsearch': input, 'langs': langs,
-               'debug': p, 'array': output}
+    print >>sys.stderr, final.keys(), shown_langs, position
+ 
+    for item in final:
+        output[item] = final[item][max(0,position[item]-10):position[item]]
+    context = {'forsearch': input, 'langs': final.keys(),
+               'debug': p, 'array': output, 'hide_morebutton': {item: position[item] == len(final[item]) for item in final} }
     json_out = json.dumps(context)
     return HttpResponse(json_out, content_type='application/json')
 
 def load_more(request):
     final = cache.get(cache.get(str(request.user.id) + "findme"))
-    langs = cache.get(str(request.user.id) + "langs")
+    langs = final.keys()
     position = cache.get(str(request.user.id) + "position")
     update_lang = request.GET['lang']
     output = dict()
@@ -109,7 +111,7 @@ def load_more(request):
     else:
         delta = 0
     output[update_lang] = final[update_lang][position[update_lang]-delta:position[update_lang]]
-    context = {'array': output}
+    context = {'array': output, 'hide_morebutton': {item: position[item] == len(final[item]) for item in final} }
     cache.set(str(request.user.id) + "position", position)
     json_out = json.dumps(context)
     return HttpResponse(json_out, content_type='application/json')

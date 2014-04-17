@@ -9,7 +9,12 @@
     <button type="submit" id="search_button">Trade it!</button>
 </div>
 {% block results %}
+
 <div id="results">
+    <form id="search_langs" style="display: block">
+        <input type="checkbox" name="vehicle" value="ru" checked>Russian words
+        <input type="checkbox" name="vehicle" value="en" checked>English words
+    </form>
     <select id="curr_lang">
         <option value="ru">russian</option>
         <option value="en">english</option>

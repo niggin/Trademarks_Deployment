@@ -12,6 +12,7 @@ $(document).ready(function () {
 	$("#findme").keyup(function (event) {
 	    if (event.keyCode == 13) {
 	        $("#search_button").click();
+	        return true;
 	    }
 	});
 
@@ -67,10 +68,18 @@ function sort() {
 
 function fetch(kind) {
     cleanup();
+    var ter = $("#search_langs").children();
+    var alang = [];
+    for (var item = 0; item < ter.length; item++) 
+    {
+        if (ter[item].checked) {
+            alang[item] = ter[item].value;
+        }
+    }
     var request = $.ajax({
         url: "/search_sortbymatch",
         type: "GET",
-        data: { findme: kind, lang: $("#selected_lang").html() },
+        data: { findme: kind, lang_skip: $("#selected_lang").html(), shown_langs: alang },
         dataType: "json",
         beforeSend: function() { 
             $("#output").css("display", "none");
@@ -81,7 +90,7 @@ function fetch(kind) {
                
                 var $baselang = $("<div/>", { class: "lang", id: "lang1" });
                 var $lang1 = $("<div/>", { class: "lang_link", id: lang }).appendTo($baselang);
-                $("<button/>", { type: "button", text: "load more", onclick: "fetch_more(" + lang + ")" }).appendTo($baselang);
+                $("<button/>", { type: "button", text: "load more", onclick: "fetch_more(" + lang + ")", id: "button_" + lang }).appendTo($baselang);
                 for (var i = 0; i < data['array'][lang].length; i++) {
                     var $word = $("<div/>", { class: "wordline" });
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
@@ -93,6 +102,9 @@ function fetch(kind) {
                 }
                 console.log(data);
                 $("#output").append($baselang);
+                if (data['hide_morebutton'][lang]) {
+                    $("#button_" + lang).css("display","none");
+                }
             }
             if ($.isEmptyObject(data['array'])) {
                 cleanup();
@@ -194,6 +206,9 @@ function fetch_more(lang_out) {
                     $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
                     $input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1] + "%").appendTo($word);
                     $baselang.append($word);
+                    if (data['hide_morebutton'][lang]) {
+                        $("#button_" + lang).css("display", "none");
+                    }
                 }
                 console.log(data);
             }

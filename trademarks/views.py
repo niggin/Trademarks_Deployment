@@ -51,10 +51,10 @@ def home(request):
     context = {'array' : final, 'forsearch': input, 'langs' : langs, 'debug' : p + sorting, 'sort' : sorting}
     return render(request, 'search.html', context)"""
 
-def search_sortbymatch(request):
+def search(request):
     input = request.GET['findme']
-    lang_skip = request.GET['lang_skip']
-    shown_langs = request.GET.getlist('shown_langs[]')
+    lang_skip = request.GET['translate']
+    shown_langs = request.GET.getlist('langs[]')
     print >>sys.stderr, shown_langs
     p = DoubleMetaphon(input).transcription
     

@@ -3,39 +3,53 @@
     {% load staticfiles %}
 {% endblock %}
 {% block content %}
-<div id="search">
-    <div id="lang"></div>
-    <input type="text" name="findme2" id="findme" placeholder="Trade word" value="{{ forsearch }}" autofocus/>
-    <button type="submit" id="search_button">Trade it!</button>
+<div id="header-background">
+    <div id="search-form">
+        <div id="search">
+            <div id="lang"></div>
+                <input type="text" name="findme2" id="findme" placeholder="Trade word" value="{{ forsearch }}" autofocus/>
+                <button type="submit" id="search_button">Trade it!</button>
+        </div>
+        <ul id="search-menu">
+            <li>
+                <div class="switcher-text">Translate into: </div>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chooselang" checked>
+                    <label class="onoffswitch-label" for="chooselang">
+                        <div class="onoffswitch-inner chooselang"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </label>
+                </div>
+            </li>
+            <li class="separator"></li>
+            <li>
+                <div class="switcher-text" id="transcription-text">Transcription: </div>
+                <div class="onoffswitch" id="transcript-switcher">
+                    <input type="checkbox" name="onoffswitch2" class="onoffswitch-checkbox" id="showtranscript" checked>
+                    <label class="onoffswitch-label" for="showtranscript">
+                        <div class="onoffswitch-inner transcription"></div>
+                        <div class="onoffswitch-switch transcription"></div>
+                    </label>
+                </div>
+            </li>
+            <li class="separator" ></li>
+            <li>
+                <div class="switcher-text" id="sort-by">Sort results by: </div>
+                <div class="onoffswitch" id="sort-by-switcher">
+                    <input type="checkbox" name="onoffswitch2" class="onoffswitch-checkbox" id="sort-by-button" checked>
+                    <label class="onoffswitch-label" for="sort-by-button">
+                        <div class="onoffswitch-inner sort-by"></div>
+                        <div class="onoffswitch-switch sort-by"></div>
+                    </label>
+                </div>
+            </li>
+        </ul>
+    </div> 
 </div>
 {% block results %}
 
 <div id="results">
-    <form id="search_langs" style="display: block">
-        <input type="checkbox" name="vehicle" value="ru" checked>Russian words
-        <input type="checkbox" name="vehicle" value="en" checked>English words
-    </form>
-    <select id="curr_lang">
-        <option value="ru">russian</option>
-        <option value="en">english</option>
-    </select>
-    <div id="selected_lang" style="display: none">ru</div>
-    <div class="lang" id="results-header" style="display:none">
-        <div class="wordline">
-            <div class="cell word">
-                <div title="choose results language" class="menu_button">Aa</div>
-            </div>
-            <div class="cell transcript">
-                <div title="show / hide transcriptions" class="menu_button transcript_button">[]</div>
-            </div>
-            <div class="cell translate">
-                <div title="choose translation language" class="menu_button">Aa</div>
-            </div>
-            <div class="cell percent">
-                <div title="sort by percentage" class="menu_button percent_button">%</div>
-            </div>
-        </div>    
-    </div>
+
     <div id="loader" style="display: none"></div>
     <div id="output"></div>
     <div id="tohide" style="display:none"></div>

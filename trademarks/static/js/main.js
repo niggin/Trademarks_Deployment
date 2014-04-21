@@ -3,23 +3,8 @@ $(document).ready(function () {
 	/*
 	 Lang onclick event
 	 */
-
-	$("#search_button").click(function () {
-	    $("#selected_lang").html($("#curr_lang").val());
-        fetch($("#findme").val());
-	});
-
-	$("#findme").keyup(function (event) {
-	    if (event.keyCode == 13) {
-	        $("#search_button").click();
-	        return true;
-	    }
-	});
-
-    $(".percent_button").click(function () {
-        sort();
-    });
-
+    
+    loadListeners();
 });
 
 function loadToggles() {
@@ -51,6 +36,79 @@ function loadToggles() {
 
 }
 
+function loadListeners() {
+    $("#search_button").click(function () {
+        fetch($("#findme").val());
+        setUrlAttr("w", $("#findme").val());
+    });
+
+    $("#findme").keyup(function (event) {
+        if (event.keyCode == 13) {
+            $("#search_button").click();
+        }
+    });
+
+    $("#showtranscript").click(function () {
+        $(".transcript").toggleClass("hidden");
+    });
+
+    $("#sort-by-button").click(function () {
+        sort();
+        var $switcher = $(".onoffswitch-inner.sort-by");
+        if($(this).is(":checked"))
+            $switcher.each(function() {
+                setUrlAttr("sort", window.getComputedStyle(this,':before').content);
+            });
+        else
+            $switcher.each(function() {
+                setUrlAttr("sort", window.getComputedStyle(this,':after').content);
+            });
+    });
+
+    $(".lang_link").click(function () {
+        $(this).focuseOn();
+    });
+
+    $(".more").click(function () {
+        $(this).parent().focuseOn();
+
+    });
+
+    $(".lang-header .word").click(function () {
+        $(this).parent().focuseOn();
+    });
+
+    $("#chooselang").click(function () {
+        var $switcher = $(".onoffswitch-inner.chooselang");
+        if($(this).is(":checked"))
+            $switcher.each(function() {
+                setUrlAttr("lt", window.getComputedStyle(this,':before').content);
+            });
+        else
+            $switcher.each(function() {
+                setUrlAttr("lt", window.getComputedStyle(this,':after').content);
+            });
+    });
+
+    var searchTop = $("#header-background").offset().top;
+    $(window).scroll(function(){ 
+        var scrollTop = $(window).scrollTop();
+        if(scrollTop > searchTop) {
+            $("#header-background").css("position", "fixed");
+        } else {
+            $("#header-background").css("position", "relative"); 
+        }
+    });
+
+}
+
+function setUrlAttr(key, value) {
+    var q = queryString.parse(location.search);
+    console.log(q);
+    q[key] = value;
+    history.pushState('', 'xz', '?' + queryString.stringify(q));
+}
+
 function sort() {
     $(".percent_button").toggleClass('active');
     $.ajax({
@@ -68,18 +126,10 @@ function sort() {
 
 function fetch(kind) {
     cleanup();
-    var ter = $("#search_langs").children();
-    var alang = [];
-    for (var item = 0; item < ter.length; item++) 
-    {
-        if (ter[item].checked) {
-            alang[item] = ter[item].value;
-        }
-    }
     var request = $.ajax({
-        url: "/search_sortbymatch",
+        url: "/search",
         type: "GET",
-        data: { findme: kind, lang_skip: $("#selected_lang").html(), shown_langs: alang },
+        data: { findme: kind, translate: getAttrFromUrl("lt"), langs: getAttrFromUrl("lf"), sort: getAttrFromUrl("sort") },
         dataType: "json",
         beforeSend: function() { 
             $("#output").css("display", "none");
@@ -88,23 +138,18 @@ function fetch(kind) {
         success: function (data) {
             for (var lang in data['array']) {
                
-                var $baselang = $("<div/>", { class: "lang", id: "lang1" });
-                var $lang1 = $("<div/>", { class: "lang_link", id: lang }).appendTo($baselang);
-                $("<button/>", { type: "button", text: "load more", onclick: "fetch_more(" + lang + ")", id: "button_" + lang }).appendTo($baselang);
+                var $baselang = $("<div/>", { class: "lang" });
+                var $lang = $("<div/>", { class: "lang_link", id: lang }).appendTo($baselang);
+
                 for (var i = 0; i < data['array'][lang].length; i++) {
                     var $word = $("<div/>", { class: "wordline" });
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
-                    $input = $("<div/>", { class: "cell transcript" }).html(/*"[" + data['array'][lang][i][0]['ipa'] + "] " + data['array'][lang][i][0]['transcription']*/
-                        "[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
+                    $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['ipa'] + "] " + data['array'][lang][i][0]['transcription']).appendTo($word);
                     $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
                     $input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1] + "%").appendTo($word);
                     $baselang.append($word);
                 }
-                console.log(data);
                 $("#output").append($baselang);
-                if (data['hide_morebutton'][lang]) {
-                    $("#button_" + lang).css("display","none");
-                }
             }
             if ($.isEmptyObject(data['array'])) {
                 cleanup();
@@ -112,16 +157,16 @@ function fetch(kind) {
                 getReady();
             }
             $("#loader").css("display", "none");
-            $("#output").css("display", "block");
+            $("#output").html("").css("display", "block");
         }
     });
 }
 
 
-function sortByMatch(lang_skip) {
+function sortByMatch() {
     var $source = $("#output");
     var $tohide = $("#tohide");
-    
+
     if ($tohide.html().localeCompare("")) {
         $source.html($tohide.html());
         $tohide.html("");
@@ -131,21 +176,15 @@ function sortByMatch(lang_skip) {
 
         for (var item in langs) {
             var temparray = $.makeArray(langs[item].children);
-            
-            for (var i = 2; i < temparray.length; i++) {
-                if (temparray[0].id == lang_skip) {
-                    var toarray = temparray[i].cloneNode(true);
-                    toarray.children[2].innerHTML = temparray[i].children[0].innerHTML;
-                    allwords.push(toarray);
-                } else {
+            temparray.splice(0, 1);
+            for (var i = 1; i < temparray.length; i++) {
                     allwords.push(temparray[i]);
-                }
             }
         }
 
         allwords.sort(function (a, b) {
-            var aord = a.children[3].innerHTML;
-            var bord = b.children[3].innerHTML;
+            var aord = a.children[2].innerHTML;
+            var bord = b.children[2].innerHTML;
             return parseInt(bord) - parseInt(aord);
         });
 
@@ -162,6 +201,8 @@ function sortByMatch(lang_skip) {
             id: "all"
         }).appendTo($baselang);
 
+        $baselang.append("<div class='wordline lang-header'><div class='cell word'>All languages</div><div class='cell more'>more</div></div>");
+
         for (i = 0; i < allwords.length; i++) {
             $baselang.append(allwords[i]);
         }
@@ -174,7 +215,7 @@ function sortByMatch(lang_skip) {
 }
 
 function cleanup() {
-    $("#results-header").css("display", "none");
+    $("#loader").css("display", "none");
     if ($("#tohide").html().localeCompare("")) {
         $("#tohide").html("");
         $(".percent_button").toggleClass('active');
@@ -183,9 +224,16 @@ function cleanup() {
 }
 
 function getReady() {
-    $("#results-header").css("display", "");
     $(".lang_link").click(function () {
         $(this).focuseOn();
+    });
+
+    $(".more").click(function () {
+        $(this).parent().focuseOn();
+    });
+
+    $(".lang-header .word").click(function () {
+        $(this).parent().focuseOn();
     });
 }
 
@@ -193,7 +241,7 @@ function fetch_more(lang_out) {
     var request = $.ajax({
         url: "/load_more",
         type: "GET",
-        data: { lang:lang_out.id },
+        data: { lang: lang_out.id },
         dataType: "json",
         success: function(data) {
             for (var lang in data['array']) {
@@ -201,8 +249,7 @@ function fetch_more(lang_out) {
                 for (var i = 0; i < data['array'][lang].length; i++) {
                     var $word = $("<div/>", { class: "wordline" });
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
-                    $input = $("<div/>", { class: "cell transcript" }).html(/*"[" + data['array'][lang][i][0]['ipa'] + "] " + data['array'][lang][i][0]['transcription']*/
-                        "[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
+                    $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
                     $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
                     $input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1] + "%").appendTo($word);
                     $baselang.append($word);
@@ -210,7 +257,6 @@ function fetch_more(lang_out) {
                         $("#button_" + lang).css("display", "none");
                     }
                 }
-                console.log(data);
             }
         }
     });

@@ -367,11 +367,15 @@ html, body {
 }
 
 #results #en.lang_link {
-	background: url('../images/flags/en.ico') no-repeat 50% 37%;
+	background: url('../images/flags/en.png') no-repeat 50% 37%;
 }
 
 #results #ru.lang_link {
-	background: url('../images/flags/ru.ico') no-repeat 50% 37%;
+	background: url('../images/flags/ru.png') no-repeat 50% 37%;
+}
+
+#results #ge.lang_link {
+	background: url('../images/flags/ge.png') no-repeat 50% 37%;
 }
 
 #results #all.lang_link {

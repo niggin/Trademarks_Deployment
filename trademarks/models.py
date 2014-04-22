@@ -4,6 +4,7 @@ class Word(models.Model):
     word = models.CharField(max_length=50)
     ipa = models.CharField(max_length=50)
     meaning = models.CharField(max_length=1000)
+    meaning_eng = models.CharField(max_length=1000)
     lang = models.CharField(max_length=5)
     transcription = models.CharField(max_length=50)
     def __str__(self):
@@ -16,5 +17,6 @@ class Word(models.Model):
             "ipa": self.ipa,
             "meaning": self.meaning,
             "lang": self.lang,
-            "transcription": self.transcription
+            "transcription": self.transcription,
+            "meaning_eng": self.meaning_eng
         }

@@ -162,7 +162,7 @@ function sort() {
 
 function fetch(kind, lang_out, async, languages) {
     async = typeof (async) != 'undefined' ? async : true;
-    languages = typeof (languages) != 'undefined' ? languages : ["ru", "en"];
+    languages = typeof (languages) != 'undefined' ? languages : ["ru", "en", "ge"];
     if (typeof (languages) == "string") languages = [languages];
     cleanup();
     var request = $.ajax({

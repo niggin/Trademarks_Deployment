@@ -71,6 +71,8 @@ def search(request):
             for item in shown_langs:
                 final[item] = list()
             for item in raw:
+                if lang_skip == "en":
+                    item.meaning = item.meaning_eng
                 if item.lang == lang_skip:
                     item.meaning = ''
                 final[item.lang].append([item.serialize(), metric(p,item.ipa)])

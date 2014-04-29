@@ -81,11 +81,11 @@ def search(request):
                     item.meaning = item.meaning_eng
                 if item.lang == lang_skip:
                     item.meaning = ''
-                if item.fullipa == "":
+                #if item.fullipa == "":
                     #print >>sys.stderr, item.word
-                    item_fullipa = analyzer(item.word,item.ipa)
-                else:
-                    item_fullipa = item.fullipa
+                item_fullipa = analyzer(item.word,item.ipa)
+                #else:
+                 #   item_fullipa = item.fullipa
                 score = metricOfTranscriptions(p_fullipa, item_fullipa)
                 final[item.lang].append([item.serialize(), (1 - score)*100])
             #print >>sys.stderr, "metric executed"

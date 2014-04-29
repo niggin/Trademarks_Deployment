@@ -1,537 +1,661 @@
-﻿# coding: utf-8
+﻿def isEnglish(letter):
+    return u'A' <= letter <= u'Z'
+
+def isRussian(letter):
+    return letter == u'Ё' or u'А' <= letter <= u'Я'
+
+def isVowel(letter):
+    if letter in u'AEIOUY' or letter in u'АУОЫИЭЯЮЕЁ':
+        return True
+    else:
+        return False
 
 class DoubleMetaphon:
     '''
-        @version: Version 1.1 from 18.03.2014
+        @version: Version 1.1 from 10.04.2014
         @author: Alex Kuzmin
         @return: Double Metaphon transcription of the word
     '''
 
-    def __init__(self, word):
-        self.length = len(word) + 4 #about extra '+4' see the first 4 symbols ('####') of the next line
-        self.word = '####' + word.upper() + '########' #for safe indexing
-        self.current = 4 # Attention! (because of 4 safe index in the begin of self.word)
+    def __init__(self):
+        self.numbersOfTranscriptionSymbols = []
+        self.amountsOfReplacedSymbols = []
+
+    def getTranscription(self, word):
+        self.numbersOfTranscriptionSymbols = []
+        self.amountsOfReplacedSymbols = []
+        self.indent = 4 #const
+        self.length = len(word) + self.indent #about extra +'self.indent' see the first 'self.indent' symbols ('#' * 'self.indent') of the next line
+        self.word = ""
+        for idx in range(self.indent):
+            self.word += '#'
+        self.word = self.word + word.upper() + '########' #for safe indexing
+        self.current = self.indent # Attention! (because of 'self.indent' safe index in the begin of self.word)
         self.transcription = "" #the first answer
-        self.extraTranscription = "" #the second answer
-
-        if self.searchOfString(4, 2, 'GN', 'KN', 'PN', 'WR', 'PS'):
-            self.current += 1
-
-        if self.word[4] == 'X':
-          self.addLetter('S');
-          self.current += 1
+        #self.extraTranscription = "" #the second answer
 
         while self.current < self.length:
-            
             #English language
-            if 'A' <= self.word[self.current] <= 'Z':
+            if isEnglish(self.word[self.current]):
 
                 #Case Vowel
-                if self.isVowel(self.word[self.current]):
-                    if self.current == 4:
-                        self.addLetter('A')   
+                if isVowel(self.word[self.current]):
+                    if self.current == self.indent:
+                        self.__addLetter(u'A')   
                     self.current += 1
                     continue
                 
-                #Case 'B'
-                elif self.word[self.current] == 'B':
-                    self.addLetter('P')
-                    while self.word[self.current] == 'B':
+                #Case u'B'
+                elif self.word[self.current] == u'B':
+                    self.__addLetter(u'P')
+                    self.current += 1
+                    while self.word[self.current] == u'B':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
     
-                #Case 'C'
-                elif self.word[self.current] == 'C':
-                    if (not self.isVowel(self.word[self.current - 2]) and self.searchOfString(self.current - 1, 3, 'ACH') 
-                            and self.word[self.current + 2] not in 'IE'
-                                or self.searchOfString(self.current - 2, 6, 'BACHER', 'MACHER')):
-                        self.addLetter('K')
+                #Case u'C'
+                elif self.word[self.current] == u'C':
+                    if (not isVowel(self.word[self.current - 2]) and self.searchOfString(self.current - 1, 3, u'ACH') 
+                            and self.word[self.current + 2] not in u'IE'
+                            or self.searchOfString(self.current - 2, 6, u'BACHER', u'MACHER')):
+                        self.__addLetter(u'K', 2)
                         self.current += 2
                         continue
-    
-                    elif self.word[self.current + 1] == 'H':
-                        if self.searchOfString(self.current + 2, 2, 'IA'):
-                            self.addLetter('K')
-                        elif self.current > 4 and self.searchOfString(self.current + 2, 2, 'AE'):
-                            self.addLetter('K')
-                            #self.extraAdd('X')
-                        elif ((self.searchOfString(0, 4, 'VAN ', 'VON ') or self.searchOfString(0, 3, 'SCH'))
-                            or self.searchOfString(self.current - 2, 6, 'ORCHES', 'ARCHIT', 'ORCHID')
-                            or self.word[self.current - 2] in 'TS'
-                            or (self.word[self.current - 1] in 'AOUE' or self.current == 4) 
-                                and self.word[self.current + 2] in 'LRNMBHFVW '):
-                            self.addLetter('K')
-                        elif (self.current == 4 and 
-                                (self.searchOfString(self.current + 2, 4, 'ARAC', 'ARIS') 
-                                or self.searchOfString(self.current + 2, 4, 'OR', 'YM', 'IA', 'EM'))
-                                    and not self.searchOfString(0, 5, 'CHORE')):
-                            self.addLetter('K')
+                    elif self.word[self.current + 1] == u'H':
+                        if self.searchOfString(self.current + 2, 2, u'IA'):
+                            self.__addLetter(u'K')
+                        elif self.current > self.indent and self.searchOfString(self.current + 2, 2, u'AE'):
+                            self.__addLetter(u'K')
+                            #self.extraAdd(u'X')
+                        elif (self.searchOfString(self.indent, 4, u'VAN ', u'VON ') 
+                            or self.word[self.current - 2] in u'TS' 
+                            or (self.word[self.current - 1] in u'AOUE' or self.current == self.indent) 
+                                and self.word[self.current + 2] in u'LRNMBHFVW '):
+                              self.__addLetter(u'K')
+                        elif self.searchOfString(self.indent, 3, u'SCH') or self.searchOfString(self.current - 2, 6, u'ORCHES', u'ARCHIT', u'ORCHID'):
+                            self.__addLetter(u'K', 2)
+                        elif (self.current == self.indent and 
+                                (self.searchOfString(self.current + 2, 4, u'ARAC', u'ARIS') 
+                                or self.searchOfString(self.current + 2, 4, u'OR', u'YM', u'IA', u'EM'))
+                                    and not self.searchOfString(self.indent, 5, u'CHORE')):
+                            self.__addLetter(u'K')
                         else:
-                            if self.current > 4:
-                                if self.searchOfString(0, 2, 'MC'):
-                                    self.addLetter('K')
+                            if self.current > self.indent:
+                                if self.searchOfString(self.indent, 2, u'MC'):
+                                    self.__addLetter(u'K')
                                 else:
-                                    self.addLetter('X')
-                                    #self.extraAdd('K')
+                                    self.__addLetter(u'X')
+                                    #self.extraAdd(u'K')
                             else:
-                                self.addLetter('X')
+                                self.__addLetter(u'X')
                         self.current += 2
                         continue
     
-                    elif self.word[self.current + 1] == 'Z' and not self.searchOfString(self.current - 2, 4, 'WICZ'):
-                        self.addLetter('S')
-                        #self.extraAdd('X')
+                    elif self.word[self.current + 1] == u'Z' and not self.searchOfString(self.current - 2, 4, u'WICZ'):
+                        self.__addLetter(u'S')
+                        #self.extraAdd(u'X')
                         self.current += 2
                         continue
     
-                    elif self.searchOfString(self.current + 1, 3, 'CIA'):
-                        self.addLetter('X')
+                    elif self.searchOfString(self.current + 1, 2, u'IA'):
+                        self.__addLetter(u'X')
                         self.current += 3
                         continue
     
-                    elif self.word[self.current + 1] == 'C' and not (self.current == 5 and self.word[4] == 'M'):
-                        if self.word[self.current + 2] in 'IEH' and not self.searchOfString(self.current + 2, 2, 'HU'):
-                            if (self.current == 5 and self.word[self.current - 1] == 'A' 
-                                or self.searchOfString(self.current - 1, 5, 'UCCEE', 'UCCES')):
-                                self.addLetter('KS')
+                    elif self.word[self.current + 1] == u'C' and not (self.current == self.indent + 1 and self.word[self.indent] == u'M'):
+                        if self.word[self.current + 2] in u'IEH' and not self.searchOfString(self.current + 2, 2, u'HU'):
+                            if (self.current == self.indent + 1 and self.word[self.current - 1] == u'A' 
+                                or self.searchOfString(self.current - 1, 5, u'UCCEE', u'UCCES')):
+                                self.__addLetter(u'KS', 1, 1)
                             else:
-                                self.addLetter('X')
+                                self.__addLetter(u'X', 2)
                             self.current += 3
                             continue
                         else:
-                            self.addLetter('K')
+                            self.__addLetter(u'K', 2)
                             self.current += 2
                             continue
     
-                    elif self.word[self.current + 1] in 'KGQ':
-                        self.addLetter('K')
+                    elif self.word[self.current + 1] in u'KGQ':
+                        self.__addLetter(u'K')
                         self.current += 2
+                        while self.word[self.current + 1] in u'KGQ':
+                            self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1
+                            self.current += 1
                         continue
     
-                    elif self.word[self.current + 1] in 'IEY':
-                        if self.searchOfString(self.current + 1, 2, 'IO', 'IE', 'IA'):
-                            self.addLetter('S')
-                            #self.extraAdd('X')
+                    elif self.word[self.current + 1] in u'IEY':
+                        if self.searchOfString(self.current + 1, 2, u'IO', u'IE', u'IA'):
+                            self.__addLetter(u'S')
+                            #self.extraAdd(u'X')
                         else:
-                            self.addLetter('S')
+                            self.__addLetter(u'S')
                         self.current += 2
                         continue
     
-                    elif self.current == 4 and self.searchOfString(self.current + 1, 5, 'AESAR'):
-                        self.addLetter('S')
+                    elif self.current == self.indent and self.searchOfString(self.current + 1, 5, u'AESAR'):
+                        self.__addLetter(u'S')
                         self.current += 2
                         continue
     
-                    self.addLetter('K')
-                    while self.word[self.current + 1] in 'CKQ':
-                        self.current += 1
-                    if not self.word[self.current] in 'EI':
+                    self.__addLetter(u'K')
+                    self.current += 1
+                    while self.word[self.current + 1] in u'CKQ':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
                 
-                #Case 'D'
-                elif self.word[self.current] == 'D':
-                    if self.word[self.current + 1] == 'G':
-                        if self.word[self.current + 2] in 'IEY':
-                            self.addLetter('J')
+                #Case u'D'
+                elif self.word[self.current] == u'D':
+                    if self.word[self.current + 1] == u'G':
+                        if self.word[self.current + 2] in u'IEY':
+                            self.__addLetter(u'J', 2)
                             self.current += 3
                             continue
                         else:
-                            self.addLetter('TK')
+                            self.__addLetter(u'TK', 1, 1)
                             self.current += 2
                     else:
-                        self.addLetter('T')
-                    while self.word[self.current] in 'DT':
+                        self.__addLetter(u'T')
+                        self.current += 1
+                    while self.word[self.current] in u'DT':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
     
-                #Case 'F'
-                elif self.word[self.current] == 'F':
-                    self.addLetter('F')
-                    while self.word[self.current] == 'F':
+                #Case u'F'
+                elif self.word[self.current] == u'F':
+                    self.__addLetter(u'F')
+                    self.current += 1
+                    while self.word[self.current] == u'F':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
                 
-                #Case 'G'
-                elif self.word[self.current] == 'G':
-                    if self.word[self.current + 1] == 'H':
-                        if not self.isVowel(self.word[self.current - 1]):
-                            self.addLetter('K')
-                            self.current += 2
-                            continue
-        
-                        elif self.current == 4:
-                            if self.word[self.current + 2] == 'I':
-                                self.addLetter('J')
+                #Case u'G'
+                elif self.word[self.current] == u'G':
+                    if self.word[self.current + 1] == u'H':
+                        if self.current == self.indent:
+                            if self.word[self.current + 2] == u'I':
+                                self.__addLetter(u'J', 2)
                                 self.current += 3
                             else:
-                                self.addLetter('K')
+                                self.__addLetter(u'K', 2)
                                 self.current += 2
                             continue
 
-                        if (self.word[self.current - 2] in 'BHD' or self.word[self.current - 3] in 'BHD' 
-                            or self.word[self.current - 4] in 'BHD'):
-                            self.current += 2
-                            continue
-                        else:
-                            if self.word[self.current - 1] == 'U' and self.word[self.current - 3] in 'CGLRT':
-                                self.addLetter('F')
-                            else:
-                                if self.word[self.current - 1] != 'I':
-                                    self.addLetter('K')
+                        elif not isVowel(self.word[self.current - 1]):
+                            self.__addLetter(u'K', 2)
                             self.current += 2
                             continue
 
-                    elif self.word[self.current + 1] == 'N':
-                        if self.current == 5 and self.isVowel(self.word[4]) and not self.slavoGermanic():
-                            self.addLetter('KN')
-                            #self.extraAdd('N')
-                        else:
-                            if not self.searchOfString(self.current + 2, 2, 'EY') and not self.slavoGermanic():
-                                self.addLetter('N')
-                                #self.extraAdd('KN')
+                        if self.searchOfString(self.current - 4, 7, u'DRAUGHT'):
+                            self.__addLetter(u'F', 2)
+                            self.current += 2
+                            self.__addLetter(u'T')
+                            self.current += 1
+                            continue
+                        elif self.word[self.current + 2] == u'T':
+                            self.__addLetter(u'T', 3)
+                            self.current += 3
+                            continue
+                        elif self.searchOfString(self.current - 2, 2, u'OU'):
+                            if (self.word[self.current - 3] in u'CNT' or 
+                                (self.current - 3 == self.indent and self.word[self.current - 3] == u'R' ) or
+                                (self.word[self.current - 4] == u'S' and self.word[self.current - 3] == u'L')):
+                                self.__addLetter(u'F', 2)
+                                self.current += 2
+                                continue
+                            elif (self.word[self.current - 3] in u'BD' or self.searchOfString(self.current - 4, 2, u'TH') or
+                                (self.current - 3 != self.indent and self.word[self.current - 3] == u'R')):
+                                self.current += 2
+                                continue
+                            elif self.word[self.current - 3] == u'L':
+                                self.__addLetter(u'K', 2)
+                                self.current += 2
+                                continue
                             else:
-                                self.addLetter('KN')
+                                #when I don't know read u'ouGH' or don't
+                                self.current += 2
+                                continue
+                        elif self.word[self.current - 1] == u'I':
+                            if self.searchOfString(self.current + 2, 3, u'EAD', u'EAT', u'AND', u'OLE', u'OLD', u'ILL') or self.searchOfString(self.current + 2, 2, u'AI'):
+                                self.__addLetter(u'GH', 1, 1)
+                                self.current += 2
+                                continue
+                            else:
+                                self.current += 2
+                                continue
+                        else:
+                            if self.word[self.current - 1] == u'U' and self.word[self.current - 3] in u'CGLRT':
+                                self.__addLetter(u'F', 2)
+                            else:
+                                if self.word[self.current - 1] != u'I':
+                                    self.__addLetter(u'K', 2)
+                            self.current += 2
+                            continue
+
+                    elif self.word[self.current + 1] == u'N':
+                        if self.current == self.indent:
+                            self.__addLetter(u'N', 2)
+                        elif self.current == self.indent + 1 and isVowel(self.word[self.indent]) and not self.__slavoGermanic():
+                            self.__addLetter(u'KN', 1, 1)
+                            #self.extraAdd(u'N')
+                        else:
+                            if not self.searchOfString(self.current + 2, 2, u'EY') and not self.__slavoGermanic():
+                                self.__addLetter(u'N', 2)
+                                #self.extraAdd(u'KN')
+                            else:
+                                self.__addLetter(u'KN', 1, 1)
                         self.current += 2
                         continue
     
-                    elif self.searchOfString(self.current + 1, 2, 'LI') and not self.slavoGermanic():
-                        self.addLetter('KL')
-                        #self.extraAdd('L')
+                    elif self.searchOfString(self.current + 1, 2, u'LI') and not self.__slavoGermanic():
+                        self.__addLetter(u'KL', 1, 1)
+                        #self.extraAdd(u'L')
+                        self.current += 2
+                        continue
+
+                    elif ((self.current == self.indent and self.word[self.current + 1] == u'Y')
+                          or self.searchOfString(self.current + 1, 2, u'ES', u'EP', u'EB', u'EL', u'EY', u'IB', u'IL', u'IN', u'IE', u'EI', u'ER')):
+                        self.__addLetter(u'K')
+                        #self.extraAdd(u'J')
                         self.current += 2
                         continue
     
-                    elif ((self.current == 4 and self.word[self.current + 1] == 'Y')
-                          or self.searchOfString(self.current + 1, 2, 'ES', 'EP', 'EB', 'EL', 'EY', 'IB', 'IL', 'IN', 'IE', 'EI', 'ER')):
-                        self.addLetter('K')
-                        #self.extraAdd('J')
-                        self.current += 2
-                        continue
-    
-                    elif (self.searchOfString(self.current + 1, 2, 'ER') or self.word[self.current + 1] == 'Y'
-                        and not self.searchOfString(0, 6, 'DANGER', 'RANGER', 'MANGER') and not self.word[self.current - 1] in 'EI'
-                            and not self.searchOfString(self.current - 1, 3, 'RGY', 'OGY')):
-                        self.addLetter('K')
-                        #self.extraAdd('J')
+                    elif (self.searchOfString(self.current + 1, 2, u'ER') or self.word[self.current + 1] == u'Y'
+                        and not self.searchOfString(self.indent, 6, u'DANGER', u'RANGER', u'MANGER') and not self.word[self.current - 1] in u'EI'
+                            and not self.searchOfString(self.current - 1, 3, u'RGY', u'OGY')):
+                        self.__addLetter(u'K')
+                        #self.extraAdd(u'J')
                         self.current += 2
                         continue
                     
-                    elif (self.searchOfString(self.current + 1, 2, 'ER') or self.word[self.current + 1] == 'Y'
-                          and not self.searchOfString(0, 6, 'DANGER', 'RANGER', 'MANGER') and not self.word[self.current - 1] in 'EI'
-                            and not self.searchOfString(self.current - 1, 3, 'RGY', 'OGY')):
-                        self.addLetter('K')
-                        #self.extraAdd('J')
+                    elif (self.searchOfString(self.current + 1, 2, u'ER') or self.word[self.current + 1] == u'Y'
+                          and not self.searchOfString(self.indent, 6, u'DANGER', u'RANGER', u'MANGER') and not self.word[self.current - 1] in u'EI'
+                            and not self.searchOfString(self.current - 1, 3, u'RGY', u'OGY')):
+                        self.__addLetter(u'K')
+                        #self.extraAdd(u'J')
                         self.current += 2
                         continue
     
-                    elif self.word[self.current + 1] in 'EIY' or self.searchOfString(self.current - 1, 4, 'AGGI', 'OGGI'):
-                        if ((self.searchOfString(0, 4, 'VAN ', 'VON ') or self.searchOfString(0, 3, 'SCH'))
-                            or self.searchOfString(self.current + 1, 2, 'ET')):
-                            self.addLetter('K')
+                    elif self.word[self.current + 1] in u'EIY' or self.searchOfString(self.current - 1, 4, u'AGGI', u'OGGI'):
+                        if ((self.searchOfString(self.indent, 4, 'VAN ', 'VON ') or self.searchOfString(self.indent, 3, u'SCH'))
+                            or self.searchOfString(self.current + 1, 2, u'ET')):
+                            self.__addLetter(u'K')
                         else:
-                            if self.searchOfString(self.current + 1, 4, 'IER'):
-                                self.addLetter('J')
+                            if self.searchOfString(self.current + 1, 4, u'IER'):
+                                self.__addLetter(u'J')
                             else:
-                                self.addLetter('J')
-                                #self.extraAdd('K')
+                                self.__addLetter(u'J')
+                                #self.extraAdd(u'K')
                         self.current += 2
                         continue
                     
                     else:
-                        while self.word[self.current] in 'GK':
+                        self.__addLetter(u'K')
+                        self.current += 1
+                        while self.word[self.current] in u'GK':
+                            self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                             self.current += 1
-                    self.addLetter('K')
                     continue
                 
-                #Case 'H'
-                elif self.word[self.current] == 'H':
-                    if self.current == 4 or self.isVowel(self.word[self.current - 1]):
-                        while self.word[self.current] == 'H':
-                            self.current += 1
-                        if self.isVowel(self.word[self.current]):
-                            self.addLetter('H')
-                            self.current += 1
+                #Case u'H'
+                elif self.word[self.current] == u'H':
+                    if self.current == self.indent or isVowel(self.word[self.current - 1]):
+                        tmp = 1
+                        while self.word[self.current + tmp] == u'H':
+                            tmp += 1
+                        if isVowel(self.word[self.current + tmp]):
+                            self.__addLetter(u'H', tmp)
+                            self.current += tmp + 1
+                        else:
+                            self.current += tmp
                     else:
-                        while self.word[self.current] == 'H':
+                        while self.word[self.current] == u'H':
                             self.current += 1
                     continue
     
-                #Case 'J'
-                elif self.word[self.current] == 'J':
-                    if self.searchOfString(self.current, 4, 'JOSE') or self.searchOfString(0, 4, 'SAN '):
-                        if (self.current == 4 and self.word[self.current + 4] == ' ') or self.searchOfString(0, 4, 'SAN '):
-                            self.addLetter('H')
+                #Case u'J'
+                elif self.word[self.current] == u'J':
+                    if self.searchOfString(self.current, 4, u'JOSE') or self.searchOfString(self.indent, 4, 'SAN '):
+                        if (self.current == self.indent and self.word[self.current + 4] == ' ') or self.searchOfString(self.indent, 4, 'SAN '):
+                            self.__addLetter(u'H')
                         else:
-                            self.addLetter('J')
-                            #self.extraAdd('H')
+                            self.__addLetter(u'J')
+                            #self.extraAdd(u'H')
                         self.current += 1
                         continue
     
-                    elif self.current == 4 and not self.searchOfString(self.current, 4, 'JOSE'):
-                        self.addLetter('J')
-                        #self.extraAdd('A')
-                    elif (self.isVowel(self.word[self.current - 1]) and not self.slavoGermanic() and
-                          (self.word[self.current + 1] == 'A' or self.word[self.current + 1] == 'O')):
-                        self.addLetter('J')
-                        #self.extraAdd('H')
+                    elif self.current == self.indent and not self.searchOfString(self.current, 4, u'JOSE'):
+                        self.__addLetter(u'J')
+                        #self.extraAdd(u'A')
+                    elif (isVowel(self.word[self.current - 1]) and not self.__slavoGermanic() and
+                          (self.word[self.current + 1] == u'A' or self.word[self.current + 1] == u'O')):
+                        self.__addLetter(u'J')
+                        #self.extraAdd(u'H')
                     elif self.current == self.length - 1:
-                        self.addLetter('J')
+                        self.__addLetter(u'J')
                         #self.extraAdd(' ')
-                    elif (not self.word[self.current + 1] in 'LTKSNMBZ' and not self.word[self.current - 1] in 'SKL'):
-                        self.addLetter('J')
-    
-                    while self.word[self.current] == 'J':
+                    elif (not self.word[self.current + 1] in u'LTKSNMBZ' and not self.word[self.current - 1] in u'SKL'):
+                        self.__addLetter(u'J')
+                    else:
+                        while self.word[self.current] == u'J':
+                            self.current += 1
+                        continue
+                    self.current += 1
+                    while self.word[self.current] == u'J':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
-                    continue
+                        continue
     
-                #Case 'K'
-                elif self.word[self.current] == 'K':
-                    self.addLetter('K')
-                    while self.word[self.current] == 'K':
+                #Case u'K'
+                elif self.word[self.current] == u'K':
+                    if self.word[self.current + 1] == u'N' and self.current == self.indent:
+                        self.__addLetter(u'N', 2)
+                        self.current += 2
+                        continue
+                    self.__addLetter(u'K')
+                    self.current += 1
+                    while self.word[self.current] == u'K':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'L'
-                elif self.word[self.current] == 'L':
-                    if self.word[self.current + 1] == 'L':
-                        if ((self.current == self.length - 3 and self.searchOfString(self.current - 1, 4, 'ILLO', 'ILLA', 'ALLE'))
-                            or ((self.searchOfString(self.length - 2, 2, 'AS', 'OS') or self.word[self.length - 1] in 'AO') 
-                                and self.searchOfString(self.current - 1, 4, 'ALLE'))):
-                            self.addLetter('L')
+                #Case u'L'
+                elif self.word[self.current] == u'L':
+                    if self.word[self.current + 1] == u'L':
+                        if ((self.current == self.length - 3 and self.searchOfString(self.current - 1, 4, u'ILLO', u'ILLA', u'ALLE'))
+                            or ((self.searchOfString(self.length - 2, 2, u'AS', u'OS') or self.word[self.length - 1] in u'AO') 
+                                and self.searchOfString(self.current - 1, 4, u'ALLE'))):
+                            self.__addLetter(u'L', 2)
                             #self.extraAdd(' ')
                             self.current += 2
                             continue
-                        while self.word[self.current] == 'L':
-                            self.current += 1
+
+                    self.__addLetter(u'L')
+                    self.current += 1
+                    while self.word[self.current] == u'L':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
+                        self.current += 1
+                    continue
+    
+                #Case u'M'
+                elif self.word[self.current] == u'M':
+                    self.__addLetter(u'M')
+                    self.current += 1
+                    while self.word[self.current] == u'M':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
+                        self.current += 1
+                    if (self.searchOfString(self.current - 2, 3, u'UMB') and ((self.current == self.length - 1) 
+                        or self.searchOfString(self.current + 1, 2, u'ER'))):
+                        self.current += 1
+                    continue
+    
+                #Case u'N'
+                elif self.word[self.current] == u'N':
+                    self.__addLetter(u'N')
+                    self.current += 1
+                    while self.word[self.current] == u'N':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
+                        self.current += 1
+                    continue
+    
+                #Case u'P'
+                elif self.word[self.current] == u'P':
+                    if self.current == self.indent:
+                        if self.word[self.current + 1] == u'N':
+                            self.__addLetter(u'N')
+                            self.current += 2
+                            continue
+                        elif self.word[self.current + 1] == u'S':
+                            self.__addLetter(u'S')
+                            self.current += 2
+                            continue
+                    if self.word[self.current + 1] == u'H':
+                        tmp = 1
+                        while self.word[self.current + tmp] == u'H':
+                            tmp += 1
+                        self.__addLetter(u'F', tmp)
+                        self.current += tmp
+                        continue
+                    self.__addLetter(u'P')
+                    self.current += 1
+                    while self.word[self.current] in u'PB':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
+                        self.current += 1
+                    continue
+    
+                #Case u'Q'
+                elif self.word[self.current] == u'Q':
+                    self.__addLetter(u'K')
+                    self.current += 1
+                    while self.word[self.current] == u'Q':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
+                        self.current += 1
+                    continue
+    
+                #Case u'R'
+                elif self.word[self.current] == u'R':
+                    if (self.current == self.length - 1 and not self.__slavoGermanic()
+                        and self.searchOfString(self.current - 2, 2, u'IE') and not self.searchOfString(self.current - 4, 2, u'ME', u'MA')):
+                        #self.__addLetter('')
+                        #self.extraAdd(u'R')
+                        None
+                    elif (self.current == self.length - 1 and self.word[self.current - 1] == u'E'):
+                        #self.extraAdd(u'R')
+                        #self.__addLetter('')
+                        None
                     else:
+                        self.__addLetter(u'R')
+                    self.current += 1
+                    while self.word[self.current] == u'R':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
-                    self.addLetter('L')
                     continue
     
-                #Case 'M'
-                elif self.word[self.current] == 'M':
-                    while self.word[self.current] == 'M':
-                        self.current += 1
-                    if (self.searchOfString(self.current - 2, 3, 'UMB') and ((self.current == self.length - 1) 
-                        or self.searchOfString(self.current + 1, 2, 'ER'))):
-                        self.current += 1
-                    self.addLetter('M')
-                    continue
-    
-                #Case 'N'
-                elif self.word[self.current] == 'N':
-                    while self.word[self.current] == 'N':
-                        self.current += 1
-                    self.addLetter('N')
-                    continue
-    
-                #Case 'P'
-                elif self.word[self.current] == 'P':
-                    if self.word[self.current + 1] == 'H':
-                        while self.word[self.current + 1] == 'H':
-                            self.current += 1
-                        self.addLetter('F')
+                #Case u'S'
+                elif self.word[self.current] == u'S':
+                    if self.searchOfString(self.current + 1, 3, u'ISL', u'YSL'):
                         self.current += 1
                         continue
-                    while self.word[self.current] in 'PB':
-                        self.current += 1
-                    self.addLetter('P')
-                    continue
     
-                #Case 'Q'
-                elif self.word[self.current] == 'Q':
-                    while self.word[self.current] == 'Q':
-                        self.current += 1
-                    self.addLetter('K')
-                    continue
-    
-                #Case 'R'
-                elif self.word[self.current] == 'R':
-                    if (self.current == self.length - 1 and not self.slavoGermanic()
-                        and self.searchOfString(self.current - 2, 2, 'IE') and not self.searchOfString(self.current - 4, 2, 'ME', 'MA')):
-                        self.addLetter('')
-                        #self.extraAdd('R')
-                    else:
-                        self.addLetter('R')
-                    while self.word[self.current] == 'R':
-                        self.current += 1
-                    continue
-    
-                #Case 'S'
-                elif self.word[self.current] == 'S':
-                    if self.searchOfString(self.current + 1, 3, 'ISL', 'YSL'):
-                        self.current += 1
-                        continue
-    
-                    elif self.current == 4 and self.searchOfString(self.current, 5, 'SUGAR'):
-                        self.addLetter('X')
-                        #self.extraAdd('S')
+                    elif self.current == self.indent and self.searchOfString(self.current, 5, u'SUGAR'):
+                        self.__addLetter(u'X')
+                        #self.extraAdd(u'S')
                         self.current += 1
                         continue
         
-                    elif self.searchOfString(self.current, 2, 'SH'):
-                        if self.searchOfString(self.current + 1, 4, 'HEIM', 'HOEK', 'HOLM', 'HOLZ'):
-                            self.addLetter('S')
+                    elif self.word[self.current + 1] == u'H':
+                        if self.searchOfString(self.current + 1, 4, u'HEIM', u'HOEK', u'HOLM', u'HOLZ'):
+                            self.__addLetter(u'S', 2)
                         else:
-                            self.addLetter('X')
+                            self.__addLetter(u'X', 2)
                         self.current += 2
                         continue
     
-                    elif (self.searchOfString(self.current, 3, 'SIO', 'SIA') 
-                          or self.searchOfString(self.current, 4, 'SIAN')):
-                        if not self.slavoGermanic():
-                            self.addLetter('S')
-                            #self.extraAdd('X')
+                    elif (self.searchOfString(self.current + 1, 2, u'IO', u'IA') 
+                          or self.searchOfString(self.current + 1, 3, u'IAN')):
+                        if not self.__slavoGermanic():
+                            self.__addLetter(u'S')
+                            #self.extraAdd(u'X')
                         else:
-                            self.addLetter('S')
+                            self.__addLetter(u'S')
                         self.current += 3
                         continue
     
-                    elif ((self.current == 4 and self.word[self.current + 1] in 'MNLW')
-                          or self.word[self.current + 1] == 'Z'):
-                        self.addLetter('S')
-                        #self.extraAdd('X')
-                        while self.word[self.current + 1] == 'Z':
+                    elif ((self.current == self.indent and self.word[self.current + 1] in u'MNLW')
+                          or self.word[self.current + 1] == u'Z'):
+                        tmp = 1
+                        while self.word[self.current + tmp] in u'SZ':
                             self.current += 1
-                        self.current += 1
+                        self.__addLetter(u'S', tmp)
+                        #self.extraAdd(u'X')
+                        self.current += tmp
                         continue
-        
-                    elif self.word[self.current + 1] == 'C':
-                        if self.word[self.current + 2] == 'H':
-                            if self.searchOfString(self.current + 3, 2, 'OO', 'ER', 'EN', 'UY', 'ED', 'EM'):
-                                if self.searchOfString(self.current + 3, 2, 'ER', 'EN'):
-                                    self.addLetter('X')
-                                    #self.extraAdd('SK')
+
+                    elif self.word[self.current + 1] == u'C':
+                        if self.word[self.current + 2] == u'H':
+                            if self.searchOfString(self.current + 3, 2, u'OO', u'ER', u'EN', u'UY', u'ED', u'EM'):
+                                if self.searchOfString(self.current + 3, 2, u'ER', u'EN'):
+                                    self.__addLetter(u'X', 3)
+                                    #self.extraAdd(u'SK')
                                 else:
-                                    self.addLetter('SK')
+                                    self.__addLetter(u'SK', 1, 2)
                                 self.current += 3
                                 continue
                             else:
-                                if (self.current == 4 and not self.isVowel(self.word[7]) and self.word[7] != 'W'):
-                                    self.addLetter('X')
-                                    #self.extraAdd('S')
+                                if (self.current == self.indent and not isVowel(self.word[self.indent + 3]) and self.word[self.indent + 3] != u'W'):
+                                    self.__addLetter(u'X', 3)
+                                    #self.extraAdd(u'S')
                                 else:
-                                    self.addLetter('X')
+                                    self.__addLetter(u'X', 3)
                                 self.current += 3
                                 continue
-                        elif self.word[self.current + 2] in 'IEY':
-                            self.addLetter('S')
+                        elif self.word[self.current + 2] in u'IEY':
+                            self.__addLetter(u'S', 2)
                             self.current += 3
                             continue
-                        self.addLetter('SK')
-                        self.current += 3
-                        continue
-        
-                    elif (self.current == self.length - 1 and self.searchOfString(self.current - 2, 2, 'AI', 'OI')):
-                        self.addLetter('')
-                        #self.extraAdd('S')
-                    else:
-                        self.addLetter('S')
-        
-                    while self.word[self.current] in 'SZ':
-                        self.current += 1
-                    continue
-    
-                #Case 'T'
-                elif self.word[self.current] == 'T':
-                    if self.searchOfString(self.current, 4, 'TION'):
-                        self.addLetter('X')
-                        self.current += 3
-                        continue
-        
-                    elif self.searchOfString(self.current, 3, 'TIA', 'TCH'):
-                        self.addLetter('X')
-                        self.current += 3
-                        continue
-        
-                    elif self.searchOfString(self.current, 2, 'TH') or self.searchOfString(self.current, 3, 'TTH'):
-                        if (self.searchOfString(self.current + 2, 2, 'OM', 'AM') 
-                            or self.searchOfString(0, 4, 'VAN ', 'VON ') or self.searchOfString(0, 3, 'SCH')):
-                            self.addLetter('T')
-                        else:
-                            self.addLetter('S')
-                            #self.extraAdd('T')
+                        self.__addLetter(u'SK', 1, 1)
                         self.current += 2
                         continue
         
-                    while self.word[self.current] in 'TD':
+                    elif (self.current == self.length - 1 and self.searchOfString(self.current - 2, 2, u'AI', u'OI')):
+                        #self.__addLetter('')
+                        #self.extraAdd(u'S')
+                        None
+                    else:
+                        self.__addLetter(u'S')
                         self.current += 1
-                    self.addLetter('T')
+        
+                    while self.word[self.current] in u'SZ':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
+                        self.current += 1
                     continue
     
-                #Case 'V'
-                elif self.word[self.current] == 'V':
-                    while self.word[self.current] == 'V':
+                #Case u'T'
+                elif self.word[self.current] == u'T':
+                    if self.searchOfString(self.current + 1, 3, u'ION'):
+                        self.__addLetter(u'X', 3)
+                        self.current += 3
+                        continue
+        
+                    elif self.searchOfString(self.current + 1, 2, u'IA'):
+                        self.__addLetter(u'X')
+                        self.current += 3
+                        continue
+                    elif self.searchOfString(self.current + 1, 2, u'CH'):
+                        self.__addLetter(u'X', 3)
+                        self.current += 3
+                        continue
+                    elif self.word[self.current + 1] == u'H' or self.searchOfString(self.current + 1, 2, u'TH'):
+                        if (self.searchOfString(self.current + 2, 2, u'OM', u'AM') 
+                            or self.searchOfString(self.indent, 4, 'VAN ', 'VON ') or self.searchOfString(self.indent, 3, u'SCH')):
+                            if self.word[self.current + 1] == u'H':
+                                self.__addLetter(u'T', 2)
+                            else:
+                                self.__addLetter(u'T', 3)
+                        else:
+                            if self.word[self.current + 1] == u'H':
+                                self.__addLetter(u'S', 2)
+                                #self.extraAdd(u'T')
+                            else:
+                                self.__addLetter(u'S', 3)
+                                #self.extraAdd(u'T')
+                        self.current += 2
+                        continue
+                    self.__addLetter(u'T')
+                    self.current += 1
+                    while self.word[self.current] in u'TD':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
-                    self.addLetter('F')
                     continue
     
-                #Case 'W'
-                elif self.word[self.current] == 'W':
-                    if self.word[self.current + 1]  == 'R':
-                        self.addLetter('R')
+                #Case u'V'
+                elif self.word[self.current] == u'V':
+                    self.__addLetter(u'F')
+                    self.current += 1
+                    while self.word[self.current] == u'V':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
+                        self.current += 1
+                    continue
+    
+                #Case u'W'
+                elif self.word[self.current] == u'W':
+                    if self.word[self.current + 1]  == u'R':
+                        self.__addLetter(u'R', 2)
                         self.current += 2
                         continue
 
-                    elif self.current == 4:
-                        if self.isVowel(self.word[self.current + 1]):
-                            self.addLetter('F')
-                            #self.extraAdd('A')
+                    elif self.current == self.indent:
+                        if isVowel(self.word[self.current + 1]):
+                            self.__addLetter(u'F')
+                            #self.extraAdd(u'A')
                             self.current += 2
                             continue
-                        elif self.word[self.current + 1]  == 'H' and self.isVowel(self.word[self.current + 2]):
-                            self.addLetter('F')
+                        elif self.word[self.current + 1]  == u'H' and isVowel(self.word[self.current + 2]):
+                            self.__addLetter(u'F', 2)
                             self.current += 3
                             continue
 
-                    elif self.isVowel(self.word[self.current + 1]) and self.isVowel(self.word[self.current - 1]):
-                        self.addLetter('F')
+                    elif isVowel(self.word[self.current + 1]) and isVowel(self.word[self.current - 1]):
+                        self.__addLetter(u'F')
                         self.current += 1
                         continue
 
-                    elif ((self.current == self.length - 1 and self.isVowel(self.word[self.current - 1])) 
-                          or self.searchOfString(self.current - 1, 5, 'EWSKI', 'EWSKY', 'OWSKI', 'OWSKY')):
-                        self.addLetter('')
-                        #self.extraAdd('F')
+                    elif ((self.current == self.length - 1 and isVowel(self.word[self.current - 1])) 
+                          or self.searchOfString(self.current - 1, 5, u'EWSKI', u'EWSKY', u'OWSKI', u'OWSKY')):
+                        #self.__addLetter('')
+                        #self.extraAdd(u'F')
                         self.current += 1
                         continue
-        
-                    elif self.searchOfString(self.current, 4, 'WICZ', 'WITZ'):
-                        self.addLetter('TS')
-                        #self.extraAdd('FX')
+
+                    elif self.searchOfString(self.current, 4, u'WICZ', u'WITZ'):
+                        self.__addLetter(u'TS', 4)
+                        #self.extraAdd(u'FX')
                         self.current += 4
                         continue
         
-                    while self.word[self.current] == 'W':
+                    while self.word[self.current] == u'W':
                         self.current += 1
                     continue
 
+                #Case u'X'
+                elif self.word[self.current] == u'X':
+                    if self.current == self.indent:
+                        self.__addLetter(u'S')
+                        self.current += 1
+                    elif (not (self.current == self.length - 1 and
+                              self.searchOfString(self.current - 2, 2, u'AU', u'OU'))):
+                        self.__addLetter(u'KS', 1, 0)
+                        while self.word[self.current] in u'CX':
+                            self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 2] += 1 
+                            self.current += 1
+                        continue
 
-                #Case 'X'
-                elif self.word[self.current] == 'X':
-                    if (not (self.current == self.length - 1 and
-                             (self.searchOfString(self.current - 3, 3, 'IAU', 'EAU') 
-                              or self.searchOfString(self.current - 2, 2, 'AU', 'OU')))):
-                        self.addLetter('KS')
-
-                    while self.word[self.current] in 'CX':
+                    while self.word[self.current] in u'CX':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
     
-                #Case 'Z'
-                elif self.word[self.current] == 'Z':
-                    if self.word[self.current + 1] == 'H':
-                        self.addLetter('J')
+                #Case u'Z'
+                elif self.word[self.current] == u'Z':
+                    if self.word[self.current + 1] == u'H':
+                        self.__addLetter(u'J', 2)
                         self.current += 2
                         continue
-                    elif (self.searchOfString(self.current + 1, 2, 'ZO', 'ZI', 'ZA') or (self.slavoGermanic() 
-                            and (self.current > 4 and self.word[self.current - 1] != 'T'))):
-                        self.addLetter('S')
-                        #self.extraAdd('TS')
+                    elif (self.searchOfString(self.current + 1, 2, u'ZO', u'ZI', u'ZA') or (self.__slavoGermanic() 
+                            and (self.current > self.indent and self.word[self.current - 1] != u'T'))):
+                        self.__addLetter(u'S')
+                        #self.extraAdd(u'TS')
+                        self.current += 1
                     else:
-                        self.addLetter('S')
-    
-                    while self.word[self.current] == 'Z':
+                        self.__addLetter(u'S')
+                        self.current += 1
+
+                    while self.word[self.current] == u'Z':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
@@ -540,172 +664,212 @@ class DoubleMetaphon:
                     self.current += 1
 
             #Russian language
-            elif u'А' <= self.word[self.current] <= u'Я':
+            elif isRussian(self.word[self.current]):
                 
                 #Case Vowel
-                if self.isVowel(self.word[self.current]):
-                    if self.current == 4:
-                        self.addLetter('A')   
+                if isVowel(self.word[self.current]):
+                    if self.current == self.indent:
+                        self.__addLetter(u'A')
                     self.current += 1
                     continue
 
-                #Case 'Б'
+                #Case u'Б'
                 elif self.word[self.current] == u'Б':
-                    self.addLetter('P')
-                    
-                    while self.word[self.current] == u'Б' or self.word[self.current] == u'П':
+                    self.__addLetter(u'P')
+                    self.current += 1
+
+                    while self.word[self.current] == u'БП':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'В'
+                #Case u'В'
                 elif self.word[self.current] == u'В':
-                    self.addLetter('F')
-                    
-                    while self.word[self.current] == u'В' or self.word[self.current] == u'Ф':
+                    self.__addLetter(u'F')
+                    self.current += 1
+
+                    while self.word[self.current] == u'ВФ':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Г'
+                #Case u'Г'
                 elif self.word[self.current] == u'Г':
-                    self.addLetter('K')
-                    
+                    self.__addLetter(u'K')
+                    self.current += 1
+
                     while self.word[self.current] == u'Г' or self.word[self.current] == u'К':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Д'
+                #Case u'Д'
                 elif self.word[self.current] == u'Д':
-                    if self.word[self.current + 1] == u'C':
-                        self.addLetter('X')
+                    if self.word[self.current + 1] == u'С':
+                        self.__addLetter(u'TS', 1, 0)
+                        #self.extraAdd(u'X', 2)
                         self.current += 2
                         continue
                     else:
-                        self.addLetter('T')
-                    
-                    while self.word[self.current] == u'Д' or self.word[self.current] == u'Т':
+                        self.__addLetter(u'T')
+                        self.current += 1
+
+                    while self.word[self.current] in u'ДT':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Ж'
+                #Case u'Ж'
                 elif self.word[self.current] == u'Ж':
-                    self.addLetter('J')
-                    
-                    while self.word[self.current] == u'Ж':
+                    self.__addLetter(u'J')
+                    self.current += 1
+
+                    while self.word[self.current] in u'ЖШ':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'З'
+                #Case u'З'
                 elif self.word[self.current] == u'З':
-                    self.addLetter('S')
-                    
-                    while self.word[self.current] == u'З' or self.word[self.current] == u'С':
+                    self.__addLetter(u'S')
+                    self.current += 1
+
+                    while self.word[self.current] in u'ЗС':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'К'
+                #Case u'К'
                 elif self.word[self.current] == u'К':
-                    self.addLetter('K')
-                    
-                    while self.word[self.current] == u'К' or self.word[self.current] == u'Г':
+                    self.__addLetter(u'K')
+                    self.current += 1
+
+                    while self.word[self.current] in u'КГ':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Л'
+                #Case u'Л'
                 elif self.word[self.current] == u'Л':
-                    self.addLetter('L')
-                    
+                    self.__addLetter(u'L')
+                    self.current += 1
+
                     while self.word[self.current] == u'Л':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'М'
+                #Case u'М'
                 elif self.word[self.current] == u'М':
-                    self.addLetter('M')
-                    
+                    self.__addLetter(u'M')
+                    self.current += 1
+
                     while self.word[self.current] == u'М':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Н'
+                #Case u'Н'
                 elif self.word[self.current] == u'Н':
-                    self.addLetter('N')
-                    
+                    self.__addLetter(u'N')
+                    self.current += 1
+
                     while self.word[self.current] == u'Н':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'П'
+                #Case u'П'
                 elif self.word[self.current] == u'П':
-                    self.addLetter('P')
-                    
-                    while self.word[self.current] == u'Б' or self.word[self.current] == u'П':
+                    self.__addLetter(u'P')
+                    self.current += 1
+
+                    while self.word[self.current] in u'БП':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Р'
+                #Case u'Р'
                 elif self.word[self.current] == u'Р':
-                    self.addLetter('R')
-                    
+                    self.__addLetter(u'R')
+                    self.current += 1
+
                     while self.word[self.current] == u'Р':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'С'
+                #Case u'С'
                 elif self.word[self.current] == u'С':
-                    self.addLetter('S')
-                    
-                    while self.word[self.current] == u'С' or self.word[self.current] == u'З':
+                    self.__addLetter(u'S')
+                    self.current += 1
+
+                    while self.word[self.current] in u'СЗ':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Т'
+                #Case u'Т'
                 elif self.word[self.current] == u'Т':
-                    self.addLetter('T')
-                    
-                    while self.word[self.current] == u'Т' or self.word[self.current] == u'Д':
+                    self.__addLetter(u'T')
+                    self.current += 1
+
+                    while self.word[self.current] in u'ТД':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Ф'
+                #Case u'Ф'
                 elif self.word[self.current] == u'Ф':
-                    self.addLetter('F')
-                    
-                    while self.word[self.current] == u'Ф' or self.word[self.current] == u'В':
+                    self.__addLetter(u'F')
+                    self.current += 1
+
+                    while self.word[self.current] in u'ФВ':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Х'
+                #Case u'Х'
                 elif self.word[self.current] == u'Х':
-                    self.addLetter('H')
-                    
+                    self.__addLetter(u'H')
+                    self.current += 1
+
                     while self.word[self.current] == u'Х':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Ц'
+                #Case u'Ц'
                 elif self.word[self.current] == u'Ц':
-                    self.addLetter('TS')
+                    self.__addLetter(u'TS', 1, 0)
+                    self.current += 1
+
                     while self.word[self.current] == u'Ц':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 2] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Ч'
+                #Case u'Ч'
                 elif self.word[self.current] == u'Ч':
-                    if self.word[self.current + 1] == u'Т' and self.word[self.current + 1] == u'Н':
-                        self.addLetter('X')
+                    if self.word[self.current + 1] in u'ТН':
+                        self.__addLetter(u'X', 2)
                         self.current += 2
                         continue
 
-                    self.addLetter('X')
+                    self.__addLetter(u'X')
+                    self.current += 1
                     while self.word[self.current] == u'Ч':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
-                #Case 'Ш' or 'Щ'
-                elif self.word[self.current] == u'Ш' or self.word[self.current] == u'Щ':
-                    self.addLetter('X')
+                #Case u'Ш' or u'Щ'
+                elif self.word[self.current] in u'ШЩ':
+                    self.__addLetter(u'X')
+                    self.current += 1
                     
-                    while self.word[self.current] == u'Ш' or self.word[self.current] == u'Щ':
+                    while self.word[self.current] in u'ШЩ':
+                        self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
                     continue
 
@@ -717,6 +881,8 @@ class DoubleMetaphon:
             else:
                 self.current += 1
 
+        return self.transcription
+
 
     def searchOfString(self, start, length, *strings):
         if self.word[start : start + length] in strings:
@@ -724,35 +890,63 @@ class DoubleMetaphon:
         else:
             return False
     
-    def addLetter(self, string):    
+    def __addLetter(self, string, *numbersOfReplacedCharacters):
+        if len(numbersOfReplacedCharacters) == 0:
+            self.amountsOfReplacedSymbols.append(1)
+            self.numbersOfTranscriptionSymbols.append(self.current - self.indent)
+        else:
+            currentDelta = 0
+            for num in numbersOfReplacedCharacters:
+                self.amountsOfReplacedSymbols.append(num)
+                self.numbersOfTranscriptionSymbols.append(self.current - self.indent + currentDelta)
+                currentDelta += num
         self.transcription += string
 
-    #TODO?        
-    def extraAdd(self, string):
-        None
+    #TODO?
+    #def extraAdd(self, string):
+    #   None
 
-    def isVowel(self, letter):
-        if letter in "AEIOUY" or letter in u"АУОЫИЭЯЮЕЁ":
+    def __slavoGermanic(self):
+        if u'W' in self.word or u'K' in self.word or u'CZ' in self.word or u'WITZ' in self.word:
             return True
         else:
             return False
 
-    def slavoGermanic(self):
-        if 'W' in self.word or 'K' in self.word or 'CZ' in self.word or 'WITZ' in self.word:
-            return True
-        else:
-            return False
+    '''def __str__(self):
+        
+        #answer = self.transcription[0]
+        #if len(self.transcription) > 0:
+        #    for i in range(1, len(self.transcription)):
+        #        if self.transcription[i - 1] != self.transcription[i]:
+        #            answer += self.transcription[i]
+        #return answer
+        return self.transcription'''
 
-    def __str__(self):
+    def getNumbersOfSymbols(self):
+        ''' 
+            @attention: before this you should run self.getTranscription() with argument
+            @return: list, the numbers of the first letters in the word that relate to each of the symbols of the transcription
         '''
-        answer = self.transcription[0]
-        if len(self.transcription) > 0:
-            for i in range(1, len(self.transcription)):
-                if self.transcription[i - 1] != self.transcription[i]:
-                    answer += self.transcription[i]
-        return answer
+
+        if self.numbersOfTranscriptionSymbols == []:
+            return -1
+        else:
+            return self.numbersOfTranscriptionSymbols
+
+    def getAmountsOfReplacedSymbols(self):
+        ''' 
+            @attention: before this you should run self.getTranscription() with argument
+            @return: list, the amounts of the letters in the word that relate to each of the symbols of the transcription
         '''
-        return self.transcription
+
+        if self.amountsOfReplacedSymbols == []:
+            return - 1
+        else:
+            return self.amountsOfReplacedSymbols
+
+
 
 if __name__ == '__main__':
-    print( DoubleMetaphon("thought") )
+    DM = DoubleMetaphon()
+    print( DM.getTranscription(u'царитьсяц') )
+    print( DM.getNumbersOfSymbols(), DM.getAmountsOfReplacedSymbols())

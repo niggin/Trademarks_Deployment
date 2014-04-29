@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 
 from django.http import HttpResponse, HttpRequest
@@ -5,7 +6,8 @@ from django.utils import simplejson
 from django.core import serializers
 from trademarks.models import Word
 from trademarks.algorithm import *
-from trademarks.metric import metric
+from trademarks.metric import *
+from trademarks.analyzer import *
 from django.core.cache import cache
 import sys, json
 
@@ -56,7 +58,10 @@ def search(request):
     lang_skip = request.GET['translate']
     shown_langs = request.GET.getlist('langs[]')
     print >>sys.stderr, shown_langs
-    p = DoubleMetaphon(input).transcription
+    metaphon = DoubleMetaphon()
+    p = metaphon.getTranscription(unicode(input))
+
+    p_fullipa = analyzer(input, p)
     
     langs = list()
     position = dict()
@@ -68,6 +73,7 @@ def search(request):
                 raw = list(Word.objects.filter(ipa=p, lang__in=shown_langs))
             else:
                 raw = list(Word.objects.filter(ipa__contains=p, lang__in=shown_langs))
+            print >>sys.stderr, "fetched", len(raw)
             for item in shown_langs:
                 final[item] = list()
             for item in raw:
@@ -75,13 +81,22 @@ def search(request):
                     item.meaning = item.meaning_eng
                 if item.lang == lang_skip:
                     item.meaning = ''
-                final[item.lang].append([item.serialize(), metric(p,item.ipa)])
+                if item.fullipa == "":
+                    #print >>sys.stderr, item.word
+                    item_fullipa = analyzer(item.word,item.ipa)
+                else:
+                    item_fullipa = item.fullipa
+                score = metricOfTranscriptions(p_fullipa, item_fullipa)
+                final[item.lang].append([item.serialize(), (1 - score)*100])
+            #print >>sys.stderr, "metric executed"
             for lang in shown_langs:
                 if len(final[lang])>0:
-                    final[lang].sort(key=lambda l:int(l[1]), reverse = True)
+                    #final[lang].sort(key=lambda l:int(l[1]), reverse = True)
+                    final[lang] = sorted(final[lang], key=lambda l:l[1], reverse = True)
                     position[lang] = min(10,len(final[lang]))
                 else:
                     final.pop(lang)
+            print >>sys.stderr, "sorted"
         cache.set(input + lang_skip + ''.join(shown_langs), final)
         cache.set(str(request.user.id) + "findme", input + lang_skip + ''.join(shown_langs))
         cache.set(str(request.user.id) + "position", position)
@@ -117,3 +132,7 @@ def load_more(request):
     cache.set(str(request.user.id) + "position", position)
     json_out = json.dumps(context)
     return HttpResponse(json_out, content_type='application/json')
+
+def metric(a,b):
+    import random
+    return random.randint(0,100)

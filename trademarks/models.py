@@ -7,6 +7,7 @@ class Word(models.Model):
     meaning_eng = models.CharField(max_length=1000)
     lang = models.CharField(max_length=5)
     transcription = models.CharField(max_length=50)
+    fullipa = models.CharField(max_length=50)
     def __str__(self):
         return self.word
     def __unicode__(self):
@@ -18,5 +19,6 @@ class Word(models.Model):
             "meaning": self.meaning,
             "lang": self.lang,
             "transcription": self.transcription,
-            "meaning_eng": self.meaning_eng
+            "meaning_eng": self.meaning_eng,
+            "fullipa": self.fullipa
         }

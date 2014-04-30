@@ -13,7 +13,7 @@ $("document").ready(function (event, data) {
     if (word) {
         var lang = getUrlAttr("lt");
         $("#findme").val(word);
-        if (lang == "english")
+        if (lang == "english" || typeof (lang) == "undefined")
             $switcher.each(function () {
                 lang = window.getComputedStyle(this, ':before').content;
             });
@@ -24,23 +24,26 @@ $("document").ready(function (event, data) {
             $("#chooselang").prop("checked", !$("#chooselang").prop("checked"));
         }
         var languages = getUrlAttr("lf");
-        fetch(word, lang.substring(0, 2), false, languages);
-        if (typeof getUrlAttr("tr") != "undefined") $("#showtranscript").click();
         var sorting = getUrlAttr("sort");
+        var sort_li;
         if (sorting) {
             $switcher = $(".onoffswitch-inner.sort-by");
-            if (sorting == "language")
+            if (sorting == "language") {
                 $switcher.each(function() {
                     setUrlAttr("sort", window.getComputedStyle(this, ':before').content);
                 });
-            else {
+                sort_li = false;
+            } else {
                 $switcher.each(function() {
-                    setUrlAttr("sort", window.getComputedStyle(this, ':after').content);    
+                    setUrlAttr("sort", window.getComputedStyle(this, ':after').content);
                 });
                 $("#sort-by-button").prop("checked", !$("#sort-by-button").prop("checked"));
-                sort();
+                sort_li = true;
             }
         }
+        fetch(word, lang.substring(0, 2), false, languages, sort_li);
+        if (getUrlAttr("tr") == 0) $("#showtranscript").click();
+        
         //$("#output").css("display", "");
     }
 });
@@ -77,8 +80,14 @@ function loadToggles() {
 function loadListeners() {
     $("#search_button").click(function () {
         var lang = get_currlang();
+        var $switcher = $(".onoffswitch-inner.sort-by");
+        var sort;
+        if ($("#sort-by-button").is(":checked"))
+            sort = false;
+        else
+            sort = true;
         setUrlAttr("lt", lang);
-        fetch($("#findme").val(), lang.substring(0,2));
+        fetch($("#findme").val(), lang.substring(0, 2), true, ["ru", "en"], sort);
         setUrlAttr("w", $("#findme").val());
     });
 
@@ -90,7 +99,11 @@ function loadListeners() {
 
     $("#showtranscript").click(function () {
         $(".transcript").toggleClass("hidden");
-
+        if (typeof getUrlAttr("tr") == "undefined") {
+            setUrlAttr("tr", 0);
+        } else {
+            setUrlAttr("tr", 1 - getUrlAttr("tr"));
+        }
     });
 
     $("#sort-by-button").click(function () {
@@ -160,9 +173,10 @@ function sort() {
     });
 }
 
-function fetch(kind, lang_out, async, languages) {
+function fetch(kind, lang_out, async, languages, sort) {
     async = typeof (async) != 'undefined' ? async : true;
-    languages = typeof (languages) != 'undefined' ? languages : ["ru", "en", "ge"];
+    sort = typeof (sort) != 'undefined' ? sort : false;
+    languages = typeof (languages) != 'undefined' ? languages : ["ru", "en"];
     if (typeof (languages) == "string") languages = [languages];
     cleanup();
     var request = $.ajax({
@@ -171,7 +185,7 @@ function fetch(kind, lang_out, async, languages) {
         type: "GET",
         data: { findme: kind, translate: lang_out, langs: languages },//getAttrFromUrl("lt"), langs: getAttrFromUrl("lf"), sort: getAttrFromUrl("sort") },
         dataType: "json",
-        beforeSend: function() { 
+        beforeSend: function () {
             $("#output").css("display", "none");
             $("#loader").css("display", "");
         },
@@ -200,6 +214,7 @@ function fetch(kind, lang_out, async, languages) {
             } else {
                 getReady();
             }
+            if (sort) sortByMatch(lang_out);
             $("#loader").css("display", "none");
             $("#output").css("display", "block");
         }

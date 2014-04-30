@@ -62,12 +62,12 @@ def search(request):
     p = metaphon.getTranscription(unicode(input))
 
     p_fullipa = Word.objects.filter(word=input)
-    print >>sys.stderr, p_fullipa[0].ipa
+    #print >>sys.stderr, p_fullipa[0].ipa
     if p_fullipa and p_fullipa[0].fullipa != None:
         p_fullipa = p_fullipa[0].fullipa
     else:
         p_fullipa = analyzer(input, p)
-    print >>sys.stderr, p_fullipa
+    #print >>sys.stderr, p_fullipa
     
     langs = list()
     position = dict()

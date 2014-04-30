@@ -41,8 +41,9 @@ $("document").ready(function (event, data) {
                 sort_li = true;
             }
         }
-        fetch(word, lang.substring(0, 2), false, languages, sort_li);
-        if (getUrlAttr("tr") == 0) $("#showtranscript").click();
+        var trans = true;
+        if (getUrlAttr("tr") == 0) trans = false;
+        fetch(word, lang.substring(0, 2), false, languages, sort_li, trans);
         
         //$("#output").css("display", "");
     }
@@ -87,7 +88,9 @@ function loadListeners() {
         else
             sort = true;
         setUrlAttr("lt", lang);
-        fetch($("#findme").val(), lang.substring(0, 2), true, ["ru", "en"], sort);
+        var trans = true;
+        if (getUrlAttr("tr") == 0) trans = false;
+        fetch($("#findme").val(), lang.substring(0, 2), true, ["ru", "en"], sort, trans);
         setUrlAttr("w", $("#findme").val());
     });
 
@@ -135,7 +138,7 @@ function loadListeners() {
     $("#chooselang").click(function () {
         var lang = get_currlang();
         setUrlAttr("lt", lang);
-        fetch($("#findme").val(), lang.substring(0,2));
+        $("#search_button").click();
     });
 
     var searchTop = $("#header-background").offset().top;
@@ -173,8 +176,9 @@ function sort() {
     });
 }
 
-function fetch(kind, lang_out, async, languages, sort) {
+function fetch(kind, lang_out, async, languages, sort, trans) {
     async = typeof (async) != 'undefined' ? async : true;
+    trans = typeof (trans) != 'undefined' ? trans : true;
     sort = typeof (sort) != 'undefined' ? sort : false;
     languages = typeof (languages) != 'undefined' ? languages : ["ru", "en"];
     if (typeof (languages) == "string") languages = [languages];
@@ -215,6 +219,7 @@ function fetch(kind, lang_out, async, languages, sort) {
                 getReady();
             }
             if (sort) sortByMatch(lang_out);
+            if (!trans) $(".transcript").toggleClass("hidden");
             $("#loader").css("display", "none");
             $("#output").css("display", "block");
         }

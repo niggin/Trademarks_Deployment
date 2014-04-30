@@ -61,7 +61,11 @@ def search(request):
     metaphon = DoubleMetaphon()
     p = metaphon.getTranscription(unicode(input))
 
-    p_fullipa = analyzer(input, p)
+    p_fullipa = Word.objects.filter(word=input)
+    if p_fullipa:
+        p_fullipa = p_fullipa[0].fullipa
+    else:
+        p_fullipa = analyzer(input, p)
     
     langs = list()
     position = dict()
@@ -81,14 +85,16 @@ def search(request):
                     item.meaning = item.meaning_eng
                 if item.lang == lang_skip:
                     item.meaning = ''
-                #if item.fullipa == "":
+                if item.fullipa == None:
                     #print >>sys.stderr, item.word
-                item_fullipa = analyzer(item.word,item.ipa)
-                #else:
-                 #   item_fullipa = item.fullipa
+                    item_fullipa = analyzer(item.word,item.ipa)
+                else:
+                    #print type(item.fullipa), item.fullipa
+                    item_fullipa = item.fullipa
+                #print >>sys.stderr, item_fullipa, p_fullipa
                 score = metricOfTranscriptions(p_fullipa, item_fullipa)
                 final[item.lang].append([item.serialize(), (1 - score)*100])
-            #print >>sys.stderr, "metric executed"
+            print >>sys.stderr, "metric executed"
             for lang in shown_langs:
                 if len(final[lang])>0:
                     #final[lang].sort(key=lambda l:int(l[1]), reverse = True)

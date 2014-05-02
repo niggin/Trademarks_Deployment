@@ -25,9 +25,9 @@ $("document").ready(function (event, data) {
         var sorting = getUrlAttr("sort");
         var sort_li;
         if (sorting) {
-            if (sorting == "language" || sorting == "undefined") {
+            if (sorting == "percents" || sorting == "undefined") {
                 sort_li = false;
-            } else if (sorting == "percents") {
+            } else if (sorting == "similarity") {
                 $("#sort-by-button").prop("checked", !$("#sort-by-button").prop("checked"));
                 sort_li = true;
             }
@@ -155,7 +155,7 @@ function setUrlAttr(key, value) {
 }
 
 function sort() {
-    $(".percent_button").toggleClass('active');
+    //$(".percent_button").toggleClass('active');
     sortByMatch(get_currlang().substring(0, 2));
 }
 
@@ -232,7 +232,7 @@ function sortByMatch(lang_skip) {
         for (var item in langs) {
             var temparray = $.makeArray(langs[item].children);
             temparray.splice(0, 1);
-            for (var i = 1; i < temparray.length; i++) {
+            for (var i = 1; i < temparray.length - 1; i++) {
                 if (temparray[0].id == lang_skip) {
                     //temparray[i].id = i;
                     //alert(temparray[i].children[0].innerHTML);
@@ -248,7 +248,7 @@ function sortByMatch(lang_skip) {
         allwords.sort(function (a, b) {
             var aord = a.children[3].innerHTML;
             var bord = b.children[3].innerHTML;
-            return parseInt(bord) - parseInt(aord);
+            return parseFloat(bord) - parseFloat(aord);
         });
 
         //$tohide.html($source.html());

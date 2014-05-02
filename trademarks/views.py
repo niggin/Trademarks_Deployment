@@ -11,7 +11,6 @@ from trademarks.analyzer import *
 from django.core.cache import cache
 import sys, json, time, math
 
-gamma = 3
 
 def home(request):
     context = {'forsearch': ''}
@@ -39,9 +38,10 @@ def search(request):
         print >>sys.stderr, "not from cache"
         final = dict()
         if p != '':
-            raw = list(Word.objects.raw('SELECT * FROM trademarks_word WHERE ("' 
-                                         + p + '" LIKE CONCAT("%%",ipa,"%%") OR ipa LIKE "%%' 
-                                         + p + '%%") AND lang IN (' + ", ".join('"%s"'% arg for arg in shown_langs) + ')'))
+            #raw = list(Word.objects.raw('SELECT * FROM trademarks_word WHERE ("' 
+            #                             + p + '" LIKE CONCAT("%%",ipa,"%%") OR ipa LIKE "%%' 
+            #                             + p + '%%") AND lang IN (' + ", ".join('"%s"'% arg for arg in shown_langs) + ')'))
+            raw = list(Word.objects.filter(ipa__contains=p))
             print >>sys.stderr, "fetched"
             for item in shown_langs:
                 final[item] = list()
@@ -55,7 +55,7 @@ def search(request):
                 else:
                     item_fullipa = item.fullipa
                 score = metricOfTranscriptions(p_fullipa, item_fullipa)
-                final[item.lang].append([item.serialize(), math.exp(-score*gamma) * 100])
+                final[item.lang].append([item.serialize(), func(score)])#math.exp(-score*gamma) * 100])
             print >>sys.stderr, "metric executed"
             for lang in shown_langs:
                 if len(final[lang])>0:
@@ -70,7 +70,10 @@ def search(request):
     else:
         print >>sys.stderr, "from cache"
         final = cache.get(fromcache)
-        position = cache.get(str(request.user.id) + "position")
+        for lang in final:
+            position[lang] = min(10,len(final[lang]))
+        cache.set(str(request.user.id) + "position", position)
+        #position = cache.get(str(request.user.id) + "position")
     output = dict()
     print >>sys.stderr, final.keys(), shown_langs, position
  
@@ -105,3 +108,7 @@ def load_more(request):
 def metric(a,b):
     import random
     return random.randint(0,100)
+
+def func(score):
+
+    return 100 * (1 - score)

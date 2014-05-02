@@ -9,40 +9,34 @@ $(document).ready(function () {
 
 $("document").ready(function (event, data) {
     var word = getUrlAttr("w");
-    var $switcher = $(".onoffswitch-inner.chooselang");
-    if (word) {
+    console.log(word);
+    if (word != "undefined") {
+        console.log("ready run");
         var lang = getUrlAttr("lt");
         $("#findme").val(word);
-        if (lang == "english" || typeof (lang) == "undefined")
-            $switcher.each(function () {
-                lang = window.getComputedStyle(this, ':before').content;
-            });
+        if (lang == "english" || lang == "undefined") {
+            
+        }
         else if (lang == "russian") {
-            $switcher.each(function() {
-                lang = window.getComputedStyle(this, ':after').content;
-            });
             $("#chooselang").prop("checked", !$("#chooselang").prop("checked"));
         }
         var languages = getUrlAttr("lf");
+        console.log(languages, "ready");
         var sorting = getUrlAttr("sort");
         var sort_li;
         if (sorting) {
-            $switcher = $(".onoffswitch-inner.sort-by");
-            if (sorting == "language") {
-                $switcher.each(function() {
-                    setUrlAttr("sort", window.getComputedStyle(this, ':before').content);
-                });
+            if (sorting == "language" || sorting == "undefined") {
                 sort_li = false;
-            } else {
-                $switcher.each(function() {
-                    setUrlAttr("sort", window.getComputedStyle(this, ':after').content);
-                });
+            } else if (sorting == "percents") {
                 $("#sort-by-button").prop("checked", !$("#sort-by-button").prop("checked"));
                 sort_li = true;
             }
         }
         var trans = true;
-        if (getUrlAttr("tr") == 0) trans = false;
+        if (getUrlAttr("tr") == "0") {
+            trans = false;
+            $("#showtranscript").prop("checked", !$("#showtranscript").prop("checked"));
+        }
         fetch(word, lang.substring(0, 2), false, languages, sort_li, trans);
         
         //$("#output").css("display", "");
@@ -81,7 +75,6 @@ function loadToggles() {
 function loadListeners() {
     $("#search_button").click(function () {
         var lang = get_currlang();
-        var $switcher = $(".onoffswitch-inner.sort-by");
         var sort;
         if ($("#sort-by-button").is(":checked"))
             sort = false;
@@ -102,7 +95,7 @@ function loadListeners() {
 
     $("#showtranscript").click(function () {
         $(".transcript").toggleClass("hidden");
-        if (typeof getUrlAttr("tr") == "undefined") {
+        if (getUrlAttr("tr") == "undefined") {
             setUrlAttr("tr", 0);
         } else {
             setUrlAttr("tr", 1 - getUrlAttr("tr"));
@@ -155,33 +148,24 @@ function loadListeners() {
 
 function setUrlAttr(key, value) {
     var q = queryString.parse(location.search);
-    console.log(q);
+    value = String(value).replace(/"/g, '');
+    console.log(value, "set");
     q[key] = value;
     history.pushState('', 'xz', '?' + queryString.stringify(q));
 }
 
 function sort() {
     $(".percent_button").toggleClass('active');
-    $.ajax({
-        beforeSend: function() {
-            $("#output").css("display", "none");
-            $("#loader").css("display", "");
-        },
-        success: function () {
-            sortByMatch(get_currlang().substring(0,2));
-            //sortByMatch();
-            $("#loader").css("display", "none");
-            $("#output").css("display", "block");
-        }
-    });
+    sortByMatch(get_currlang().substring(0, 2));
 }
 
 function fetch(kind, lang_out, async, languages, sort, trans) {
-    async = typeof (async) != 'undefined' ? async : true;
-    trans = typeof (trans) != 'undefined' ? trans : true;
-    sort = typeof (sort) != 'undefined' ? sort : false;
-    languages = typeof (languages) != 'undefined' ? languages : ["ru", "en"];
+    async = async != 'undefined' ? async : true;
+    trans = trans != 'undefined' ? trans : true;
+    sort = sort != 'undefined' ? sort : false;
+    languages = languages != 'undefined' ? languages : ["ru", "en"];
     if (typeof (languages) == "string") languages = [languages];
+    console.log(async, trans, sort, languages, lang_out);
     cleanup();
     var request = $.ajax({
         url: "/search",
@@ -197,7 +181,7 @@ function fetch(kind, lang_out, async, languages, sort, trans) {
             for (var lang in data['array']) {
                
                 var $baselang = $("<div/>", { class: "lang" });
-                $baselang.append("<div class='wordline lang-header'><div class='cell word'>" + lang + "</div><div class='more' id='" + "more_" + lang + "'>more</div></div>");
+                $baselang.append("<div class='wordline lang-header'><div class='cell word'>" + lang + "</div>");//"<div class='more' id='" + "more_" + lang + "'>more</div></div>");
                 var $lang = $("<div/>", { class: "lang_link", id: lang }).appendTo($baselang);
 
                 for (var i = 0; i < data['array'][lang].length; i++) {
@@ -208,6 +192,7 @@ function fetch(kind, lang_out, async, languages, sort, trans) {
                     $input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1].toFixed(1) + "%").appendTo($word);
                     $baselang.append($word);
                 }
+                $baselang.append($("<div/>", { class: "loadmore", id: "more_" + lang }).html("show more results"));
                 $("#output").append($baselang);
                 if (data['hide_morebutton'][lang]) {
                     $("#more_" + lang).css("display", "none");
@@ -218,10 +203,15 @@ function fetch(kind, lang_out, async, languages, sort, trans) {
             } else {
                 getReady();
             }
-            if (sort) sortByMatch(lang_out);
-            if (!trans) $(".transcript").toggleClass("hidden");
+            if (sort) {
+                sortByMatch(lang_out);
+            }
+            console.log(trans, "fetch");
+            if (!trans) {
+                $(".transcript").toggleClass("hidden");
+            }
             $("#loader").css("display", "none");
-            $("#output").css("display", "block");
+            if (!sort) $("#output").css("display", "block");
         }
     });
 }
@@ -232,7 +222,8 @@ function sortByMatch(lang_skip) {
     var $tohide = $("#tohide");
 
     if ($tohide.html().localeCompare("")) {
-        $source.html($tohide.html());
+        //$source.html($tohide.html());
+        $source.css("display", "block");
         $tohide.html("");
     } else {
         var langs = $.makeArray($source.children());
@@ -243,23 +234,25 @@ function sortByMatch(lang_skip) {
             temparray.splice(0, 1);
             for (var i = 1; i < temparray.length; i++) {
                 if (temparray[0].id == lang_skip) {
+                    //temparray[i].id = i;
+                    //alert(temparray[i].children[0].innerHTML);
                     var toarray = temparray[i].cloneNode(true);
                     toarray.children[2].innerHTML = temparray[i].children[0].innerHTML;
                     allwords.push(toarray);
                 } else {
-                    allwords.push(temparray[i]);
+                    allwords.push(temparray[i].cloneNode(true));
                 }
             }
         }
-
+        
         allwords.sort(function (a, b) {
             var aord = a.children[3].innerHTML;
             var bord = b.children[3].innerHTML;
             return parseInt(bord) - parseInt(aord);
         });
 
-        $tohide.html($source.html());
-        $source.html("");
+        //$tohide.html($source.html());
+        //$source.html("");
 
         var $baselang = $("<div/>", {
             class: "lang",
@@ -277,7 +270,10 @@ function sortByMatch(lang_skip) {
             $baselang.append(allwords[i]);
         }
 
-        $source.append($baselang);
+        //$source.append($baselang);
+        $tohide.append($baselang);
+        $tohide.css("display", "block");
+        $source.css("display", "none");
     }
 
     getReady();
@@ -298,7 +294,7 @@ function getReady() {
         $(this).focuseOn();
     });
 
-    $(".more").click(function () {
+    $(".loadmore").click(function () {
         fetch_more($(this).attr('id').substring(5));
     });
 
@@ -316,16 +312,21 @@ function fetch_more(lang_out) {
         success: function(data) {
             for (var lang in data['array']) {
                 var $baselang = $("#" + lang).parent();
+                //alert($("#" + lang).parent().lastChild);
+                //var $more = $baselang.lastChild;
                 for (var i = 0; i < data['array'][lang].length; i++) {
                     var $word = $("<div/>", { class: "wordline" });
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
                     $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
                     $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
                     $input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1].toFixed(1) + "%").appendTo($word);
+                    //$baselang.insertBefore($word, $baselang.lastChild);
                     $baselang.append($word);
-                    if (data['hide_morebutton'][lang]) {
-                        $("#more_" + lang).css("display", "none");
-                    }
+                }
+                $("#more_" + lang).appendTo($baselang);
+                //$more.appendTo($baselang);
+                if (data['hide_morebutton'][lang]) {
+                    $("#more_" + lang).css("display", "none");
                 }
             }
         }
@@ -334,7 +335,7 @@ function fetch_more(lang_out) {
 
 function get_currlang() {
     var $switcher = $(".onoffswitch-inner.chooselang");
-    var lang;
+    var lang = String();
     if ($("#chooselang").is(":checked"))
         $switcher.each(function () {
             lang = window.getComputedStyle(this, ':before').content;
@@ -343,10 +344,27 @@ function get_currlang() {
         $switcher.each(function () {
             lang = window.getComputedStyle(this, ':after').content;
         });
-    return lang;
+    console.log(lang.replace(/"/g, ''), "get_currlang");
+    return lang.replace(/"/g,'');
 }
 
 function getUrlAttr(key) {
     var q = queryString.parse(location.search);
-    return q[key];
+    console.log(q[key], "get", key);
+    return String(q[key]).replace(/"/g, '');
+}
+
+
+function cloneNode1(node) {
+    // If the node is a text node, then re-create it rather than clone it
+    var clone = node.nodeType == 3 ? document.createTextNode(node.nodeValue) : node.cloneNode(false);
+
+    // Recurse     
+    var child = node.firstChild;
+    while (child) {
+        clone.appendChild(cloneNode1(child));
+        child = child.nextSibling;
+    }
+
+    return clone;
 }

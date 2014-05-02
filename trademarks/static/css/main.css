@@ -20,7 +20,7 @@ html, body {
 	margin: 0 auto;
 	background-color: #fff;
 	width: 740px;
-	height: 94px;
+	height: 72px;
 	margin: -50px 0 0 80px;
 	z-index: 500;
 }
@@ -131,7 +131,7 @@ html, body {
 }
 
 #search-menu {
-	width: 720px;
+	width: 727px;
 	height: 20px;
 	margin: 0 auto;
 	padding: 5px 5px ;
@@ -164,14 +164,13 @@ html, body {
 }
 
 #results {
-	width: 738px;
+	width: 730px;
 	margin: 0 auto;
 	margin-top: 100px !important;
     overflow: inherit;
     font: normal 12px/20px 'sans', 'trebuchet MS', 'Tahoma';
     letter-spacing: 1px;
     color: #333;
-
 }
 
 #results #results-header {
@@ -299,11 +298,11 @@ html, body {
 }
 
 .onoffswitch-inner.sort-by:before {
-	content: "language";
+	content: "percents";
 }
 
 .onoffswitch-inner.sort-by:after {
-	content: "percents";
+	content: "similarity";
 }
 
 .onoffswitch-switch {
@@ -361,21 +360,37 @@ html, body {
 	margin-left: 26px;
 	border-top: 1px solid #ddd;
 	width: 682px;
-	padding: 34px 15px 15px 15px;
+	padding: 34px 15px 27px 15px;
 	display: table;
 	z-index: 10;
 }
 
+#results .hidewords {
+	position: absolute;
+	display: none;
+	margin-left: -45px;
+	height: calc(100% - 37px);
+	width: 35px;
+	cursor: pointer;
+}
+
+#results .hidewords:hover {
+	background-color: #efefef;
+	background-image: url('../images/hidewords.png');
+	background-repeat: repeat-y;
+	background-position: 50% 50%;
+	transition: all 0.2s linear;
+	-moz-transition: all 0.2s linear;
+	-webkit-transition: all 0.2s linear;
+	-o-transition: all 0.2s linear;
+}
+
 #results #en.lang_link {
-	background: url('../images/flags/en.png') no-repeat 50% 37%;
+	background: url('../images/flags/en.ico') no-repeat 50% 37%;
 }
 
 #results #ru.lang_link {
-	background: url('../images/flags/ru.png') no-repeat 50% 37%;
-}
-
-#results #ge.lang_link {
-	background: url('../images/flags/ge.png') no-repeat 50% 37%;
+	background: url('../images/flags/ru.ico') no-repeat 50% 37%;
 }
 
 #results #all.lang_link {
@@ -443,6 +458,23 @@ html, body {
 	position: relative;
 	text-align: right;
 	width: 7%;
+}
+
+#results .loadmore {
+	position: absolute;
+	text-align: center;
+	width: 	697px;
+	padding: 2px 0;
+	color: #bbb;
+	cursor: pointer;
+}
+
+#results .loadmore:hover {
+	background-color: #efefef;
+	transition: all 0.2s linear;
+	-moz-transition: all 0.2s linear;
+	-webkit-transition: all 0.2s linear;
+	-o-transition: all 0.2s linear;
 }
 
 #footer {

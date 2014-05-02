@@ -37,7 +37,7 @@ def metricOfWords(pattern, word, vFine = 50.0, cFine = 5.0):
         idxP = 0 # pattern transcription index
         idxW = 0 # word transcription index
         while indexW < lenW or indexP < lenP:
-            print(indexW, indexP)
+            #print(indexW, indexP)
             if indexW < lenW and indexP < lenP:
                 #Case 1: the current letters of u'pattern' form the current symbol of the transcription
                 if idxP < lenTP and indexP == DMTrancriptionPinfo[numbers][idxP]:
@@ -47,14 +47,14 @@ def metricOfWords(pattern, word, vFine = 50.0, cFine = 5.0):
                         #subcase: there are extra letters(vowels) in u'word'
                         #@fine for each extra-letter (vowel)
                         fines += vFine
-                        print(u"extra in W: ", word[indexW])
+                        #print(u"extra in W: ", word[indexW])
                         indexW += 1
                     if DMTrancriptionP[idxP] == DMTrancriptionW[idxW]:
                         #subcase: Coincidence of transcription symbols
                         distance += cFine * compareConsonants(word[indexW:indexW + DMTrancriptionWinfo[amounts][idxW]], 
                                                       pattern[indexP:indexP + DMTrancriptionPinfo[amounts][idxP]])
                         fines += cFine
-                        print(u"OkayP: ", word[indexW])
+                        #print(u"OkayP: ", word[indexW])
                         indexP += DMTrancriptionPinfo[amounts][idxP]
                         indexW += DMTrancriptionWinfo[amounts][idxW]
                         idxP += 1
@@ -64,7 +64,7 @@ def metricOfWords(pattern, word, vFine = 50.0, cFine = 5.0):
                         #subcase: different letters of trascriptions
                         #max-@fine for a different-letter (consonant)
                         fines += vFine
-                        print(u"differ")
+                        #print(u"differ")
                         indexP += DMTrancriptionPinfo[amounts][idxP]
                         indexW += DMTrancriptionWinfo[amounts][idxW]
                         idxP += 1
@@ -76,7 +76,7 @@ def metricOfWords(pattern, word, vFine = 50.0, cFine = 5.0):
                         fines += cFine
                         indexP += DMTrancriptionPinfo[amounts][idxP]
                         idxP += 1
-                        print (u"The End?")
+                        #print (u"The End?")
                         continue
 
                 #Case 2: the current letters of u'word' form the current symbol of the transcription
@@ -85,14 +85,14 @@ def metricOfWords(pattern, word, vFine = 50.0, cFine = 5.0):
                         #subcase: there are extra letters(vowels) in u'pattern'
                         #@fine for each extra-letter (vowel)
                         fines += vFine
-                        print(u"extra in P: ", pattern[indexP])
+                        #print(u"extra in P: ", pattern[indexP])
                         indexP += 1
                     if DMTrancriptionW[idxW] == DMTrancriptionP[idxP]:
                         #subcase: Coincidence of transcription symbols
                         distance += cFine * compareConsonants(word[indexW:indexW + DMTrancriptionWinfo[amounts][idxW]], 
                                                       pattern[indexP:indexP + DMTrancriptionPinfo[amounts][idxP]])
                         fines += cFine
-                        print(u"OkayW: ", word[indexP])
+                        #print(u"OkayW: ", word[indexP])
                         indexP += DMTrancriptionPinfo[amounts][idxP] - 1
                         indexW += DMTrancriptionWinfo[amounts][idxW] - 1
                         idxP += 1
@@ -102,7 +102,7 @@ def metricOfWords(pattern, word, vFine = 50.0, cFine = 5.0):
                         #subcase: different letters of trascriptions
                         #max-@fine for a different-letter (consonant)
                         fines += cFine
-                        print(u"differ")
+                        #print(u"differ")
                         indexP += DMTrancriptionPinfo[amounts][idxP]
                         indexW += DMTrancriptionWinfo[amounts][idxW]
                         idxP += 1
@@ -114,7 +114,7 @@ def metricOfWords(pattern, word, vFine = 50.0, cFine = 5.0):
                         fines += cFine
                         indexW += DMTrancriptionWinfo[amounts][idxW]
                         idxW += 1
-                        print (u"The End?")
+                        #print (u"The End?")
                         continue
 
                 #Case 3: the current letters are not in transcriptions of u'word' and 'pattern'
@@ -122,7 +122,7 @@ def metricOfWords(pattern, word, vFine = 50.0, cFine = 5.0):
                 fines += vFine
                 indexW += 1
                 indexP += 1
-                print(u"work with Vowels")
+                #print(u"work with Vowels")
                 continue
 
             #Case: the remaining part of u'pattern' is empty
@@ -130,14 +130,14 @@ def metricOfWords(pattern, word, vFine = 50.0, cFine = 5.0):
                 #@fine for extra-letter of u'word'
                 fines += vFine
                 indexW += 1
-                print(u"fine for extra-vowel of Pattern!")
+                #print(u"fine for extra-vowel of Pattern!")
 
             #Case: the remaining part of u'word' is empty
             else:
                 #@fine for extra-letter of u'pattern'
                 fines += vFine
                 indexP += 1
-                print(u"fine for extra-vowel of Word!")
+                #print(u"fine for extra-vowel of Word!")
     else:
         return 1
     return 1 - distance / fines
@@ -161,8 +161,8 @@ def compareVovels(letters, oLetters):
 
 def compareConsonants(letters, oLetters):
     #return double in [0, 1]
-    print(letters)
-    print(oLetters)
+    #print(letters)
+    #print(oLetters)
     if letters == oLetters:
             return 1
     if len(letters) == 1 and len(oLetters) == 1:

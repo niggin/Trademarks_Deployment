@@ -41,7 +41,7 @@ def search(request):
             #raw = list(Word.objects.raw('SELECT * FROM trademarks_word WHERE ("' 
             #                             + p + '" LIKE CONCAT("%%",ipa,"%%") OR ipa LIKE "%%' 
             #                             + p + '%%") AND lang IN (' + ", ".join('"%s"'% arg for arg in shown_langs) + ')'))
-            raw = list(Word.objects.filter(ipa__contains=p))
+            raw = list(Word.objects.filter(ipa__contains=p,lang__in=shown_langs))
             print >>sys.stderr, "fetched"
             for item in shown_langs:
                 final[item] = list()

@@ -309,7 +309,8 @@ function fetch_more(lang_out) {
         type: "GET",
         data: { lang: lang_out },
         dataType: "json",
-        success: function(data) {
+        success: function (data) {
+            var trans = getUrlAttr("tr") == "0";
             for (var lang in data['array']) {
                 var $baselang = $("#" + lang).parent();
                 //alert($("#" + lang).parent().lastChild);
@@ -318,7 +319,8 @@ function fetch_more(lang_out) {
                     var $word = $("<div/>", { class: "wordline" });
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
                     $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
-                    $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
+                    $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']);//.appendTo($word);
+                    $input.appendTo($word);
                     $input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1].toFixed(1) + "%").appendTo($word);
                     //$baselang.insertBefore($word, $baselang.lastChild);
                     $baselang.append($word);
@@ -328,7 +330,11 @@ function fetch_more(lang_out) {
                 if (data['hide_morebutton'][lang]) {
                     $("#more_" + lang).css("display", "none");
                 }
+                
             }
+            if (trans) {
+                    $(".transcript").toggleClass("hidden", true);
+                }
         }
     });
 }

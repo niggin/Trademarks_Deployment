@@ -13,10 +13,14 @@ import sys, json, time, math
 
 
 def home(request):
+    if not request.session.get('has_session'):
+        request.session['has_session'] = True
     context = {'forsearch': ''}
     return render(request, 'index.html', context)
 
 def search(request):
+    #print >>sys.stderr, str(request.session.session_key)
+    id = request.session.session_key
     sec = time.time()
     input = request.GET['findme']
     lang_skip = request.GET['translate']
@@ -33,7 +37,7 @@ def search(request):
     
     langs = list()
     position = dict()
-    fromcache = cache.get(str(request.user.id) + "findme")
+    fromcache = cache.get(id + "findme")
     if not fromcache or input + lang_skip + ''.join(shown_langs) != fromcache:
         print >>sys.stderr, "not from cache"
         final = dict()
@@ -65,14 +69,14 @@ def search(request):
                     final.pop(lang)
             print >>sys.stderr, "sorted"
         cache.set(input + lang_skip + ''.join(shown_langs), final)
-        cache.set(str(request.user.id) + "findme", input + lang_skip + ''.join(shown_langs))
-        cache.set(str(request.user.id) + "position", position)
+        cache.set(id + "findme", input + lang_skip + ''.join(shown_langs))
+        cache.set(id + "position", position)
     else:
         print >>sys.stderr, "from cache"
         final = cache.get(fromcache)
         for lang in final:
             position[lang] = min(10,len(final[lang]))
-        cache.set(str(request.user.id) + "position", position)
+        cache.set(id + "position", position)
         #position = cache.get(str(request.user.id) + "position")
     output = dict()
     print >>sys.stderr, final.keys(), shown_langs, position
@@ -86,9 +90,11 @@ def search(request):
     return HttpResponse(json_out, content_type='application/json')
 
 def load_more(request):
-    final = cache.get(cache.get(str(request.user.id) + "findme"))
+    #print >>sys.stderr, str(request.session.session_key)
+    id = request.session.session_key
+    final = cache.get(cache.get(id + "findme"))
     langs = final.keys()
-    position = cache.get(str(request.user.id) + "position")
+    position = cache.get(id + "position")
     update_lang = request.GET['lang']
     output = dict()
     delta = 10
@@ -101,7 +107,7 @@ def load_more(request):
         delta = 0
     output[update_lang] = final[update_lang][position[update_lang]-delta:position[update_lang]]
     context = {'array': output, 'hide_morebutton': {item: position[item] == len(final[item]) for item in final} }
-    cache.set(str(request.user.id) + "position", position)
+    cache.set(id + "position", position)
     json_out = json.dumps(context)
     return HttpResponse(json_out, content_type='application/json')
 

@@ -534,3 +534,17 @@ html, body {
 .absolute {
 	position: absolute !important;
 }
+
+.progressbar {
+      background-color: #efefef;
+      border-radius: 0px; /* (height of inner div) / 2 + padding */
+      padding: 3px;
+      height: 7px;
+    }
+    
+.progressbar > div {
+       background-color: chartreuse;
+       width: 75.2%; /* Adjust with JavaScript */
+       height: 90%;
+       border-radius: 3px;
+    }

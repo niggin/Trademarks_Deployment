@@ -178,6 +178,7 @@ function fetch(kind, lang_out, async, languages, sort, trans) {
             $("#loader").css("display", "");
         },
         success: function (data) {
+            var colors = ["#ff0000", "#ffd700", "#00ff00"];
             for (var lang in data['array']) {
                
                 var $baselang = $("<div/>", { class: "lang" });
@@ -189,7 +190,11 @@ function fetch(kind, lang_out, async, languages, sort, trans) {
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
                     $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
                     $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
-                    $input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1].toFixed(1) + "%").appendTo($word);
+                    //$input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1].toFixed(1) + "%").appendTo($word);
+                    var percent = data['array'][lang][i][1].toFixed(1);
+                    $input = $("<div/>", { class: "progressbar" });
+                    var $ch = $("<div/>", { width: percent }).css("background-color", colors[parseInt(percent/34)]).appendTo($input);
+                    $input.appendTo($word);
                     $baselang.append($word);
                 }
                 $baselang.append($("<div/>", { class: "loadmore", id: "more_" + lang }).html("show more results"));
@@ -311,6 +316,7 @@ function fetch_more(lang_out) {
         dataType: "json",
         success: function (data) {
             var trans = getUrlAttr("tr") == "0";
+            var colors = ["#ff0000", "#ffd700", "#00ff00"];
             for (var lang in data['array']) {
                 var $baselang = $("#" + lang).parent();
                 //alert($("#" + lang).parent().lastChild);
@@ -319,9 +325,12 @@ function fetch_more(lang_out) {
                     var $word = $("<div/>", { class: "wordline" });
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
                     $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
-                    $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']);//.appendTo($word);
+                    $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
+                    //$input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1].toFixed(1) + "%").appendTo($word);
+                    var percent = data['array'][lang][i][1].toFixed(1);
+                    $input = $("<div/>", { class: "progressbar" });
+                    var $ch = $("<div/>", { width: percent }).css("background-color", colors[parseInt(percent / 34)]).appendTo($input);
                     $input.appendTo($word);
-                    $input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1].toFixed(1) + "%").appendTo($word);
                     //$baselang.insertBefore($word, $baselang.lastChild);
                     $baselang.append($word);
                 }

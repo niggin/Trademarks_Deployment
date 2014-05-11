@@ -193,7 +193,7 @@ function fetch(kind, lang_out, async, languages, sort, trans) {
                     //$input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1].toFixed(1) + "%").appendTo($word);
                     var percent = data['array'][lang][i][1].toFixed(1);
                     $input = $("<div/>", { class: "progressbar" });
-                    var $ch = $("<div/>", { width: percent }).css("background-color", colors[parseInt(percent/34)]).appendTo($input);
+                    var $ch = $("<div/>", { width: percent }).css("background-color", colors[parseInt(percent / 34)]).appendTo($input);
                     $input.appendTo($word);
                     $baselang.append($word);
                 }
@@ -251,8 +251,8 @@ function sortByMatch(lang_skip) {
         }
         
         allwords.sort(function (a, b) {
-            var aord = a.children[3].innerHTML;
-            var bord = b.children[3].innerHTML;
+            var aord = $(a.children[3].children[0]).width();
+            var bord = $(b.children[3].children[0]).width();
             return parseFloat(bord) - parseFloat(aord);
         });
 
@@ -274,6 +274,8 @@ function sortByMatch(lang_skip) {
         for (i = 0; i < allwords.length; i++) {
             $baselang.append(allwords[i]);
         }
+
+        //$baselang.append($("<div/>", { class: "loadmore", id: "more_" + "all" }).html("show more results"));
 
         //$source.append($baselang);
         $tohide.append($baselang);
@@ -300,7 +302,7 @@ function getReady() {
     });
 
     $(".loadmore").click(function () {
-        fetch_more($(this).attr('id').substring(5));
+        fetch_more($(this).attr('id').substring(5), getUrlAttr("sort") == "similarity");
     });
 
     $(".lang-header .word").click(function () {

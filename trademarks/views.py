@@ -21,6 +21,7 @@ def home(request):
 def search(request):
     #print >>sys.stderr, str(request.session.session_key)
     id = request.session.session_key
+    print >>sys.stderr, (id)
     sec = time.time()
     input = request.GET['findme']
     lang_skip = request.GET['translate']
@@ -38,7 +39,8 @@ def search(request):
     langs = list()
     position = dict()
     fromcache = cache.get(id + "findme")
-    if not fromcache or input + lang_skip + ''.join(shown_langs) != fromcache:
+    session_request = input + lang_skip + ''.join(shown_langs)
+    if 1:#if not fromcache or input + lang_skip + ''.join(shown_langs) != fromcache:
         print >>sys.stderr, "not from cache"
         final = dict()
         if p != '':
@@ -68,16 +70,16 @@ def search(request):
                 else:
                     final.pop(lang)
             print >>sys.stderr, "sorted"
-        cache.set(input + lang_skip + ''.join(shown_langs), final)
+        cache.set(id, final)
         cache.set(id + "findme", input + lang_skip + ''.join(shown_langs))
         cache.set(id + "position", position)
-    else:
+    """else:
         print >>sys.stderr, "from cache"
         final = cache.get(fromcache)
         for lang in final:
             position[lang] = min(10,len(final[lang]))
         cache.set(id + "position", position)
-        #position = cache.get(str(request.user.id) + "position")
+        #position = cache.get(str(request.user.id) + "position")"""
     output = dict()
     print >>sys.stderr, final.keys(), shown_langs, position
  
@@ -90,25 +92,44 @@ def search(request):
     return HttpResponse(json_out, content_type='application/json')
 
 def load_more(request):
-    #print >>sys.stderr, str(request.session.session_key)
     id = request.session.session_key
-    final = cache.get(cache.get(id + "findme"))
-    langs = final.keys()
-    position = cache.get(id + "position")
-    update_lang = request.GET['lang']
-    output = dict()
-    delta = 10
-    if position[update_lang] + 10 < len(final[update_lang]):
-        position[update_lang] += 10
-    elif position[update_lang] < len(final[update_lang]):
-        delta = len(final[update_lang]) - position[update_lang]
-        position[update_lang] = len(final[update_lang])
+    print >>sys.stderr, id
+    fromcache = cache.get(id + "findme")
+    final = cache.get(id)
+    if final:
+        langs = final.keys()
+        position = cache.get(id + "position")
+        update_lang = request.GET['lang']
+        output = dict()
+        if update_lang == "all":
+            """delta = { item: 10 for item in langs }
+            process = []
+            for key in delta:
+                if position[key] + 10 < len(final[key]):
+                    None
+                elif position[key] < len(final[key]):
+                    delta[key] = len(final[key]) - position[key]
+                else:
+                    delta[key] = 0
+                process += [[key, item] for item in final[key][position[key]:position[key] + delta]]
+            process = """
+            None
+        else:
+            delta = 10
+            if position[update_lang] + 10 < len(final[update_lang]):
+                position[update_lang] += 10
+            elif position[update_lang] < len(final[update_lang]):
+                delta = len(final[update_lang]) - position[update_lang]
+                position[update_lang] = len(final[update_lang])
+            else:
+                delta = 0
+            output[update_lang] = final[update_lang][position[update_lang]-delta:position[update_lang]]
+        context = {'array': output, 'hide_morebutton': {item: position[item] == len(final[item]) for item in final} }
+        cache.set(id + "position", position)
+        json_out = json.dumps(context)
     else:
-        delta = 0
-    output[update_lang] = final[update_lang][position[update_lang]-delta:position[update_lang]]
-    context = {'array': output, 'hide_morebutton': {item: position[item] == len(final[item]) for item in final} }
-    cache.set(id + "position", position)
-    json_out = json.dumps(context)
+        print >>sys.stderr, ("no final", id, fromcache)
+        json_out = json.dumps({})
     return HttpResponse(json_out, content_type='application/json')
 
 def metric(a,b):

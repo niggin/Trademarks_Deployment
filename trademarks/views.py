@@ -67,7 +67,7 @@ def search(request):
             print >>sys.stderr, "metric executed"
             for lang in shown_langs:
                 if len(final[lang])>0:
-                    final[lang] = sorted(final[lang], key=lambda l:l[1], reverse = True)
+                    final[lang] = sorted(final[lang], key=lambda l:l[1], reverse = True)[:1000]
                     position[lang] = min(10,len(final[lang]))
                 else:
                     final.pop(lang)
@@ -98,6 +98,7 @@ def load_more(request):
     print >>sys.stderr, id
     fromcache = cache.get(id + "findme")
     final = cache.get(id)
+    #cache.set(id, final)
     if final:
         langs = final.keys()
         position = cache.get(id + "position")

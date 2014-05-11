@@ -11,6 +11,8 @@ from trademarks.analyzer import *
 from django.core.cache import cache
 import sys, json, time, math
 
+cache_time = 600
+
 
 def home(request):
     if not request.session.get('has_session'):
@@ -70,9 +72,9 @@ def search(request):
                 else:
                     final.pop(lang)
             print >>sys.stderr, "sorted"
-        cache.set(id, final)
-        cache.set(id + "findme", input + lang_skip + ''.join(shown_langs))
-        cache.set(id + "position", position)
+        res = cache.set(id, final, cache_time)
+        cache.set(id + "findme", input + lang_skip + ''.join(shown_langs), cache_time)
+        cache.set(id + "position", position, cache_time)
     """else:
         print >>sys.stderr, "from cache"
         final = cache.get(fromcache)
@@ -96,9 +98,6 @@ def load_more(request):
     print >>sys.stderr, id
     fromcache = cache.get(id + "findme")
     final = cache.get(id)
-    while final == None:
-        print >>sys.stderr, "null"
-        final = cache.get(id)
     if final:
         langs = final.keys()
         position = cache.get(id + "position")
@@ -128,7 +127,7 @@ def load_more(request):
                 delta = 0
             output[update_lang] = final[update_lang][position[update_lang]-delta:position[update_lang]]
         context = {'array': output, 'hide_morebutton': {item: position[item] == len(final[item]) for item in final} }
-        cache.set(id + "position", position)
+        cache.set(id + "position", position, cache_time)
         json_out = json.dumps(context)
     else:
         print >>sys.stderr, ("no final", id, fromcache)

@@ -96,6 +96,9 @@ def load_more(request):
     print >>sys.stderr, id
     fromcache = cache.get(id + "findme")
     final = cache.get(id)
+    while final == None:
+        print >>sys.stderr, "null"
+        final = cache.get(id)
     if final:
         langs = final.keys()
         position = cache.get(id + "position")

@@ -295,6 +295,8 @@ html, body {
 
 .onoffswitch-inner.transcription:after {
 	content: "hide";
+    text-align: left;
+    padding-left: 20px;
 }
 
 .onoffswitch-inner.sort-by:before {
@@ -303,6 +305,8 @@ html, body {
 
 .onoffswitch-inner.sort-by:after {
 	content: "similarity";
+    text-align: left;
+    padding-left: 20px;
 }
 
 .onoffswitch-switch {

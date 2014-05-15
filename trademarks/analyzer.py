@@ -1,16 +1,15 @@
-﻿# -*- coding: utf-8 -*-
-import algorithm
+﻿import algorithm
 
-def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymbols=[]):
+def analyzer(word, transcription="", numbersOfSymbols=[], amountsOfReplacedSymbols=[]):
     '''
         @version: Version 1.0 from 28.04.2014
         @author: Alex Kuzmin
         @return: Full transcription of the word
-        @note: DoubleMetaphon.transcription [u'X'] goes into ['x']
+        @note: DoubleMetaphon.transcription [u'X'] goes into [u'x']
     '''
-    if word == u"":
+    if word == "":
         return -1
-    if transcription == u"" or numbersOfSymbols == [] or amountsOfReplacedSymbols == []:
+    if transcription == "" or numbersOfSymbols == [] or amountsOfReplacedSymbols == []:
         DM = algorithm.DoubleMetaphon()
         DMTranscription = DM.getTranscription(word)
         NOS = DM.getNumbersOfSymbols()
@@ -23,7 +22,7 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
     lenW = len(word)
     
 
-    fullTranscription = u""
+    fullTranscription = ""
     current = 0
     indexTr = 0
     while current < lenW:
@@ -39,7 +38,7 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
                     continue
             else:
                 #assumption, because I am not perfect ;)
-                #TODO: improve - analyze voiced/voiceless letters in u'algorithm.py'
+                #TODO: improve - analyze voiced/voiceless letters in 'algorithm.py'
                 fullTranscription += toTranscription(DMTranscription[indexTr], tr=True)
                 current += ARS[indexTr]
                 indexTr += 1
@@ -82,43 +81,136 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
         elif algorithm.isEnglish(word[current].upper()):
             #the next letter is a vowel too
             if current + 1 < lenW and algorithm.isVowel(word[current + 1].upper()):
+                #case('E?')
                 if word[current].upper() == u'E':
                     if word[current + 1].upper() == u'A':
-                        fullTranscription += u'И'
+                        if current + 2 < lenW and word[current + 2].upper() == u'R':
+                            fullTranscription += u'ЙОr'
+                            current += 3
+                            continue
+                        else:
+                            fullTranscription += u'И'
+                            current += 2
+                            continue
+                    elif word[current + 1].upper() == u'E':
+                        if current + 2 < lenW and word[current + 1].upper() == u'R':
+                            fullTranscription += u'ИЭr'
+                            current += 3
+                            continue
+                        else:
+                            fullTranscription += u'И'
+                            current += 2
+                            continue
+                    elif word[current + 1].upper() == u'Y':
+                        fullTranscription += u'ЭЙ'
+                        current += 2
+                        continue
+                    elif word[current + 1].upper() == u'I':
+                        fullTranscription += u'ЭЙ'
+                        current += 2
+                        continue
+                    elif word[current + 1].upper() == u'U' and current + 2 < lenW and word[current + 1].upper() == u'R':
+                        fullTranscription += u'ЙУЭr'
+                        current += 3
+                        continue
+                    else:
+                        fullTranscription += u'Э'
+                        current += 1
+                        continue
+                #case('O?')
+                elif word[current].upper() == u'O':
+                    if word[current + 1].upper() == u'U':
+                        if current + 4 < lenW and searchOfString(word, current + 2, 3, u"BLE"):
+                            fullTranscription += u'АБЭЛ'
+                            current += 5
+                            continue
+                        else:
+                            fullTranscription += u'АУ'
+                            current += 2
+                            if current + 2 < lenW and word[current + 2].upper() == u'R':
+                                fullTranscription += u'Эr'
+                                current += 1
+                            continue
+                    elif word[current + 1].upper() == u'O':
+                        fullTranscription += u'Оi'
+                        current += 2
+                        continue
+                    elif word[current + 1].upper() == u'I':
+                        fullTranscription += u'Оi'
+                        current += 2
+                        continue
+                    elif word[current + 1].upper() == u'Y':
+                        fullTranscription += u'У'
+                        current += 2
+                        continue
+                    elif word[current + 1].upper() == u'A':
+                        fullTranscription += u'ОУ'
+                        current += 2
+                        continue
+                    else:
+                        fullTranscription += u'О'
+                        current += 1
+                        continue
+                #case('A?')
+                elif word[current].upper() == u'A':
+                    if word[current + 1].upper() == u'U':
+                        fullTranscription += u'О'
+                        current += 2
+                        continue
+                    elif word[current + 1].upper() == u'I':
+                        if current + 2 < lenW and word[current + 1].upper() == u'R':
+                            fullTranscription += u'ЭiЭr'
+                            current += 3
+                            continue
+                        else:
+                            fullTranscription += u'ЭЙ'
+                            current += 2
+                            continue
+                    elif word[current + 1].upper() == u'Y':
+                        fullTranscription += u'ЭЙ'
                         current += 2
                         continue
                     elif word[current + 1].upper() == u'E':
                         fullTranscription += u'И'
                         current += 2
                         continue
-                    elif word[current + 1].upper() == u'Y':
-                        fullTranscription += u'ЭЙ'
+                    elif word[current + 1].upper() == u'U':
+                        fullTranscription += u'О'
                         current += 2
                         continue
                     else:
-                        #print(u'E?')
-                        None
-                elif word[current].upper() == u'O':
-                    if word[current + 1].upper() == u'O':
-                        fullTranscription += u'У'
-                        current += 2
+                        fullTranscription += u'А'
+                        current += 1
+                        continue
+                elif word[current].upper() == u'I':
+                    if word[current + 1].upper() == u'E':
+                        fullTranscription += u'И'
+                        current += 1
                         continue
                     else:
-                        #print(u"O?")
-                        None
-                elif word[current].upper() == u'A':
-                    if word[current + 1].upper() == u'U':
-                        fullTranscription += u'ЭЙ'
-                        current += 2
+                        fullTranscription += u'И'
+                        current += 1
                         continue
-                    else:
-                        #print(u"A?")
-                        None
+                elif word[current].upper() == u'U':
+                    fullTranscription += u'У'
+                    current += 1
+                    continue
+                elif word[current].upper() == u'Y':
+                    fullTranscription += u'У'
+                    current += 1
+                    continue
                 else:
-                    #print(u"??")
-                    None
+                    #case("??")
+                    if word[current] == ' ':
+                        current += 1
+                        continue
+                    fullTranscription += '?'
+                    current += 1
+                    continue
+
             #the next letter is a consonant
             else:
+                #case(u"E")
                 if word[current].upper() == u'E':
                     if current + 1 < lenW:
                         if word[current + 1].upper() == u'R':
@@ -132,6 +224,10 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
                                 fullTranscription += u'Ёr'
                                 current += 2
                                 continue
+                        elif word[current + 1].upper() == u'W':
+                            fullTranscription += u'У'
+                            current += 2
+                            continue
                         else:
                             if current + 2 < lenW and algorithm.isVowel(word[current + 2].upper()):
                                 fullTranscription += u'И'
@@ -144,6 +240,7 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
                     else:
                         current += 1
                         continue
+                #case(u"A")
                 elif word[current].upper() == u'A':
                     if current + 1 < lenW:
                         if word[current + 1].upper() == u'R':
@@ -157,6 +254,18 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
                                 fullTranscription += u'A'
                                 current += 2
                                 continue
+                        elif word[current + 1].upper() == u'L':
+                                fullTranscription += u'О'
+                                current += 1
+                                continue
+                        elif word[current + 1].upper() == u'W':
+                                fullTranscription += u'О'
+                                current += 2
+                                continue
+                        elif current + 3 < lenW and searchOfString(word, current + 1, 3, u"UGH"):
+                            fullTranscription += u'О'
+                            current += 4
+                            continue
                         else:
                             if current + 2 < lenW and algorithm.isVowel(word[current + 2].upper()):
                                 fullTranscription += u'ЭЙ'
@@ -170,6 +279,7 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
                         fullTranscription += u'Э'
                         current += 1
                         continue
+                #case(u"I")
                 elif word[current].upper() == u'I':
                     if current + 1 < lenW:
                         if word[current + 1].upper() == u'R':
@@ -183,6 +293,10 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
                                 fullTranscription += u'ИЭr'
                                 current += 2
                                 continue
+                        elif current + 2 < lenW and searchOfString(word, current + 1, 2, u"GH"):
+                            fullTranscription += u'АЙ'
+                            current += 3
+                            continue
                         else:
                             if current + 2 < lenW and algorithm.isVowel(word[current + 2].upper()):
                                 fullTranscription += u'АЙ'
@@ -196,6 +310,7 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
                         fullTranscription += u'И'
                         current += 1
                         continue
+                #case(u"O")
                 elif word[current].upper() == u'O':
                     if current + 1 < lenW:
                         if word[current + 1].upper() == u'R':
@@ -209,6 +324,27 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
                                 fullTranscription += u'ОР'
                                 current += 2
                                 continue
+                        elif word[current + 1].upper() == u'W':
+                            fullTranscription += u'АУ'
+                            current += 2
+                            continue
+                        elif word[current + 1].upper() in u"MNV":
+                            fullTranscription += u'А'
+                            current += 2
+                            continue
+                        elif current + 2 < lenW and searchOfString(word, current + 1, 2, u"TH"):
+                            fullTranscription += u'А'
+                            current += 3
+                            continue
+                        elif current + 2 < lenW and (searchOfString(word, current + 1, 2, u"LD") or searchOfString(word, current + 1, 2, u"LT") or 
+                                searchOfString(word, current + 1, 2, u"ST")):
+                            fullTranscription += u'ОУ'
+                            current += 3
+                            continue
+                        elif current + 3 < lenW and searchOfString(word, current + 1, 3, u"UGH"):
+                            fullTranscription += u'О'
+                            current += 4
+                            continue
                         else:
                             if current + 2 < lenW and algorithm.isVowel(word[current + 2].upper()):
                                 fullTranscription += u'ОУ'
@@ -222,6 +358,7 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
                         fullTranscription += u'ОУ'
                         current += 1
                         continue
+                #case(u"U")
                 elif word[current].upper() == u'U':
                     if current + 1 < lenW:
                         if word[current + 1].upper() == u'R':
@@ -248,6 +385,7 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
                         fullTranscription += u'У'
                         current += 1
                         continue
+                #case(u"Y")
                 elif word[current].upper() == u'Y':
                     if current + 1 < lenW:
                         if word[current + 1].upper() == u'R':
@@ -275,12 +413,13 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
                         current += 1
                         continue
                 else:
-                    fullTranscription += u'?'
+                    fullTranscription += '?'
                 fullTranscription += toTranscription(word[current].upper())
-        if word[current] == u' ':
+
+        if word[current] == ' ':
             current += 1
             continue
-        fullTranscription += u'?'
+        fullTranscription += '?'
         current += 1
         continue
 
@@ -291,10 +430,10 @@ def analyzer(word, transcription=u"", numbersOfSymbols=[], amountsOfReplacedSymb
     return fullTranscription
 
 def toTranscription(letter, tr=False):
-    u'''
-        @param u'tr': if letter from the DoubleMetaphon Transcription set 'True', if letter from just a word set 'False'.
+    '''
+        @param u'tr': if letter from the DoubleMetaphon Transcription set u'True', if letter from just a word set u'False'.
         @return: the transcriptional equivalent of the letter
-    u'''
+    '''
 
     if algorithm.isRussian(letter):
         return letter
@@ -341,7 +480,7 @@ def toTranscription(letter, tr=False):
             elif letter == u'X':
                 return u'КС'
             else:
-                return u'?'
+                return '?'
         elif tr:
             if letter == u'J':
                 return u'Ж'
@@ -350,17 +489,26 @@ def toTranscription(letter, tr=False):
             elif letter == u'X':
                 return u'x'
             else:
-                return u'?'
+                return '?'
+
+def searchOfString(word, start, length, *strings):
+        if word[start : start + length].upper() in strings:
+            return True
+        else:
+            return False
 
 if __name__ == u'__main__':
     #print(analyzer(u"cause"))
     #print(analyzer(u"THEREFy"))
-    #print(analyzer(u"царитьсяц"))
+    print(analyzer(u"царитьсяц"))
     #print(analyzer(u"щётка"))
     #print(analyzer(u"сланец"))
     #print(analyzer(u"солнце"))
+    #print(analyzer(u"tixit"))
+    #print(analyzer(u"push"))
+    print(analyzer(u"rah"))
     dm = algorithm.DoubleMetaphon()
     print(u"better")
-    print(dm.getTranscription(u"better"))
+    print(dm.getTranscription(u"tixit"))
     print(dm.getAmountsOfReplacedSymbols())
     print(dm.getNumbersOfSymbols())

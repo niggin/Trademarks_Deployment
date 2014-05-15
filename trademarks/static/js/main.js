@@ -9,10 +9,10 @@ $(document).ready(function () {
         console.log("ready run");
         var lang = getUrlAttr("lt");
         $("#findme").val(word);
-        if (lang == "english" || lang == "undefined") {
+        if (lang == "russian" || lang == "undefined") {
             
         }
-        else if (lang == "russian") {
+        else if (lang == "english") {
             $("#chooselang").prop("checked", !$("#chooselang").prop("checked"));
         }
         console.log(languages, "ready");

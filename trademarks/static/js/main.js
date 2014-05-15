@@ -185,7 +185,7 @@ function fetch(kind, lang_out, async, languages, trans) {
                     var percent = data['array'][lang][i][1].toFixed(1);
                     $input = $("<div/>", { class: "cell percent" });
                     var $progress = $("<div/>", { class: "progressbar" }).appendTo($input);
-                    var $ch = $("<div/>", { width: percent }).css("background-color", colors[parseInt(percent / 34)]).appendTo($progress);
+                    var $ch = $("<div/>", { width: percent + "%" }).css("background-color", colors[parseInt(percent / 34)]).appendTo($progress);
                     $input.appendTo($word);
                     $baselang.append($word);
                 }

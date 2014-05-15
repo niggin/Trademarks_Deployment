@@ -166,7 +166,7 @@ html, body {
 #results {
 	width: 730px;
 	margin: 0 auto;
-	margin-top: 100px !important;
+	margin-top: 80px !important;
     overflow: inherit;
     font: normal 12px/20px 'sans', 'trebuchet MS', 'Tahoma';
     letter-spacing: 1px;
@@ -362,7 +362,6 @@ html, body {
 #results .lang {
 	position: relative;
 	margin-left: 26px;
-	border-top: 1px solid #ddd;
 	width: 682px;
 	padding: 34px 15px 27px 15px;
 	display: table;
@@ -421,6 +420,7 @@ html, body {
 	height: 30px;
 	margin-top: -35px;
 	padding-left: 10px;
+	width: 708px;
 }
 
 #results .lang-header .word {
@@ -444,24 +444,29 @@ html, body {
 
 #results .cell {
 	display: table-cell;
-	width: 25%;
+	width: 170px;
 	/*border: 1px solid red;*/
 }
 
 #results .word, #results .transcript {
-	width: 25%;
+	width: 170px;
 	text-align: left;
 }
 
 #results .translate {
-	width: 43%;
+	width: 293px;
 	text-align: left;
 }
 
+#results .wide-translate {
+	width: 463px !important;
+}
+
 #results .percent {
+	float: right;
 	position: relative;
 	text-align: right;
-	width: 7%;
+	width: 80px;
 }
 
 #results .loadmore {
@@ -540,15 +545,18 @@ html, body {
 }
 
 .progressbar {
-      background-color: #efefef;
-      border-radius: 0px; /* (height of inner div) / 2 + padding */
-      padding: 3px;
-      height: 7px;
-    }
+	position: absolute;
+	margin: 4px 0 0 12px;
+  	background-color: #efefef;
+	border-radius: 0px; /* (height of inner div) / 2 + padding */
+	padding: 3px;
+	height: 7px;
+	width: 70px;
+}
     
 .progressbar > div {
-       background-color: chartreuse;
-       width: 75.2%; /* Adjust with JavaScript */
-       height: 90%;
-       border-radius: 3px;
-    }
+	background-color: chartreuse;
+	width: 75.2%; /* Adjust with JavaScript */
+	height: 90%;
+	border-radius: 3px;
+}

@@ -183,8 +183,9 @@ function fetch(kind, lang_out, async, languages, trans) {
                     $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
                     $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
                     var percent = data['array'][lang][i][1].toFixed(1);
-                    $input = $("<div/>", { class: "progressbar" });
-                    var $ch = $("<div/>", { width: percent }).css("background-color", colors[parseInt(percent / 34)]).appendTo($input);
+                    $input = $("<div/>", { class: "cell percent" });
+                    var $progress = $("<div/>", { class: "progressbar" }).appendTo($input);
+                    var $ch = $("<div/>", { width: percent }).css("background-color", colors[parseInt(percent / 34)]).appendTo($progress);
                     $input.appendTo($word);
                     $baselang.append($word);
                 }

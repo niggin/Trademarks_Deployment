@@ -240,6 +240,7 @@ function fetch_more(lang_out) {
         type: "GET",
         data: { lang: lang_out },
         dataType: "json",
+        async: false,
         success: function (data) {
             var trans = getUrlAttr("tr") == "0";
             var colors = ["#ff0000", "#ffd700", "#00ff00"];
@@ -260,6 +261,7 @@ function fetch_more(lang_out) {
                 if (data['hide_morebutton'][lang]) {
                     $("#more_" + lang).css("display", "none");
                 }
+                //console.log($baselang.children());
             }
             if (trans) {
                     $(".transcript").toggleClass("hidden", true);

@@ -222,7 +222,7 @@ html, body {
 }
 
 .onoffswitch#sort-by-switcher {
-	width: 77px;
+	width: 82px;
 }
 
 .onoffswitch:active, .onoffswitch:focus {
@@ -282,11 +282,11 @@ html, body {
 }
 
 .onoffswitch-inner.chooselang:before {
-	content: "english";
+	content: "russian";
 }
 
 .onoffswitch-inner.chooselang:after {
-	content: "russian";
+	content: "english";
 }
 
 .onoffswitch-inner.transcription:before {
@@ -298,7 +298,7 @@ html, body {
 }
 
 .onoffswitch-inner.sort-by:before {
-	content: "percents";
+	content: "languages";
 }
 
 .onoffswitch-inner.sort-by:after {
@@ -328,7 +328,7 @@ html, body {
 }
 
 .onoffswitch-switch.sort-by {
-	right: 62px;
+	right: 67px;
 }
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {

@@ -49,7 +49,10 @@ def search(request):
             #raw = list(Word.objects.raw('SELECT * FROM trademarks_word WHERE ("' 
             #                             + p + '" LIKE CONCAT("%%",ipa,"%%") OR ipa LIKE "%%' 
             #                             + p + '%%") AND lang IN (' + ", ".join('"%s"'% arg for arg in shown_langs) + ')'))
-            raw = list(Word.objects.filter(ipa__contains=p,lang__in=shown_langs))
+            if shown_langs[0] == "all":
+                raw = list(Word.objects.filter(ipa__contains=p,lang__in=["ru", "en"]))
+            else:
+                raw = list(Word.objects.filter(ipa__contains=p,lang__in=shown_langs))
             print >>sys.stderr, "fetched"
             for item in shown_langs:
                 final[item] = list()
@@ -57,13 +60,16 @@ def search(request):
                 if lang_skip == "en":
                     item.meaning = item.meaning_eng
                 if item.lang == lang_skip:
-                    item.meaning = ''
+                    item.meaning = item.word
                 if item.fullipa == None:
                     item_fullipa = analyzer(item.word,item.ipa)
                 else:
                     item_fullipa = item.fullipa
                 score = metricOfTranscriptions(p_fullipa, item_fullipa)
-                final[item.lang].append([item.serialize(), func(score)])#math.exp(-score*gamma) * 100])
+                if shown_langs[0] == "all":
+                    final["all"].append([item.serialize(), func(score)])
+                else:
+                    final[item.lang].append([item.serialize(), func(score)])#math.exp(-score*gamma) * 100])
             print >>sys.stderr, "metric executed"
             for lang in shown_langs:
                 if len(final[lang])>0:
@@ -103,8 +109,9 @@ def load_more(request):
         langs = final.keys()
         position = cache.get(id + "position")
         update_lang = request.GET['lang']
+        print >>sys.stderr, update_lang
         output = dict()
-        if update_lang == "all":
+        if 0:#update_lang == "all":
             """delta = { item: 10 for item in langs }
             process = []
             for key in delta:

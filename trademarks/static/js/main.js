@@ -3,11 +3,6 @@ $(document).ready(function () {
 	/*
 	 Lang onclick event
 	 */
-    
-    loadListeners();
-});
-
-$("document").ready(function (event, data) {
     var word = getUrlAttr("w");
     console.log(word);
     if (word != "undefined") {
@@ -20,16 +15,12 @@ $("document").ready(function (event, data) {
         else if (lang == "russian") {
             $("#chooselang").prop("checked", !$("#chooselang").prop("checked"));
         }
-        var languages = getUrlAttr("lf");
         console.log(languages, "ready");
-        var sorting = getUrlAttr("sort");
-        var sort_li;
-        if (sorting) {
-            if (sorting == "percents" || sorting == "undefined") {
-                sort_li = false;
-            } else if (sorting == "similarity") {
+        var languages = getUrlAttr("groups");
+        if (languages) {
+            if (languages == ["ru", "en"] || languages == "undefined") {
+            } else if (languages == ["all"]) {
                 $("#sort-by-button").prop("checked", !$("#sort-by-button").prop("checked"));
-                sort_li = true;
             }
         }
         var trans = true;
@@ -37,10 +28,11 @@ $("document").ready(function (event, data) {
             trans = false;
             $("#showtranscript").prop("checked", !$("#showtranscript").prop("checked"));
         }
-        fetch(word, lang.substring(0, 2), false, languages, sort_li, trans);
+        fetch(word, lang.substring(0, 2), false, languages, trans);
         
         //$("#output").css("display", "");
     }
+    loadListeners();
 });
 
 function loadToggles() {
@@ -75,15 +67,11 @@ function loadToggles() {
 function loadListeners() {
     $("#search_button").click(function () {
         var lang = get_currlang();
-        var sort;
-        if ($("#sort-by-button").is(":checked"))
-            sort = false;
-        else
-            sort = true;
+        var groups = getUrlAttr("groups");
         setUrlAttr("lt", lang);
         var trans = true;
         if (getUrlAttr("tr") == 0) trans = false;
-        fetch($("#findme").val(), lang.substring(0, 2), true, ["ru", "en"], sort, trans);
+        fetch($("#findme").val(), lang.substring(0, 2), true, groups, trans);
         setUrlAttr("w", $("#findme").val());
     });
 
@@ -103,16 +91,26 @@ function loadListeners() {
     });
 
     $("#sort-by-button").click(function () {
-        sort();
+        //sort();
+        var languages;
         var $switcher = $(".onoffswitch-inner.sort-by");
-        if($(this).is(":checked"))
-            $switcher.each(function() {
-                setUrlAttr("sort", window.getComputedStyle(this,':before').content);
-            });
+        if ($(this).is(":checked")) {
+            languages = ["ru", "en"];
+        } else {
+            languages = ["all"];
+        }
+        setUrlAttr("groups", languages);
+        var lang = get_currlang();
+        var sort;
+        if ($("#sort-by-button").is(":checked"))
+            sort = false;
         else
-            $switcher.each(function() {
-                setUrlAttr("sort", window.getComputedStyle(this,':after').content);
-            });
+            sort = true;
+        setUrlAttr("lt", lang);
+        var trans = true;
+        if (getUrlAttr("tr") == 0) trans = false;
+        fetch($("#findme").val(), lang.substring(0, 2), true, languages, trans);
+        setUrlAttr("w", $("#findme").val());
     });
 
     $(".lang_link").click(function () {
@@ -154,24 +152,19 @@ function setUrlAttr(key, value) {
     history.pushState('', 'xz', '?' + queryString.stringify(q));
 }
 
-function sort() {
-    //$(".percent_button").toggleClass('active');
-    sortByMatch(get_currlang().substring(0, 2));
-}
-
-function fetch(kind, lang_out, async, languages, sort, trans) {
+function fetch(kind, lang_out, async, languages, trans) {
     async = async != 'undefined' ? async : true;
     trans = trans != 'undefined' ? trans : true;
-    sort = sort != 'undefined' ? sort : false;
     languages = languages != 'undefined' ? languages : ["ru", "en"];
     if (typeof (languages) == "string") languages = [languages];
-    console.log(async, trans, sort, languages, lang_out);
+    console.log(async, trans, languages, lang_out);
     cleanup();
+    available_langs = { "en": "English", "ru": "Russian", "all": "All languages" };
     var request = $.ajax({
         url: "/search",
         async: async,
         type: "GET",
-        data: { findme: kind, translate: lang_out, langs: languages },//getAttrFromUrl("lt"), langs: getAttrFromUrl("lf"), sort: getAttrFromUrl("sort") },
+        data: { findme: kind, translate: lang_out, langs: languages },
         dataType: "json",
         beforeSend: function () {
             $("#output").css("display", "none");
@@ -182,7 +175,7 @@ function fetch(kind, lang_out, async, languages, sort, trans) {
             for (var lang in data['array']) {
                
                 var $baselang = $("<div/>", { class: "lang" });
-                $baselang.append("<div class='wordline lang-header'><div class='cell word'>" + lang + "</div>");//"<div class='more' id='" + "more_" + lang + "'>more</div></div>");
+                $baselang.append("<div class='wordline lang-header'><div class='cell word'>" + available_langs[lang] + "</div>");
                 var $lang = $("<div/>", { class: "lang_link", id: lang }).appendTo($baselang);
 
                 for (var i = 0; i < data['array'][lang].length; i++) {
@@ -190,7 +183,6 @@ function fetch(kind, lang_out, async, languages, sort, trans) {
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
                     $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
                     $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
-                    //$input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1].toFixed(1) + "%").appendTo($word);
                     var percent = data['array'][lang][i][1].toFixed(1);
                     $input = $("<div/>", { class: "progressbar" });
                     var $ch = $("<div/>", { width: percent }).css("background-color", colors[parseInt(percent / 34)]).appendTo($input);
@@ -208,83 +200,15 @@ function fetch(kind, lang_out, async, languages, sort, trans) {
             } else {
                 getReady();
             }
-            if (sort) {
-                sortByMatch(lang_out);
-            }
+
             console.log(trans, "fetch");
             if (!trans) {
                 $(".transcript").toggleClass("hidden");
             }
             $("#loader").css("display", "none");
-            if (!sort) $("#output").css("display", "block");
+            $("#output").css("display", "block");
         }
     });
-}
-
-
-function sortByMatch(lang_skip) {
-    var $source = $("#output");
-    var $tohide = $("#tohide");
-
-    if ($tohide.html().localeCompare("")) {
-        //$source.html($tohide.html());
-        $source.css("display", "block");
-        $tohide.html("");
-    } else {
-        var langs = $.makeArray($source.children());
-        var allwords = new Array();
-
-        for (var item in langs) {
-            var temparray = $.makeArray(langs[item].children);
-            temparray.splice(0, 1);
-            for (var i = 1; i < temparray.length - 1; i++) {
-                if (temparray[0].id == lang_skip) {
-                    //temparray[i].id = i;
-                    //alert(temparray[i].children[0].innerHTML);
-                    var toarray = temparray[i].cloneNode(true);
-                    toarray.children[2].innerHTML = temparray[i].children[0].innerHTML;
-                    allwords.push(toarray);
-                } else {
-                    allwords.push(temparray[i].cloneNode(true));
-                }
-            }
-        }
-        
-        allwords.sort(function (a, b) {
-            var aord = $(a.children[3].children[0]).width();
-            var bord = $(b.children[3].children[0]).width();
-            return parseFloat(bord) - parseFloat(aord);
-        });
-
-        //$tohide.html($source.html());
-        //$source.html("");
-
-        var $baselang = $("<div/>", {
-            class: "lang",
-            id: "baselang"
-        });
-
-        var $lang = $("<div/>", {
-            class: "lang_link",
-            id: "all"
-        }).appendTo($baselang);
-
-        $baselang.append("<div class='wordline lang-header'><div class='cell word'>All languages</div>");
-
-        for (i = 0; i < allwords.length; i++) {
-            $baselang.append(allwords[i]);
-        }
-
-        //$baselang.append($("<div/>", { class: "loadmore", id: "more_" + "all" }).html("show more results"));
-
-        //$source.append($baselang);
-        $tohide.append($baselang);
-        $tohide.css("display", "block");
-        $source.css("display", "none");
-    }
-
-    getReady();
-    
 }
 
 function cleanup() {
@@ -302,7 +226,7 @@ function getReady() {
     });
 
     $(".loadmore").click(function () {
-        fetch_more($(this).attr('id').substring(5), getUrlAttr("sort") == "similarity");
+        fetch_more($(this).attr('id').substring(5));
     });
 
     $(".lang-header .word").click(function () {
@@ -321,27 +245,21 @@ function fetch_more(lang_out) {
             var colors = ["#ff0000", "#ffd700", "#00ff00"];
             for (var lang in data['array']) {
                 var $baselang = $("#" + lang).parent();
-                //alert($("#" + lang).parent().lastChild);
-                //var $more = $baselang.lastChild;
                 for (var i = 0; i < data['array'][lang].length; i++) {
                     var $word = $("<div/>", { class: "wordline" });
                     var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
                     $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
                     $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
-                    //$input = $("<div/>", { class: "cell percent" }).html(data['array'][lang][i][1].toFixed(1) + "%").appendTo($word);
                     var percent = data['array'][lang][i][1].toFixed(1);
                     $input = $("<div/>", { class: "progressbar" });
                     var $ch = $("<div/>", { width: percent }).css("background-color", colors[parseInt(percent / 34)]).appendTo($input);
                     $input.appendTo($word);
-                    //$baselang.insertBefore($word, $baselang.lastChild);
                     $baselang.append($word);
                 }
                 $("#more_" + lang).appendTo($baselang);
-                //$more.appendTo($baselang);
                 if (data['hide_morebutton'][lang]) {
                     $("#more_" + lang).css("display", "none");
                 }
-                
             }
             if (trans) {
                     $(".transcript").toggleClass("hidden", true);
@@ -369,19 +287,4 @@ function getUrlAttr(key) {
     var q = queryString.parse(location.search);
     console.log(q[key], "get", key);
     return String(q[key]).replace(/"/g, '');
-}
-
-
-function cloneNode1(node) {
-    // If the node is a text node, then re-create it rather than clone it
-    var clone = node.nodeType == 3 ? document.createTextNode(node.nodeValue) : node.cloneNode(false);
-
-    // Recurse     
-    var child = node.firstChild;
-    while (child) {
-        clone.appendChild(cloneNode1(child));
-        child = child.nextSibling;
-    }
-
-    return clone;
 }

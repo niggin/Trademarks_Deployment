@@ -4,9 +4,7 @@ $(document).ready(function () {
 	 Lang onclick event
 	 */
     var word = getUrlAttr("w");
-    console.log(word);
     if (word != "undefined") {
-        console.log("ready run");
         var lang = getUrlAttr("lt");
         $("#findme").val(word);
         if (lang == "russian" || lang == "undefined") {
@@ -15,7 +13,6 @@ $(document).ready(function () {
         else if (lang == "english") {
             $("#chooselang").prop("checked", !$("#chooselang").prop("checked"));
         }
-        console.log(languages, "ready");
         var languages = getUrlAttr("groups");
         if (languages) {
             if (languages == ["ru", "en"] || languages == "undefined") {
@@ -28,7 +25,9 @@ $(document).ready(function () {
             trans = false;
             $("#showtranscript").prop("checked", !$("#showtranscript").prop("checked"));
         }
-        fetch(word, lang.substring(0, 2), false, languages, trans);
+        if (typeof (word) != "undefined") {
+            fetch(word, lang.substring(0, 2), false, languages, trans);
+        }
         
         //$("#output").css("display", "");
     }
@@ -145,18 +144,16 @@ function loadListeners() {
 
 function setUrlAttr(key, value) {
     var q = queryString.parse(location.search);
-    value = String(value).replace(/"/g, '');
-    console.log(value, "set");
+    if(typeof (value) == "string") value = String(value).replace(/"/g, '');
     q[key] = value;
     history.pushState('', 'xz', '?' + queryString.stringify(q));
 }
 
 function fetch(kind, lang_out, async, languages, trans) {
-    async = async != 'undefined' ? async : true;
-    trans = trans != 'undefined' ? trans : true;
-    languages = languages != 'undefined' ? languages : ["ru", "en"];
+    async = typeof async != 'undefined' ? async : true;
+    trans = typeof trans != 'undefined' ? trans : true;
+    languages = typeof languages != 'undefined' ? languages : ["ru", "en"];
     if (typeof (languages) == "string") languages = [languages];
-    console.log(async, trans, languages, lang_out);
     cleanup();
     available_langs = { "en": "English", "ru": "Russian", "all": "All languages" };
     var request = $.ajax({
@@ -200,8 +197,6 @@ function fetch(kind, lang_out, async, languages, trans) {
             } else {
                 getReady();
             }
-
-            console.log(trans, "fetch");
             if (!trans) {
                 $(".transcript").toggleClass("hidden");
             }
@@ -262,7 +257,6 @@ function fetch_more(lang_out) {
                 if (data['hide_morebutton'][lang]) {
                     $("#more_" + lang).css("display", "none");
                 }
-                //console.log($baselang.children());
             }
             if (trans) {
                     $(".transcript").toggleClass("hidden", true);
@@ -282,12 +276,17 @@ function get_currlang() {
         $switcher.each(function () {
             lang = window.getComputedStyle(this, ':after').content;
         });
-    console.log(lang.replace(/"/g, ''), "get_currlang");
     return lang.replace(/"/g,'');
 }
 
 function getUrlAttr(key) {
     var q = queryString.parse(location.search);
-    console.log(q[key], "get", key);
-    return String(q[key]).replace(/"/g, '');
+    var answer;
+    if (typeof (q[key]) == "string") {
+        answer = String(q[key]).replace(/"/g, '');
+    } else {
+        answer = q[key];
+    }
+    console.log(typeof (q[key]) + " " + q[key] + " " + key);
+    return answer;
 }

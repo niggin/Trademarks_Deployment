@@ -45,13 +45,8 @@ class DoubleMetaphon:
                     self.current += 1
                     continue
                 
-                #Case u{$1}
+                #Case u'B'
                 elif self.word[self.current] == u'B':
-                    if self.word[self.current - 1] == u'M' and self.current == self.length - 1:
-                        if len(self.amountsOfReplacedSymbols) > 0:
-                            self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1
-                        self.current += 1
-                        continue
                     self.__addLetter(u'P')
                     self.current += 1
                     while self.word[self.current] == u'B':
@@ -73,10 +68,10 @@ class DoubleMetaphon:
                         elif self.current > self.indent and self.searchOfString(self.current + 2, 2, u'AE'):
                             self.__addLetter(u'K')
                             #self.extraAdd(u'X')
-                        elif (self.searchOfString(self.indent, 4, 'VAN ', 'VON ') 
+                        elif (self.searchOfString(self.indent, 4, u'VAN ', u'VON ') 
                             or self.word[self.current - 2] in u'TS' 
                             or (self.word[self.current - 1] in u'AOUE' or self.current == self.indent) 
-                                and self.word[self.current + 2] in 'LRNMBHFVW '):
+                                and self.word[self.current + 2] in u'LRNMBHFVW '):
                               self.__addLetter(u'K')
                         elif self.searchOfString(self.indent, 3, u'SCH') or self.searchOfString(self.current - 2, 6, u'ORCHES', u'ARCHIT', u'ORCHID'):
                             self.__addLetter(u'K', 2)
@@ -400,11 +395,6 @@ class DoubleMetaphon:
     
                 #Case u'N'
                 elif self.word[self.current] == u'N':
-                    if self.word[self.current - 1] == u'M' and self.current == self.length - 1:
-                        if len(self.amountsOfReplacedSymbols) > 0:
-                            self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1
-                        self.current += 1
-                        continue
                     self.__addLetter(u'N')
                     self.current += 1
                     while self.word[self.current] == u'N':
@@ -639,11 +629,11 @@ class DoubleMetaphon:
                     elif (not (self.current == self.length - 1 and
                               self.searchOfString(self.current - 2, 2, u'AU', u'OU'))):
                         self.__addLetter(u'KS', 1, 0)
-                        self.current += 1
                         while self.word[self.current] in u'CX':
                             self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 2] += 1 
                             self.current += 1
                         continue
+
                     while self.word[self.current] in u'CX':
                         self.amountsOfReplacedSymbols[len(self.amountsOfReplacedSymbols) - 1] += 1 
                         self.current += 1
@@ -956,7 +946,7 @@ class DoubleMetaphon:
 
 
 
-if __name__ == u'__main__':
+if __name__ == '__main__':
     DM = DoubleMetaphon()
-    print( DM.getTranscription(u'column') )
+    print( DM.getTranscription(u'царитьсяц') )
     print( DM.getNumbersOfSymbols(), DM.getAmountsOfReplacedSymbols())

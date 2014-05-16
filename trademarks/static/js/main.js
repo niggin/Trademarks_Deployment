@@ -194,6 +194,7 @@ function fetch(kind, lang_out, async, languages, trans) {
             }
             if ($.isEmptyObject(data['array'])) {
                 cleanup();
+                $("#output").html("<center>По вашему запросу ничего не найдено</center>");
             } else {
                 getReady();
             }

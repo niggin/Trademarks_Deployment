@@ -194,7 +194,7 @@ function fetch(kind, lang_out, async, languages, trans) {
             }
             if ($.isEmptyObject(data['array'])) {
                 cleanup();
-                $("#output").html("<center>Извините, по Вашему запросу ничего не найдено.</center>");
+                $("#output").html("<div style='font-size: 14px'>Извините, по Вашему запросу ничего не найдено.</div>");
             } else {
                 getReady();
             }

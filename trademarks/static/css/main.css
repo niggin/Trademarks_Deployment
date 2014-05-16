@@ -30,15 +30,13 @@ html, body {
 	float: left;
 	z-index: 100;
 	color: #d9534f;
-	width: 300px;
-	height: 80px;
-	text-align: left;
-	text-transform: uppercase;
-	text-shadow: inset 1px 1px 1px rgba(70, 70, 70, 0.7);
-	font: bold 44px/30px 'sans', 'trebuchet MS', 'Tahoma';
-	margin: -35px 0 0 80px;
+	width: 231px;
+	height: 103px;
+	background: url('../images/logo.jpg') no-repeat 0% 0%;
+	margin: -45px 0 0 80px;
 	z-index: 500;
 }
+
 
 #content {
 	width: 900px;

@@ -59,7 +59,9 @@ def search(request):
             for item in raw:
                 if lang_skip == "en":
                     item.meaning = item.meaning_eng
-                if item.lang == lang_skip:
+                if item.lang == lang_skip and shown_langs[0] != "all":
+                    item.meaning = ''#item.word
+                elif item.lang == lang_skip:
                     item.meaning = item.word
                 if item.fullipa == None:
                     item_fullipa = analyzer(item.word,item.ipa)

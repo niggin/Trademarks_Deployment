@@ -156,55 +156,57 @@ function fetch(kind, lang_out, async, languages, trans) {
     if (typeof (languages) == "string") languages = [languages];
     cleanup();
     available_langs = { "en": "English", "ru": "Russian", "all": "All languages" };
-    var request = $.ajax({
-        url: "/search",
-        async: async,
-        type: "GET",
-        data: { findme: kind, translate: lang_out, langs: languages },
-        dataType: "json",
-        beforeSend: function () {
-            $("#output").css("display", "none");
-            $("#loader").css("display", "");
-        },
-        success: function (data) {
-            var colors = ["#ff0000", "#ffd700", "#00ff00"];
-            for (var lang in data['array']) {
-               
-                var $baselang = $("<div/>", { class: "lang" });
-                $baselang.append("<div class='wordline lang-header'><div class='cell word'>" + available_langs[lang] + "</div>");
-                var $lang = $("<div/>", { class: "lang_link", id: lang }).appendTo($baselang);
+    if (kind != "") {
+        var request = $.ajax({
+            url: "/search",
+            async: async,
+            type: "GET",
+            data: { findme: kind, translate: lang_out, langs: languages },
+            dataType: "json",
+            beforeSend: function() {
+                $("#output").css("display", "none");
+                $("#loader").css("display", "");
+            },
+            success: function(data) {
+                var colors = ["#ff0000", "#ffd700", "#00ff00"];
+                for (var lang in data['array']) {
 
-                for (var i = 0; i < data['array'][lang].length; i++) {
-                    var $word = $("<div/>", { class: "wordline" });
-                    var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
-                    $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
-                    $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
-                    var percent = data['array'][lang][i][1].toFixed(1);
-                    $input = $("<div/>", { class: "cell percent" });
-                    var $progress = $("<div/>", { class: "progressbar" }).appendTo($input);
-                    var $ch = $("<div/>", { width: percent + "%" }).css("background-color", colors[parseInt(percent / 34)]).appendTo($progress);
-                    $input.appendTo($word);
-                    $baselang.append($word);
+                    var $baselang = $("<div/>", { class: "lang" });
+                    $baselang.append("<div class='wordline lang-header'><div class='cell word'>" + available_langs[lang] + "</div>");
+                    var $lang = $("<div/>", { class: "lang_link", id: lang }).appendTo($baselang);
+
+                    for (var i = 0; i < data['array'][lang].length; i++) {
+                        var $word = $("<div/>", { class: "wordline" });
+                        var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
+                        $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
+                        $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
+                        var percent = data['array'][lang][i][1].toFixed(1);
+                        $input = $("<div/>", { class: "cell percent" });
+                        var $progress = $("<div/>", { class: "progressbar" }).appendTo($input);
+                        var $ch = $("<div/>", { width: percent + "%" }).css("background-color", colors[parseInt(percent / 34)]).appendTo($progress);
+                        $input.appendTo($word);
+                        $baselang.append($word);
+                    }
+                    $baselang.append($("<div/>", { class: "loadmore", id: "more_" + lang }).html("show more results"));
+                    $("#output").append($baselang);
+                    if (data['hide_morebutton'][lang]) {
+                        $("#more_" + lang).css("display", "none");
+                    }
                 }
-                $baselang.append($("<div/>", { class: "loadmore", id: "more_" + lang }).html("show more results"));
-                $("#output").append($baselang);
-                if (data['hide_morebutton'][lang]) {
-                    $("#more_" + lang).css("display", "none");
+                if ($.isEmptyObject(data['array'])) {
+                    cleanup();
+                    $("#output").html("<div style='font-size: 14px'>Извините, по Вашему запросу ничего не найдено.</div>");
+                } else {
+                    getReady();
                 }
+                if (!trans) {
+                    $(".transcript").toggleClass("hidden");
+                }
+                $("#loader").css("display", "none");
+                $("#output").css("display", "block");
             }
-            if ($.isEmptyObject(data['array'])) {
-                cleanup();
-                $("#output").html("<div style='font-size: 14px'>Извините, по Вашему запросу ничего не найдено.</div>");
-            } else {
-                getReady();
-            }
-            if (!trans) {
-                $(".transcript").toggleClass("hidden");
-            }
-            $("#loader").css("display", "none");
-            $("#output").css("display", "block");
-        }
-    });
+        });
+    }
 }
 
 function cleanup() {

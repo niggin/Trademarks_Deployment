@@ -1,4 +1,4 @@
-﻿import algorithm
+﻿import trademarks.algorithm as algorithm
 
 def analyzer(word, transcription="", numbersOfSymbols=[], amountsOfReplacedSymbols=[]):
     '''

@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-import algorithm
+import trademarks.algorithm
 
 def metricOfWords(pattern, word, vFine = 50.0, cFine = 5.0):
     u'''

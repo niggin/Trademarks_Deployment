@@ -21,14 +21,14 @@ def home(request):
     return render(request, 'index.html', context)
 
 def search(request):
-    print (str(request.session.session_key),file=sys.stderr)
+    #print (str(request.session.session_key),file=sys.stderr)
     id = request.session.session_key
-    print (id, file=sys.stderr)
+    #print (id, file=sys.stderr)
     sec = time.time()
     input = request.GET['findme']
     lang_skip = request.GET['translate']
     shown_langs = request.GET.getlist('langs[]')
-    print (shown_langs,file=sys.stderr)
+    #print (shown_langs,file=sys.stderr)
     metaphon = DoubleMetaphon()
     p = metaphon.getTranscription(input)
 
@@ -43,7 +43,7 @@ def search(request):
     fromcache = cache.get(id + "findme")
     session_request = input + lang_skip + ''.join(shown_langs)
     if 1:#if not fromcache or input + lang_skip + ''.join(shown_langs) != fromcache:
-        print ("not from cache",file=sys.stderr)
+        #print ("not from cache",file=sys.stderr)
         final = dict()
         if p != '':
             #raw = list(Word.objects.raw('SELECT * FROM trademarks_word WHERE ("' 
@@ -53,7 +53,7 @@ def search(request):
                 raw = list(Word.objects.filter(ipa__contains=p,lang__in=["ru", "en"]))
             else:
                 raw = list(Word.objects.filter(ipa__contains=p,lang__in=shown_langs))
-            print ("fetched",file=sys.stderr)
+            #print ("fetched",file=sys.stderr)
             for item in shown_langs:
                 final[item] = list()
             for item in raw:
@@ -72,14 +72,14 @@ def search(request):
                     final["all"].append([item.serialize(), func(score)])
                 else:
                     final[item.lang].append([item.serialize(), func(score)])#math.exp(-score*gamma) * 100])
-            print ("metric executed",file=sys.stderr)
+            #print ("metric executed",file=sys.stderr)
             for lang in shown_langs:
                 if len(final[lang])>0:
                     final[lang] = sorted(final[lang], key=lambda l:l[1], reverse = True)[:1000]
                     position[lang] = min(10,len(final[lang]))
                 else:
                     final.pop(lang)
-            print ("sorted",file=sys.stderr)
+            #print ("sorted",file=sys.stderr)
         res = cache.set(id, final, cache_time)
         cache.set(id + "findme", input + lang_skip + ''.join(shown_langs), cache_time)
         cache.set(id + "position", position, cache_time)
@@ -91,7 +91,7 @@ def search(request):
         cache.set(id + "position", position)
         #position = cache.get(str(request.user.id) + "position")"""
     output = dict()
-    print (final.keys(), shown_langs, position,file=sys.stderr)
+    #print (final.keys(), shown_langs, position,file=sys.stderr)
  
     for item in final:
         output[item] = final[item][max(0,position[item]-10):position[item]]
@@ -104,7 +104,7 @@ def search(request):
 
 def load_more(request):
     id = request.session.session_key
-    print (id,file=sys.stderr)
+    #print (id,file=sys.stderr)
     fromcache = cache.get(id + "findme")
     final = cache.get(id)
     #cache.set(id, final)
@@ -112,7 +112,7 @@ def load_more(request):
         langs = final.keys()
         position = cache.get(id + "position")
         update_lang = request.GET['lang']
-        print (update_lang,file=sys.stderr)
+        #print (update_lang,file=sys.stderr)
         output = dict()
         if 0:#update_lang == "all":
             """delta = { item: 10 for item in langs }
@@ -141,13 +141,9 @@ def load_more(request):
         cache.set(id + "position", position, cache_time)
         json_out = json.dumps(context)
     else:
-        print ("no final", id, fromcache,file=sys.stderr)
+        #print ("no final", id, fromcache,file=sys.stderr)
         json_out = json.dumps({})
     return HttpResponse(json_out, content_type='application/json')
-
-def metric(a,b):
-    import random
-    return random.randint(0,100)
 
 def func(score):
 

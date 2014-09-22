@@ -26,13 +26,14 @@ https://dev.mysql.com/downloads/connector/python/1.1.html
 5. Django Axes  
 Модуль бана после нескольких неудачных попыток логина:  
 https://pypi.python.org/pypi/django-axes/  
-pip install django-axes  
+pip install django-axes 
 
 Первый запуск:  
 0. Установите все необходимые пакеты и скачайте содержимое репозитория  
 1. Создайте в localhost базе mysql схему trademarks  
 2. Перейдите в командной строке/терминале в папку с содержимым репозитория и выполните команду python manage.py syncdb  
 3. Вас попросят создать пользователя для доступа к внутренним ресурсам, в теории это можно пропустить  
+4. Создайте кэш-таблицу в схеме командой python manage.py createcachetable cache
 4. После выполните команду python manage.py runserver 80  
 5. Перейдите в адресной строке браузера по адресу http://localhost или http://127.0.0.1  
 Если сайт загрузился, значит в этом туториале нет ошибок.  

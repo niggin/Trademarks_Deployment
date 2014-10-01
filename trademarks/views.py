@@ -9,6 +9,7 @@ from trademarks.algorithm import *
 from trademarks.metric import *
 from trademarks.analyzer import *
 from django.core.cache import cache
+from trademarks.settings import DEBUG
 import sys, json, time, math
 
 cache_time = 600
@@ -17,7 +18,7 @@ cache_time = 600
 def home(request):
     if not request.session.get('has_session'):
         request.session['has_session'] = True
-    context = {'forsearch': ''}
+    context = {'forsearch': '', 'DEBUG': DEBUG}
     return render(request, 'index.html', context)
 
 def search(request):

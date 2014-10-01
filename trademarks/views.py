@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest
 from django.utils import simplejson
 from django.core import serializers
-from trademarks.models import Word
+from trademarks.models import Word, History
 from trademarks.algorithm import *
 from trademarks.metric import *
 from trademarks.analyzer import *
@@ -21,9 +21,7 @@ def home(request):
     return render(request, 'index.html', context)
 
 def search(request):
-    #print (str(request.session.session_key),file=sys.stderr)
     id = request.session.session_key
-    #print (id, file=sys.stderr)
     sec = time.time()
     input = request.GET['findme']
     lang_skip = request.GET['translate']
@@ -31,6 +29,15 @@ def search(request):
     #print (shown_langs,file=sys.stderr)
     metaphon = DoubleMetaphon()
     p = metaphon.getTranscription(input)
+
+    #History
+    history = History.objects.filter(word=input)
+    if(history.count()):
+        history = history[0]
+        history.requests += 1
+    else:
+        history = History(word=input, requests=1)
+    history.save()
 
     p_fullipa = Word.objects.filter(word__exact=input, fullipa__isnull=False)
     if p_fullipa:

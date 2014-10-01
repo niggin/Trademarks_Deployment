@@ -22,3 +22,7 @@ class Word(models.Model):
             "meaning_eng": self.meaning_eng,
             "fullipa": self.fullipa
         }
+
+class History(models.Model):
+    word = models.CharField(max_length=50, unique=True)
+    requests = models.IntegerField(default=0)

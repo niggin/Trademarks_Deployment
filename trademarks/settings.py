@@ -1,6 +1,6 @@
 # Django settings for trademarks project.
+from local_settings import *
 
-DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -11,22 +11,10 @@ MANAGERS = ADMINS
 
 import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-#DATABASE_NAME = '/var/www/trademarks/trademarks.db'
 
 from os.path import dirname, join
 
 PROJECT_DIR = dirname(__file__)
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'trademarks',                      # Or path to database file if using sqlite3.
-        'USER': 'trademarks_user',                      # Not used with sqlite3.
-        'PASSWORD': '628802',                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -39,6 +27,7 @@ TIME_ZONE = 'Europe/Moscow'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
+
 LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1

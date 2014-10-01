@@ -10,6 +10,7 @@ from trademarks.metric import *
 from trademarks.analyzer import *
 from django.core.cache import cache
 from trademarks.settings import DEBUG
+#from trademarks.settings import custom_DEBUG
 import sys, json, time, math
 
 cache_time = 600

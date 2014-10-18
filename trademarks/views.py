@@ -32,6 +32,8 @@ def search(request):
     metaphon = DoubleMetaphon()
     p = metaphon.getTranscription(input)
 
+    print >>sys.stderr, request.GET
+
     #History
     history = History.objects.filter(word=input)
     if(history.count()):
@@ -72,10 +74,10 @@ def search(request):
                     item.meaning = ''#item.word
                 elif item.lang == lang_skip:
                     item.meaning = item.word
-                if item.fullipa == None:
-                    item_fullipa = analyzer(item.word,item.ipa)
-                else:
+                if item.fullipa:
                     item_fullipa = item.fullipa
+                else:
+                    item_fullipa = analyzer(item.word,item.ipa)
                 score = metricOfTranscriptions(p_fullipa, item_fullipa)
                 if shown_langs[0] == "all":
                     final["all"].append([item.serialize(), func(score)])

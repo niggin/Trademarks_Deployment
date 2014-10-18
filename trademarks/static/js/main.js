@@ -155,7 +155,7 @@ function fetch(kind, lang_out, async, languages, trans) {
     languages = typeof languages != 'undefined' ? languages : ["ru", "en"];
     if (typeof (languages) == "string") languages = [languages];
     cleanup();
-    available_langs = { "en": "English", "ru": "Russian", "all": "All languages" };
+    var available_langs = { "en": "Английский", "ru": "Русский", "all": "Все языки" };
     if (kind != "") {
         var request = $.ajax({
             url: "/search",
@@ -187,7 +187,7 @@ function fetch(kind, lang_out, async, languages, trans) {
                         $input.appendTo($word);
                         $baselang.append($word);
                     }
-                    $baselang.append($("<div/>", { class: "loadmore", id: "more_" + lang }).html("show more results"));
+                    $baselang.append($("<div/>", { class: "loadmore", id: "more_" + lang }).html("загрузить больше результатов"));
                     $("#output").append($baselang);
                     if (data['hide_morebutton'][lang]) {
                         $("#more_" + lang).css("display", "none");

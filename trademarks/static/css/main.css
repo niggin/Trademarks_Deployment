@@ -309,9 +309,9 @@ html, body {
 }
 
 .onoffswitch-inner.sort-by:after {
-	content: "словам";
+	content: "схожести";
     text-align: left;
-    padding-left: 22px;
+    padding-left: 18px;
 }
 
 .onoffswitch-switch {

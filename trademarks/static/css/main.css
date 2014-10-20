@@ -22,7 +22,7 @@ html, body {
 	width: 740px;
 	height: 72px;
 	margin: -50px 0 0 80px;
-	z-index: 500;
+	z-index: 100;
 }
 
 #logo {
@@ -34,7 +34,6 @@ html, body {
 	height: 103px;
 	background: url('../images/logo.jpg') no-repeat 0% 0%;
 	margin: -45px 0 0 80px;
-	z-index: 500;
 }
 
 

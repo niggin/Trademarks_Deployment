@@ -558,3 +558,18 @@ html, body {
 	height: 90%;
 	border-radius: 3px;
 }
+
+.Facebook div {
+    top: -14px;
+    left: -60px;
+}
+
+.VKontakte {
+    float: left;
+}
+
+/* Set an optional width for your button wrappers */
+.social span {
+	display: inline-block;
+	width: 110px;
+}

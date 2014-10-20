@@ -44,17 +44,39 @@
                 <a href="mailto:trdmrks@yandex.ru">Контакты</a>
                 <div id="social_networks">
                     <!-- Put this script tag to the place, where the Share button will be -->
-                    <script type="text/javascript"><!--
-                        document.write(VK.Share.button({
-                          url: 'http://trademark.javafiddle.org',
-                          title: 'Solance',
-                          description: 'Поиск созвучных слов',
-                          noparse: true
-                        }));
-                    --></script>
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://trademark.javafiddle.org" data-hashtags="Solance">Tweet</a>
+
+
+
+
+                    <!--<a href="https://twitter.com/share" class="twitter-share-button"
+                       data-url="http://trademark.javafiddle.org" data-hashtags="Solance" style="left: 100">Tweet</a>
                     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                    <div class="fb-share-button" data-href="http://trademark.javafiddle.org"></div>
+                    -->
+
+                <div class="social">
+                    <span class="VKontakte">
+                        <div class="vk_like" align="left">
+                            <script type="text/javascript">
+                                document.write(VK.Share.button({
+                                  url: 'http://trademark.javafiddle.org',
+                                  title: 'Solance',
+                                  description: 'Поиск созвучных слов',
+                                  noparse: true
+                                }));
+                            </script>
+                        </div>
+                    </span>
+                    <span class="twitter">
+                        <a href="https://twitter.com/share" class="twitter-share-button"
+                       data-url="http://trademark.javafiddle.org" data-hashtags="Solance" style="left: 100">Tweet</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                    </span>
+                    <span class="Facebook">
+                        <div class="fb-share-button" data-href="http://trademark.javafiddle.org" style="left: 100; top: -200"></div>
+                        <!--<iframe src="https://www.facebook.com/plugins/like.php?href=http://trademark.javafiddle.org&amp;show_faces=false&amp;layout=button_count" scrolling="no" frameborder="0" style="height: 21px; width: 100px" allowTransparency="true"></iframe>-->
+                    </span>
+                </div>
+
                 </div>
             </div>
         </div>
@@ -74,6 +96,12 @@
 
             var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
+
+
+
+
+
+
             f = function () { n.parentNode.insertBefore(s, n); };
             s.type = "text/javascript";
             s.async = true;
@@ -86,6 +114,18 @@
     </script>
     <div><img src="//mc.yandex.ru/watch/24210610" style="position:absolute; left:-9999px;" alt="" /></div>
     <!-- /Yandex.Metrika counter -->
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-55906621-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
     {% endif %}
     </body>
 </html>

@@ -14,15 +14,6 @@
         <script type="text/javascript" language="JavaScript" src="{% static 'js/query-string.js' %}"></script>
         <script type="text/javascript" language="JavaScript" src="{% static 'js/main.js' %}"></script>
         <!-- Put this script tag to the <head> of your page -->
-        <script type="text/javascript" src="http://vk.com/js/api/share.js?90" charset="windows-1251"></script>
-        <div id="fb-root"></div>
-        <script>(function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v2.0";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
         {% block scripts %}
         {% endblock %}
         <title>Solance - поиск созвучных слов</title>
@@ -45,39 +36,16 @@
                     <a href="mailto:trdmrks@yandex.ru">Контакты</a>
                 </div>
                 <div id="social_networks">
-                    <!-- Put this script tag to the place, where the Share button will be -->
-
-
-
-
-                    <!--<a href="https://twitter.com/share" class="twitter-share-button"
-                       data-url="http://trademark.javafiddle.org" data-hashtags="Solance" style="left: 100">Tweet</a>
-                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                    -->
-
-                <div class="social">
-                    <span class="VKontakte">
-                        <div class="vk_like" align="left">
-                            <script type="text/javascript">
-                                document.write(VK.Share.button({
-                                  url: 'http://trademark.javafiddle.org',
-                                  title: 'Solance',
-                                  description: 'Поиск созвучных слов',
-                                  noparse: true
-                                }));
-                            </script>
-                        </div>
-                    </span>
-                    <span class="twitter">
-                        <a href="https://twitter.com/share" class="twitter-share-button"
-                       data-url="http://trademark.javafiddle.org" data-hashtags="Solance" style="left: 100">Tweet</a>
-                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                    </span>
-                    <span class="Facebook">
-                        <div class="fb-share-button" data-href="http://trademark.javafiddle.org" style="left: 100; top: -200"></div>
-                        <!--<iframe src="https://www.facebook.com/plugins/like.php?href=http://trademark.javafiddle.org&amp;show_faces=false&amp;layout=button_count" scrolling="no" frameborder="0" style="height: 21px; width: 100px" allowTransparency="true"></iframe>-->
-                    </span>
-                </div>
+                    <script type="text/javascript">(function() {
+                      if (window.pluso)if (typeof window.pluso.start == "function") return;
+                      if (window.ifpluso==undefined) { window.ifpluso = 1;
+                        var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+                        s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
+                        s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
+                        var h=d[g]('body')[0];
+                        h.appendChild(s);
+                      }})();</script>
+                    <div class="pluso" data-background="transparent" data-options="medium,square,line,vertical,nocounter,theme=04" data-services="vkontakte,facebook,twitter,google,print" data-url="http://solance.me" data-title="Solance - Поиск созвучных слов"></div>
 
                 </div>
             </div>

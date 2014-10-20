@@ -59,23 +59,23 @@
                     <span class="VKontakte">
                         <div class="vk_like" align="left">
                             <script type="text/javascript">
-                                document.write(VK.Share.button({
-                                  url: 'http://trademark.javafiddle.org',
+                                document.write(VK.Share.button('http://solance.me', {
+                                  url: 'http://solance.me',
                                   title: 'Solance',
                                   description: 'Поиск созвучных слов',
-                                  noparse: true
+                                  text: "Поделиться",
+                                  type: "round"
                                 }));
                             </script>
                         </div>
                     </span>
                     <span class="twitter">
                         <a href="https://twitter.com/share" class="twitter-share-button"
-                       data-url="http://trademark.javafiddle.org" data-hashtags="Solance" style="left: 100">Tweet</a>
+                       data-url="http://solance.me" data-hashtags="Solance" style="left: 100">Tweet</a>
                         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                     </span>
                     <span class="Facebook">
-                        <div class="fb-share-button" data-href="http://trademark.javafiddle.org" style="left: 100; top: -200"></div>
-                        <!--<iframe src="https://www.facebook.com/plugins/like.php?href=http://trademark.javafiddle.org&amp;show_faces=false&amp;layout=button_count" scrolling="no" frameborder="0" style="height: 21px; width: 100px" allowTransparency="true"></iframe>-->
+                        <div class="fb-share-button" data-href="http://solance.me" style="left: 100; top: -200"></div>
                     </span>
                 </div>
 
@@ -98,11 +98,6 @@
 
             var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
-
-
-
-
-
 
             f = function () { n.parentNode.insertBefore(s, n); };
             s.type = "text/javascript";

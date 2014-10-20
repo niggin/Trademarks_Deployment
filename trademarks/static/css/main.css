@@ -280,29 +280,29 @@ html, body {
 }
 
 .onoffswitch-inner.chooselang:before {
-	content: "russian";
+	content: "русский";
 }
 
 .onoffswitch-inner.chooselang:after {
-	content: "english";
+	content: "англ.";
 }
 
 .onoffswitch-inner.transcription:before {
-	content: "show";
+	content: "вкл";
 }
 
 .onoffswitch-inner.transcription:after {
-	content: "hide";
+	content: "выкл";
     text-align: left;
     padding-left: 20px;
 }
 
 .onoffswitch-inner.sort-by:before {
-	content: "languages";
+	content: "языкам";
 }
 
 .onoffswitch-inner.sort-by:after {
-	content: "similarity";
+	content: "словам";
     text-align: left;
     padding-left: 20px;
 }

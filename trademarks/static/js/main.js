@@ -1,3 +1,6 @@
+RUSSIAN_LANG = 'русский';
+ENGLISH_LANG = "англ.";
+
 $(document).ready(function () {
 	loadToggles();
 	/*
@@ -7,10 +10,10 @@ $(document).ready(function () {
     if (word != "undefined") {
         var lang = getUrlAttr("lt");
         $("#findme").val(word);
-        if (lang == "russian" || lang == "undefined") {
-            
+        if (lang == 'russian' || lang == "undefined") {
+
         }
-        else if (lang == "english") {
+        else if (lang == 'english') {
             $("#chooselang").prop("checked", !$("#chooselang").prop("checked"));
         }
         var languages = getUrlAttr("groups");
@@ -25,6 +28,7 @@ $(document).ready(function () {
             trans = false;
             $("#showtranscript").prop("checked", !$("#showtranscript").prop("checked"));
         }
+        //lang = lang.replace("\"","").replace("'","");
         if (typeof (word) != "undefined") {
             fetch(word, lang.substring(0, 2), false, languages, trans);
         }
@@ -273,11 +277,11 @@ function get_currlang() {
     var lang = String();
     if ($("#chooselang").is(":checked"))
         $switcher.each(function () {
-            lang = window.getComputedStyle(this, ':before').content;
+            lang = 'russian'; // window.getComputedStyle(this, ':before').content;
         });
     else
         $switcher.each(function () {
-            lang = window.getComputedStyle(this, ':after').content;
+            lang = 'english'; // window.getComputedStyle(this, ':after').content;
         });
     return lang.replace(/"/g,'');
 }

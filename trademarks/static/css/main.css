@@ -495,22 +495,15 @@ html, body {
 }
 
 #about {
-	/*border: 1px solid red;*/
 	margin: 0 auto;
-	width: 90%;
 	height: 30px;
 	color: #aaa;
-	word-spacing: 30px;
 	text-transform: uppercase;
 	text-shadow: 1px 1px 1px rgba(70, 70, 70, 0.1);
 	font: bold 13px/30px 'sans', 'trebuchet MS', 'Tahoma';
 }
 
-#about #links {
-	float: left;
-}
-
-#about #social_networks {
+#social_networks {
 	position: fixed;
 	top: 70px;
 	right: 0;
@@ -520,11 +513,12 @@ html, body {
 #about a {
 	text-decoration: none;
 	color: #aaa;
+	margin: 0 20px;
+	
 }
 
 #about a:hover {
-	text-decoration: underline;
-	color: #333;
+	color: #d9534f;
 	transition: all 0.4s linear;
 	-moz-transition: all 0.4s linear;
 	-webkit-transition: all 0.4s linear;

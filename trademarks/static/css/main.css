@@ -215,6 +215,10 @@ html, body {
     -ms-user-select: none;
 }
 
+.onoffswitch#lang-switcher {
+	width: 92px;
+}
+
 .onoffswitch#transcript-switcher {
 	width: 55px;
 }
@@ -281,30 +285,33 @@ html, body {
 
 .onoffswitch-inner.chooselang:before {
 	content: "русский";
+	padding-left: 16px;
 }
 
 .onoffswitch-inner.chooselang:after {
-	content: "англ.";
+	content: "английский";
 }
 
 .onoffswitch-inner.transcription:before {
 	content: "вкл";
+	padding-left: 12px;
 }
 
 .onoffswitch-inner.transcription:after {
 	content: "выкл";
     text-align: left;
-    padding-left: 20px;
+    padding-left: 18px;
 }
 
 .onoffswitch-inner.sort-by:before {
 	content: "языкам";
+	padding-left: 13px;
 }
 
 .onoffswitch-inner.sort-by:after {
 	content: "словам";
     text-align: left;
-    padding-left: 20px;
+    padding-left: 22px;
 }
 
 .onoffswitch-switch {
@@ -323,6 +330,10 @@ html, body {
 	-moz-box-shadow: 0 0 3px rgba(0,0,0,.57);
 	-webkit-box-shadow: 0 0 3px rgba(0,0,0,.57);
 	box-shadow: 0 0 3px rgba(0,0,0,.57);
+}
+
+.onoffswitch-switch.chooselang {
+	right: 77px;
 }
 
 .onoffswitch-switch.transcription {

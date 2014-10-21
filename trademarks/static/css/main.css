@@ -568,7 +568,7 @@ html, body {
 }
     
 .progressbar > div {
-	background-color: chartreuse;
+	background-color: #6bc873;
 	width: 75.2%; /* Adjust with JavaScript */
 	height: 90%;
 	border-radius: 3px;

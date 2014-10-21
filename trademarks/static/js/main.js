@@ -172,7 +172,7 @@ function fetch(kind, lang_out, async, languages, trans) {
                 $("#loader").css("display", "");
             },
             success: function(data) {
-                var colors = ["#ff0000", "#ffd700", "#00ff00"];
+                var colors = ["#d9534f", "#FFCC66", "#6bc873"];
                 for (var lang in data['array']) {
 
                     var $baselang = $("<div/>", { class: "lang" });

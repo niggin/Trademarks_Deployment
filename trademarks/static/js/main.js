@@ -245,7 +245,7 @@ function fetch_more(lang_out) {
         async: false,
         success: function (data) {
             var trans = getUrlAttr("tr") == "0";
-            var colors = ["#ff0000", "#ffd700", "#00ff00"];
+            var colors = ["#d9534f", "#FFCC66", "#6bc873"];
             for (var lang in data['array']) {
                 var $baselang = $("#" + lang).parent();
                 for (var i = 0; i < data['array'][lang].length; i++) {

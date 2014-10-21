@@ -22,7 +22,7 @@ html, body {
 	width: 740px;
 	height: 72px;
 	margin: -50px 0 0 80px;
-	z-index: 500;
+	z-index: 100;
 }
 
 #logo {
@@ -34,7 +34,6 @@ html, body {
 	height: 103px;
 	background: url('../images/logo.jpg') no-repeat 0% 0%;
 	margin: -45px 0 0 80px;
-	z-index: 500;
 }
 
 
@@ -215,6 +214,10 @@ html, body {
     -ms-user-select: none;
 }
 
+.onoffswitch#lang-switcher {
+	width: 92px;
+}
+
 .onoffswitch#transcript-switcher {
 	width: 55px;
 }
@@ -281,30 +284,33 @@ html, body {
 
 .onoffswitch-inner.chooselang:before {
 	content: "русский";
+	padding-left: 16px;
 }
 
 .onoffswitch-inner.chooselang:after {
-	content: "англ.";
+	content: "английский";
 }
 
 .onoffswitch-inner.transcription:before {
 	content: "вкл";
+	padding-left: 12px;
 }
 
 .onoffswitch-inner.transcription:after {
 	content: "выкл";
     text-align: left;
-    padding-left: 20px;
+    padding-left: 18px;
 }
 
 .onoffswitch-inner.sort-by:before {
 	content: "языкам";
+	padding-left: 13px;
 }
 
 .onoffswitch-inner.sort-by:after {
-	content: "словам";
+	content: "схожести";
     text-align: left;
-    padding-left: 20px;
+    padding-left: 18px;
 }
 
 .onoffswitch-switch {
@@ -323,6 +329,10 @@ html, body {
 	-moz-box-shadow: 0 0 3px rgba(0,0,0,.57);
 	-webkit-box-shadow: 0 0 3px rgba(0,0,0,.57);
 	box-shadow: 0 0 3px rgba(0,0,0,.57);
+}
+
+.onoffswitch-switch.chooselang {
+	right: 77px;
 }
 
 .onoffswitch-switch.transcription {
@@ -495,22 +505,15 @@ html, body {
 }
 
 #about {
-	/*border: 1px solid red;*/
 	margin: 0 auto;
-	width: 90%;
 	height: 30px;
 	color: #aaa;
-	word-spacing: 30px;
 	text-transform: uppercase;
 	text-shadow: 1px 1px 1px rgba(70, 70, 70, 0.1);
 	font: bold 13px/30px 'sans', 'trebuchet MS', 'Tahoma';
 }
 
-#about #links {
-	float: left;
-}
-
-#about #social_networks {
+#social_networks {
 	position: fixed;
 	top: 70px;
 	right: 0;
@@ -520,11 +523,12 @@ html, body {
 #about a {
 	text-decoration: none;
 	color: #aaa;
+	margin: 0 20px;
+	
 }
 
 #about a:hover {
-	text-decoration: underline;
-	color: #333;
+	color: #d9534f;
 	transition: all 0.4s linear;
 	-moz-transition: all 0.4s linear;
 	-webkit-transition: all 0.4s linear;

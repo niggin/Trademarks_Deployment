@@ -8,7 +8,10 @@
         <meta name="Keywords" content="Поиск, созвучных, слов, искать, созвучные, слова, созвучия, рифмы, звучание, похожие"/>
         <meta name="Description" content="Сервис для поиска созвучных слов"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" /> 	
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta property="og:image" content="http://solance.me/static/images/logo.jpg" />
+        <meta property="og:title" content="Solance - поиск созвучных слов" />
+        <meta property="og:description" content="Сервис для поиска созвучных слов" /> 	
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
         <script type="text/javascript" language="JavaScript" src="{% static 'js/jquery.js' %}"></script>
         <script type="text/javascript" language="JavaScript" src="{% static 'js/query-string.js' %}"></script>
@@ -28,24 +31,25 @@
                 
             </div>
         </div>
+        <div id="social_networks">
+            <script type="text/javascript">(function() {
+              if (window.pluso)if (typeof window.pluso.start == "function") return;
+              if (window.ifpluso==undefined) { window.ifpluso = 1;
+                var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+                s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
+                s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
+                var h=d[g]('body')[0];
+                h.appendChild(s);
+              }})();</script>
+            <div class="pluso" data-background="transparent" data-options="medium,square,line,vertical,nocounter,theme=04" data-services="vkontakte,facebook,twitter,google,print" data-url="http://solance.me" data-title="Solance"></div>
+        </div>
         <div id="footer">
             <div id="about">
                 <!--<a href="https://fivt.in.ru/confluence/pages/viewpage.action?pageId=7012409"></a>-->
                 <div id="links">
                     <a href="http://solance-blog.tumblr.com">Блог</a>
+                    <a href="http://vk.com/solance_me">Группа ВК</a>
                     <a href="mailto:trdmrks@yandex.ru">Контакты</a>
-                </div>
-                <div id="social_networks">
-                    <script type="text/javascript">(function() {
-                      if (window.pluso)if (typeof window.pluso.start == "function") return;
-                      if (window.ifpluso==undefined) { window.ifpluso = 1;
-                        var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
-                        s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
-                        s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
-                        var h=d[g]('body')[0];
-                        h.appendChild(s);
-                      }})();</script>
-                    <div class="pluso" data-background="transparent" data-options="medium,square,line,vertical,nocounter,theme=04" data-services="vkontakte,facebook,twitter,google,print" data-url="http://solance.me" data-title="Solance - Поиск созвучных слов"></div>
                 </div>
             </div>
         </div>

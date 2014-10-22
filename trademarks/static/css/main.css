@@ -87,6 +87,14 @@ html, body {
 }
 
 /**
+ * Modal window with feedback
+ */
+
+#textarea .input-group-addon {
+	border-left: 1px solid #ccc !important;
+}
+
+/**
  * Result header buttons
  */
 

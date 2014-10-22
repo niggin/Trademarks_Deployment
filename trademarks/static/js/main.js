@@ -134,15 +134,15 @@ function loadListeners() {
         $("#search_button").click();
     });
 
-    var searchTop = $("#header-background").offset().top;
-    $(window).scroll(function(){ 
-        var scrollTop = $(window).scrollTop();
-        if(scrollTop > searchTop) {
-            $("#header-background").css("position", "fixed");
-        } else {
-            $("#header-background").css("position", "relative"); 
-        }
-    });
+    // var searchTop = $("#header-background").offset().top;
+    // $(window).scroll(function(){ 
+    //     var scrollTop = $(window).scrollTop();
+    //     if(scrollTop > searchTop) {
+    //         $("#header-background").css("position", "fixed");
+    //     } else {
+    //         $("#header-background").css("position", "relative"); 
+    //     }
+    // });
 
 }
 

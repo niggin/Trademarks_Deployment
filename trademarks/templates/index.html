@@ -4,13 +4,17 @@
 {% endblock %}
 {% block content %}
 <div id="header-background">
-    <div id="search-form">
-        <div id="search">
-            <div id="lang"></div>
-                <input type="text" name="findme2" id="findme" placeholder="Введите слово" value="{{ forsearch }}" autofocus/>
-                <button type="submit" id="search_button">Искать</button>
-        </div>
-        <ul id="search-menu">
+        <form id="main-searcher" >
+            <div class="input-group">
+                <input type="text" class="form-control" name="findme2"  placeholder="Введите слово" value="{{ forsearch }}" autofocus >
+                <input id="resultmode" type="hidden" name="mode" value=""/>
+                <span class="input-group-btn">
+                    <button type="button" id="search_button" class="btn btn-danger">Показать</button>
+                </span>
+            </div>
+        </form>
+
+        <div id="search-menu">
             <li>
                 <div class="switcher-text">Язык перевода: </div>
                 <div class="onoffswitch" id="lang-switcher">
@@ -43,8 +47,7 @@
                     </label>
                 </div>
             </li>
-        </ul>
-    </div> 
+        </div>
 </div>
 {% block results %}
 

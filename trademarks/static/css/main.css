@@ -1,148 +1,46 @@
-* {
-	padding: 0; 
-	margin: 0; 
-}
-
 html, body {
-	background-color: #fff;
-	height: 100%; 
-	width: 100%;
-}
-
-#wrapper {
-	min-height: 100%;
-    margin-bottom: -50px;
+	padding: 0 !important;
 }
 
 #header-background {
-	position: relative;
-	float: left;
-	margin: 0 auto;
 	background-color: #fff;
-	width: 740px;
-	height: 72px;
-	margin: -50px 0 0 80px;
-	z-index: 100;
+	z-index: 1000;
+	padding: 10px 0;
 }
 
-#logo {
+.container .header {
+	min-height: 70px !important;
+	margin-bottom: 20px !important;
+}
+
+.header ul {
 	position: relative;
-	float: left;
-	z-index: 100;
-	color: #d9534f;
-	width: 304px;
-	height: 103px;
-	background: url('../images/logo.jpg') no-repeat 0% 0%;
-	margin: -45px 0 0 80px;
+	margin-top: 17px;
 }
 
-
-#content {
-	width: 900px;
-    min-height: 100%;
-    height: 100%;
-    padding: 50px 0;
-    padding-bottom: 50px;
-	top: 85px;
-	bottom: 150px;
-	margin: 0 auto;
-	text-align: center;
-	-webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+.header ul a {
+	color: #555;
 }
 
-#search-form {
-	width: 740px;
-	height: 62px;
-	
-	margin: 10px 0 0 0;
-}
-
-#search {
-	height: 30px;
-	width: 700px;
-	margin: 0 auto;
-	
-}
-
-#search input {
-	border-left: 1px solid #d1d1d1;
-	border-top: 1px solid #d1d1d1;
-	border-bottom: 1px solid #d1d1d1;
-	margin-left: -20px;
-	float: left;
-	width: 647px;
-	padding-left: 10px;
-	height: 28px;
-	color: #333;
-	font: normal 15px/30px 'sans', 'trebuchet MS', 'Tahoma';
-	-webkit-box-shadow: 0px 0px 5px rgba(50, 50, 50, 0.25);
-    -moz-box-shadow: 0px 0px 5px rgba(50, 50, 50, 0.25);
-    box-shadow: 0px 0px 5px rgba(50, 50, 50, 0.25); 
-}
-
-#search input:hover {
-	border-left: 1px solid #bbb;
-	border-top: 1px solid #bbb;
-	border-bottom: 1px solid #bbb;
-}
-
-#search button {
+.logo {
 	position: relative;
-	margin-right: -20px;
-	float: right;
-	border: 0;
-	height: 30px;
-	width: 80px;
-	text-align: center;
-	overflow: visible;
-	padding: 0;
-	cursor: pointer;
-	font: bold 12px/30px 'sans', 'trebuchet MS', 'Tahoma';
-	color: white;
-	text-transform: uppercase;
-	background-color: #d9534f;
-	border: 1px solid #d43f3a;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-	-webkit-box-shadow: 0px 1px 3px rgba(50, 50, 50, 0.25);
-    -moz-box-shadow: 0px 1px 3px rgba(50, 50, 50, 0.25);
-    box-shadow: 0px 1px 3px rgba(50, 50, 50, 0.25); 
-    -webkit-appearance: button;
-    -webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-#search button:hover {
-	background-color: #d2322d;
-	border-color: #ac2925;
-}
-
-#search button:focus, #search button:active {
-	border: 1px solid #d43f3a !important;
-	-webkit-box-shadow: inset 0px 5px 3px rgba(50, 50, 50, 0.25);
-    -moz-box-shadow: inset 0px 2px 5px rgba(50, 50, 50, 0.25);
-    box-shadow: inset 0px 2px 5px rgba(50, 50, 50, 0.25); 
+	margin-top: 5px;
 }
 
 #search-menu {
-	width: 727px;
-	height: 20px;
+	height: 30px;
+	position: relative;
+	width: 98%;
 	margin: 0 auto;
 	padding: 5px 5px ;
 	list-style: none;
 	text-align: left;
-	background-color: #eee;
-	border: 1px solid #d1d1d1;
-	-webkit-box-shadow: 0px 3px 3px 0px rgba(50, 50, 50, 0.1);
-	-moz-box-shadow:    0px 3px 3px 0px rgba(50, 50, 50, 0.1);
-	box-shadow:         0px 3px 3px 0px rgba(50, 50, 50, 0.1);
 }
 
 #search-menu li {
+	position: relative;
 	margin-right: 10px;
+	height: 20px;
 	color: #555;
 	font: normal 12px/20px 'sans', 'trebuchet MS', 'Tahoma';
 	display: inline-block;
@@ -161,9 +59,8 @@ html, body {
 }
 
 #results {
-	width: 730px;
+	width: 100%;
 	margin: 0 auto;
-	margin-top: 90px !important;
     overflow: inherit;
     font: normal 12px/20px 'sans', 'trebuchet MS', 'Tahoma';
     letter-spacing: 1px;
@@ -214,6 +111,10 @@ html, body {
     -ms-user-select: none;
 }
 
+.onoffswitch input {
+	height: 19px;
+}
+
 .onoffswitch#lang-switcher {
 	width: 92px;
 }
@@ -238,6 +139,7 @@ html, body {
 }
 
 .onoffswitch-label {
+	height: 19px;
     display: block; 
     overflow: hidden; 
     cursor: pointer;
@@ -253,12 +155,13 @@ html, body {
     transition: margin 0.3s ease-in 0s;
 }
 .onoffswitch-inner:before, .onoffswitch-inner:after {
-    float: left; 
+    float: left;
     width: 50%; 
     height: 17px; 
     padding: 0; 
     line-height: 17px;
-    font-size: 13px; 
+    font-size: 13px;
+    font-weight: normal; 
     color: white; 
     font-family: Trebuchet, Arial, sans-serif; 
     -moz-box-sizing: border-box; 
@@ -494,45 +397,11 @@ html, body {
 	-o-transition: all 0.2s linear;
 }
 
-#footer {
-	border-top: 1px solid #ddd;
-    position: relative;
-	width: 740px;
-	margin: 0 auto;
-	height: 49px;
-	text-align: center;
-	z-index: 100;
-}
-
-#about {
-	margin: 0 auto;
-	height: 30px;
-	color: #aaa;
-	text-transform: uppercase;
-	text-shadow: 1px 1px 1px rgba(70, 70, 70, 0.1);
-	font: bold 13px/30px 'sans', 'trebuchet MS', 'Tahoma';
-}
-
 #social_networks {
 	position: fixed;
 	top: 70px;
 	right: 0;
 	z-index: 1000;
-}
-
-#about a {
-	text-decoration: none;
-	color: #aaa;
-	margin: 0 20px;
-	
-}
-
-#about a:hover {
-	color: #d9534f;
-	transition: all 0.4s linear;
-	-moz-transition: all 0.4s linear;
-	-webkit-transition: all 0.4s linear;
-	-o-transition: all 0.4s linear;
 }
 
 /**
@@ -572,19 +441,4 @@ html, body {
 	width: 75.2%; /* Adjust with JavaScript */
 	height: 90%;
 	border-radius: 3px;
-}
-
-.Facebook div {
-    top: -14px;
-    left: -60px;
-}
-
-.VKontakte {
-    float: left;
-}
-
-/* Set an optional width for your button wrappers */
-.social span {
-	display: inline-block;
-	width: 110px;
 }

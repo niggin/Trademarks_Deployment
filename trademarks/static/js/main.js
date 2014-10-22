@@ -108,10 +108,10 @@ function loadListeners() {
     $("#showtranscript").click(function () {
         $(".transcript").toggleClass("hidden");
         $(".translate").toggleClass("wide-translate");
-        if (getUrlAttr("tr") == "undefined") {
+        if (typeof getUrlAttr("tr") == "undefined") {
             setUrlAttr("tr", 0);
         } else {
-            setUrlAttr("tr", 1 - getUrlAttr("tr"));
+            setUrlAttr("tr", 1 - parseInt(getUrlAttr("tr")));
         }
     });
 

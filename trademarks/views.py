@@ -162,7 +162,7 @@ def func(score):
     return 100 * (1 - score)
 
 def send_report(request):
-    print >>sys.stderr, request.POST, 1
-    send_mail('From ' + request.POST['name'], request.POST['message'], request.POST['email'],
-    ['trdmrks@yandex.ru'], fail_silently=False)
+    print >>sys.stderr, request.POST
+    send_mail('From ' + request.POST['name'] + ', email - ' + request.POST['email'], request.POST['message'],
+              'trdmrks@yandex.ru', ['trdmrks@yandex.ru'], fail_silently=False)
     return HttpResponse()

@@ -167,8 +167,8 @@ CACHES = {
     }
 }
 
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_HOST_USER = 'trdmrks@yandex.ru'
-EMAIL_HOST_PASSWORD = 'tr@deMarks'
-EMAIL_PORT = 465
 EMAIL_USE_TLS = True
+EMAIL_HOST='smtp.yandex.ru'
+EMAIL_PORT=587
+EMAIL_HOST_USER='trdmrks@yandex.ru'
+EMAIL_HOST_PASSWORD='tr@deMarks'

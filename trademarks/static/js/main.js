@@ -43,7 +43,7 @@ function loadToggles() {
         if(!$(this).parent(".lang").hasClass("focused")) {
             var $focusedobject = $(this);
             var $opaco = $("<div/>", {
-                id: "opaco",
+                id: "opaco"
             });
             $("body").append($opaco);
             $($opaco).height($(document).height())
@@ -65,22 +65,21 @@ function loadToggles() {
 
 }
 
-function loadListeners() {
-    $("#search_button").click(function () {
-        var lang = get_currlang();
-        var groups = getUrlAttr("groups");
-        setUrlAttr("lt", lang);
-        var trans = true;
-        if (getUrlAttr("tr") == 0) trans = false;
-        fetch($("#findme").val(), lang.substring(0, 2), true, groups, trans);
-        setUrlAttr("w", $("#findme").val());
-    });
+function perform_fetch(event) {
+    event.preventDefault();
+    var lang = get_currlang();
+    var groups = getUrlAttr("groups");
+    setUrlAttr("lt", lang);
+    var trans = true;
+    if (getUrlAttr("tr") == 0) trans = false;
+    fetch($("#findme").val(), lang.substring(0, 2), true, groups, trans);
+    setUrlAttr("w", $("#findme").val());
+}
 
-    $("#findme").keyup(function (event) {
-        if (event.keyCode == 13) {
-            $("#search_button").click();
-        }
-    });
+function loadListeners() {
+    $("#search_button").click(perform_fetch);
+
+    $("#main-searcher").submit(perform_fetch);
 
     $("#showtranscript").click(function () {
         $(".transcript").toggleClass("hidden");

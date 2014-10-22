@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block scripts %}
     {% load staticfiles %}
+        <script>
+            URL_SEND_REPORT = "{% url 'send_report' %}";
+        </script>
 {% endblock %}
 {% block content %}
 <div id="header-background">

@@ -68,23 +68,24 @@
         <div class="modal fade" id="feedback">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form role="form" action="" method="post" >
+                    <form role="form" action="" method="post" id="report">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span></button>
                             <h4 class="modal-title">Оставьте свой отзыв о сервисе</h4>
                         </div>
                         <div class="modal-body">
+
+                            <div class="well well-sm">
+                                <span class="glyphicon glyphicon-ok"></span><strong> Обязательные поля</strong>
+                            </div>
                             <div class="col-md-12">
-                                <div class="alert alert-success">
+                                <div class="alert alert-success" style="display: none" id="form_ok">
                                     <strong><span class="glyphicon glyphicon-send"></span> Success! Message sent. (If form ok!)</strong>
-                                </div>   
-                                <div class="alert alert-danger">
+                                </div>
+                                <div class="alert alert-danger" style="display: none" id="form_fail">
                                     <span class="glyphicon glyphicon-alert"></span>
                                     <strong> Error! Please check the inputs. (If form error!)</strong>
                                 </div>
-                            </div>
-                            <div class="well well-sm">
-                                <span class="glyphicon glyphicon-ok"></span><strong> Обязательные поля</strong>
                             </div>
                             <div class="form-group">
                                 <label for="InputName">Ваше имя</label>
@@ -127,6 +128,7 @@
                             <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
                             <input type="submit" name="submit" id="submit" value="Отправить" class="btn btn-primary">
                         </div>
+                        {% csrf_token %}
                     </form>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->

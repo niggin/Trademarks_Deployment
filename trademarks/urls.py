@@ -10,4 +10,5 @@ urlpatterns = patterns('',
     url(r'^search$', views.search, name='search'),
     #url(r'^search_sortbymatch$', views.search_sortbymatch, name='search_sortbymatch'),
     url(r'^load_more$', views.load_more, name='load_more'),
+    url(r'^send_report$', views.load_more, name='send_report'),
 )

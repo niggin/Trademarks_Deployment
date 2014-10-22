@@ -76,8 +76,32 @@ function perform_fetch(event) {
     setUrlAttr("w", $("#findme").val());
 }
 
+function send_report(event)
+{
+    event.preventDefault();
+    if ($("#InputReal").val() == "7")
+    {
+        $.ajax({
+            url: URL_SEND_REPORT,
+            type: "POST",
+            data: {email: $("#InputEmail").val(), name: $("#InputName").val(),
+                message: $("#InputMessage").val(), csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken").val()},
+            success: function (){
+                $("#form_ok").show(500);
+                $("#form_fail").hide(500);
+            }
+        });
+    }
+    else
+    {
+        $("#form_fail").show(500);
+    }
+}
+
 function loadListeners() {
     $("#search_button").click(perform_fetch);
+    $("#report").submit(send_report);
+
 
     $("#main-searcher").submit(perform_fetch);
 

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
+from django.core.mail import send_mail
 
 from django.http import HttpResponse, HttpRequest
 from django.utils import simplejson
@@ -159,3 +160,9 @@ def load_more(request):
 def func(score):
 
     return 100 * (1 - score)
+
+def send_report(request):
+    print >>sys.stderr, request.POST, 1
+    send_mail('From ' + request.POST['name'], request.POST['message'], request.POST['email'],
+    ['trdmrks@yandex.ru'], fail_silently=False)
+    return HttpResponse()

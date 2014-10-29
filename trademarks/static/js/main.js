@@ -10,23 +10,26 @@ $(document).ready(function () {
     if (word != "undefined") {
         var lang = getUrlAttr("lt");
         $("#findme").val(word);
+        var $choose_language = $("#chooselang");
+        var $sort_by = $("#sort-by-button");
+        var $transcription = $("#showtranscript");
         if (lang == 'russian' || lang == "undefined") {
 
         }
         else if (lang == 'english') {
-            $("#chooselang").prop("checked", !$("#chooselang").prop("checked"));
+            $choose_language.prop("checked", !$choose_language.prop("checked"));
         }
         var languages = getUrlAttr("groups");
         if (languages) {
             if (languages == ["ru", "en"] || languages == "undefined") {
             } else if (languages == ["all"]) {
-                $("#sort-by-button").prop("checked", !$("#sort-by-button").prop("checked"));
+                $sort_by.prop("checked", !$sort_by.prop("checked"));
             }
         }
         var trans = true;
         if (getUrlAttr("tr") == "0") {
             trans = false;
-            $("#showtranscript").prop("checked", !$("#showtranscript").prop("checked"));
+            $transcription.prop("checked", !$transcription.prop("checked"));
         }
         //lang = lang.replace("\"","").replace("'","");
         if (typeof (word) != "undefined") {
@@ -72,8 +75,9 @@ function perform_fetch(event) {
     setUrlAttr("lt", lang);
     var trans = true;
     if (getUrlAttr("tr") == 0) trans = false;
-    fetch($("#findme").val(), lang.substring(0, 2), true, groups, trans);
-    setUrlAttr("w", $("#findme").val());
+    var search_string = $("#findme").val();
+    fetch(search_string, lang.substring(0, 2), true, groups, trans);
+    setUrlAttr("w", search_string);
 }
 
 function send_report(event)
@@ -85,7 +89,7 @@ function send_report(event)
             url: URL_SEND_REPORT,
             type: "POST",
             data: {email: $("#InputEmail").val(), name: $("#InputName").val(),
-                message: $("#InputMessage").val(), csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken").val()},
+                message: $("#InputMessage").val(), csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()},
             success: function (){
                 $("#form_ok").show(500);
                 $("#form_fail").hide(500);
@@ -118,7 +122,7 @@ function loadListeners() {
     $("#sort-by-button").click(function () {
         //sort();
         var languages;
-        var $switcher = $(".onoffswitch-inner.sort-by");
+        //var $switcher = $(".onoffswitch-inner.sort-by");
         if ($(this).is(":checked")) {
             languages = ["ru", "en"];
         } else {
@@ -126,16 +130,17 @@ function loadListeners() {
         }
         setUrlAttr("groups", languages);
         var lang = get_currlang();
-        var sort;
-        if ($("#sort-by-button").is(":checked"))
+        var sort = $("#sort-by-button").is(":checked");
+        /*if ($("#sort-by-button").is(":checked"))
             sort = false;
         else
-            sort = true;
+            sort = true;*/
         setUrlAttr("lt", lang);
         var trans = true;
+        var search_string = $("#findme").val();
         if (getUrlAttr("tr") == 0) trans = false;
-        fetch($("#findme").val(), lang.substring(0, 2), true, languages, trans);
-        setUrlAttr("w", $("#findme").val());
+        fetch(search_string, lang.substring(0, 2), true, languages, trans);
+        setUrlAttr("w", search_string);
     });
 
     $(".lang_link").click(function () {
@@ -183,6 +188,8 @@ function fetch(kind, lang_out, async, languages, trans) {
     if (typeof (languages) == "string") languages = [languages];
     cleanup();
     var available_langs = { "en": "Английский", "ru": "Русский", "all": "Все языки" };
+    var $output = $("#output");
+    var $loader = $("#loader");
     if (kind != "") {
         var request = $.ajax({
             url: "/search",
@@ -191,8 +198,8 @@ function fetch(kind, lang_out, async, languages, trans) {
             data: { findme: kind, translate: lang_out, langs: languages },
             dataType: "json",
             beforeSend: function() {
-                $("#output").css("display", "none");
-                $("#loader").css("display", "");
+                $output.css("display", "none");
+                $loader.css("display", "");
             },
             success: function(data) {
                 var colors = ["#d9534f", "#FFCC66", "#6bc873"];
@@ -215,22 +222,22 @@ function fetch(kind, lang_out, async, languages, trans) {
                         $baselang.append($word);
                     }
                     $baselang.append($("<div/>", { class: "loadmore", id: "more_" + lang }).html("загрузить больше результатов"));
-                    $("#output").append($baselang);
+                    $output.append($baselang);
                     if (data['hide_morebutton'][lang]) {
                         $("#more_" + lang).css("display", "none");
                     }
                 }
                 if ($.isEmptyObject(data['array'])) {
                     cleanup();
-                    $("#output").html("<div style='font-size: 14px'>Извините, по Вашему запросу ничего не найдено.</div>");
+                    $output.html("<div style='font-size: 14px'>Извините, по Вашему запросу ничего не найдено.</div>");
                 } else {
                     getReady();
                 }
                 if (!trans) {
                     $(".transcript").toggleClass("hidden");
                 }
-                $("#loader").css("display", "none");
-                $("#output").css("display", "block");
+                $loader.css("display", "none");
+                $output.css("display", "block");
             }
         });
     }
@@ -283,9 +290,10 @@ function fetch_more(lang_out) {
                     $input.appendTo($word);
                     $baselang.append($word);
                 }
-                $("#more_" + lang).appendTo($baselang);
+                var $lang = $("#more_" + lang);
+                $lang.appendTo($baselang);
                 if (data['hide_morebutton'][lang]) {
-                    $("#more_" + lang).css("display", "none");
+                    $lang.css("display", "none");
                 }
             }
             if (trans) {
@@ -317,6 +325,6 @@ function getUrlAttr(key) {
     } else {
         answer = q[key];
     }
-    console.log(typeof (q[key]) + " " + q[key] + " " + key);
+    //console.log(typeof (q[key]) + " " + q[key] + " " + key);
     return answer;
 }

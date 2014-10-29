@@ -222,3 +222,4 @@ obj
 .bash_history
 .viminfo
 trademarks.pyproj
+local_settings.py

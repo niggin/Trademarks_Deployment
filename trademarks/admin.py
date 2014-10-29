@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from trademarks.models import Word, History
+from trademarks.models import Word, History, Session
+
 
 class WordAdmin(admin.ModelAdmin):
     fieldssets = [
@@ -11,14 +12,23 @@ class WordAdmin(admin.ModelAdmin):
     list_display = ('word', 'ipa', 'meaning')
     search_field = ['word']
 
+
 class HistoryAdmin(admin.ModelAdmin):
     fieldssets = [
         (None, {'fields': ['word', 'requests']}),
-        #('Transcription', {'fields': ['ipa']}),
-        #('Definition', {'fields': ['meaning']}),
     ]
     list_display = ('word', 'requests')
     search_field = ['word']
 
+
+class SessionAdmin(admin.ModelAdmin):
+    fieldssets = [
+        (None, {'fields': ['word', 'user_id']}),
+    ]
+    list_display = ('word', 'user_id')
+    search_field = ['word', 'user_id']
+
+
 admin.site.register(Word, WordAdmin)
 admin.site.register(History, HistoryAdmin)
+admin.site.register(Session, SessionAdmin)

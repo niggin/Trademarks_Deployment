@@ -207,7 +207,7 @@ function fetch(kind, lang_out, async, languages, trans) {
                 for (var lang in data['array']) {
                     var $baselang = $("#lang_template").clone();
                     $baselang.attr("id", "");
-                    $baselang.children(".cell.word").html(available_langs[lang]);
+                    $baselang.find(".cell.word").html(available_langs[lang]);
                     $baselang.children(".lang_link").attr("id", lang);
                     var $tbody = $baselang.find("tbody");
 

@@ -3,13 +3,18 @@
     {% load staticfiles %}
         <script>
             URL_SEND_REPORT = "{% url 'send_report' %}";
+            URL_SEARCH = "{% url 'search' %}";
+            URL_LOAD_MORE = "{% url 'load_more' %}";
+            URL_SEND_USER_REACTION = "{% url 'send_user_reaction' %}";
+            CSRF_TOKEN = $("{% csrf_token %}");
         </script>
 {% endblock %}
 {% block content %}
 <div id="header-background">
         <form id="main-searcher" >
             <div class="input-group">
-                <input type="text" class="form-control" name="findme2" id="findme" placeholder="Введите слово" value="{{ forsearch }}" autofocus >
+                <input type="text" class="form-control" name="findme2" id="findme" placeholder="Введите слово"
+                       value="{{ forsearch }}" autofocus >
                 <input id="resultmode" type="hidden" name="mode" value=""/>
                 <span class="input-group-btn">
                     <button type="button" id="search_button" class="btn btn-danger">Показать</button>
@@ -56,34 +61,48 @@
 
 <div id="results">
     <div class="row marketing">
-        <!--<div class="col-lg-6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-          <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-          <h4>Subheading</h4>
-          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-        </div>
-
-        <div class="col-lg-6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-          <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-          <h4>Subheading</h4>
-          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-        </div>-->
         <div id="loader" style="display: none"></div>
-        <div id="output"></div>
+        <div id="output" style="display: block">
+
+        </div>
         <div id="tohide" style="display:none"></div>
 
     </div>
 
+    <div style="display: none"> <!-- templates -->
+        <div class="lang" id="lang_template" style="display: none">
+            <div class="wordline lang-header">
+                <div class="cell word"></div> <!-- Language title-->
+            </div>
+            <div class="lang_link"></div> <!-- id must be 'ru' or 'en' for lang picture -->
+            <table class="table table-hover table-condensed">
+                <tbody> <!-- insert words in this tbody -->
+                    <tr id="word_template" style="display: none">
+                        <td class="word"></td> <!-- word -->
+                        <td class="transcript"></td> <!-- transcription -->
+                        <td class="translate"></td> <!-- translation -->
+                        <td class="dislike">
+                            <span title="не созвучно" class="glyphicon glyphicon-minus" aria-hidden="true"
+                                  onclick="send_user_reaction.call(this, false)"></span>
+                        </td>
+                        <td class="percent">
+                            <div class="progressbar">
+                                <div class="inner_progressbar" style="width: 100%; background-color: rgb(255, 204, 102);"></div>
+                            </div>
+                        </td>
+                        <td class="like">
+                            <span title="созвучно" class="glyphicon glyphicon-plus" aria-hidden="true"
+                                    onclick="send_user_reaction.call(this, true)"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
+        </div>
+
+        <div class="loadmore" id="more" style="display: none">загрузить больше результатов</div>
+
+    </div>
 
 </div>
 {% endblock %}

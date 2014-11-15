@@ -174,3 +174,20 @@ def send_report(request):
     send_mail('From ' + request.POST['name'] + ', email - ' + request.POST['email'], request.POST['message'],
               'trdmrks@yandex.ru', ['trdmrks@yandex.ru'], fail_silently=False)
     return HttpResponse()
+
+def send_user_reaction(request):
+    input_word = request.POST['input_word']
+    to_word = request.POST['to_word']
+    reaction = UserReaction.objects.filter(input_word=input_word, to_word__word=to_word)
+    if not reaction:
+        to_word = Word.objects.get(word=to_word)
+        reaction = UserReaction(input_word=input_word, to_word=to_word)
+    else:
+        reaction = reaction[0]
+
+    if request.POST['like'] == u'true':
+        reaction.like += 1
+    else:
+        reaction.dislike += 1
+    reaction.save()
+    return HttpResponse(json.dumps({}), content_type='application/json')

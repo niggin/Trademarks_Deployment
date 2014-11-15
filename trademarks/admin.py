@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from trademarks.models import Word, History, Session
+from trademarks.models import Word, History, Session, UserReaction
 
 
 class WordAdmin(admin.ModelAdmin):
@@ -28,7 +28,15 @@ class SessionAdmin(admin.ModelAdmin):
     list_display = ('word', 'user_id')
     search_field = ['word', 'user_id']
 
+class UserReactionAdmin(admin.ModelAdmin):
+    fieldssets = [
+        (None, {'fields': ['input_word', 'to_word', 'like', 'dislike']}),
+    ]
+    list_display = ('input_word', 'to_word', 'like', 'dislike')
+    search_field = ['input_word', 'to_word']
+
 
 admin.site.register(Word, WordAdmin)
 admin.site.register(History, HistoryAdmin)
 admin.site.register(Session, SessionAdmin)
+admin.site.register(UserReaction, UserReactionAdmin)

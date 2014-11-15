@@ -1,4 +1,4 @@
-html, body {
+wohtml, body {
 	padding: 0 !important;
 }
 
@@ -266,7 +266,7 @@ html, body {
 	width: 25px;
 	height: 25px;
 	margin-top: -35px;
-	margin-left: -45px;
+	margin-left: -25px;
 	background-color: #f1f1f1 !important;
 	border-top: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
@@ -278,11 +278,9 @@ html, body {
 
 #results .lang {
 	position: relative;
-	margin-left: 26px;
-	width: 682px;
-	padding: 34px 15px 27px 15px;
-	display: table;
+	width: 100%;
 	z-index: 10;
+	padding: 0 5px 50px 5px;
 }
 
 #results .hidewords {
@@ -323,25 +321,62 @@ html, body {
 	z-index: 100;
 }
 
-#results .wordline {
-	display: table-row;
-	width: 100%;
+
+#results table tr td {
+	border: 0;
+}
+
+#results .wide-translate {
+	width: 60% !important;
+	min-width: 60% !important;
+	max-width: 60% !important;
+}
+
+#results .translate {
+	width: 40%;
+	min-width: 40%;
+	max-width: 40%;
+}
+
+#results .word, #results .transcript {
+	width: 20% ;
+	min-width: 20%;
+	max-width: 20%;
+}
+
+#results .percent {
+	width: 10%;
+	min-width: 10%;
+	max-width: 10%;
+}
+
+#results .like, #results .dislike {
+	width: 5%;
+	min-width: 5%;
+	max-width: 5%;
+	color: #ddd;
+	cursor: pointer;
+}
+
+#results .like:hover, #results .dislike:hover {
+	color: #333;
+	transition: all 0.2s linear;
+	-moz-transition: all 0.2s linear;
+	-webkit-transition: all 0.2s linear;
+	-o-transition: all 0.2s linear;
 }
 
 #results .wordline.lang-header {
 	position: absolute;
-	margin-left: -25px;
 	border-top: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
 	background-color: #f1f1f1;
 	height: 25px;
 	margin-top: -35px;
-	padding-left: 10px;
-	width: 708px;
+	width: 100%;
 }
 
 #results .lang-header .word {
-	position: absolute;
 	font-weight: bold;
 	color: #555;
 	width: auto;
@@ -357,33 +392,6 @@ html, body {
 	text-decoration: underline;
 	cursor: pointer;
 	width: auto;
-}
-
-#results .cell {
-	display: table-cell;
-	width: 170px;
-	/*border: 1px solid red;*/
-}
-
-#results .word, #results .transcript {
-	width: 170px;
-	text-align: left;
-}
-
-#results .translate {
-	width: 293px;
-	text-align: left;
-}
-
-#results .wide-translate {
-	width: 463px !important;
-}
-
-#results .percent {
-	float: right;
-	position: relative;
-	text-align: right;
-	width: 80px;
 }
 
 #results .loadmore {
@@ -433,8 +441,7 @@ html, body {
 }
 
 .progressbar {
-	position: absolute;
-	margin: 4px 0 0 12px;
+	margin-top: 2px;
   	background-color: #efefef;
 	border-radius: 0px; /* (height of inner div) / 2 + padding */
 	padding: 3px;

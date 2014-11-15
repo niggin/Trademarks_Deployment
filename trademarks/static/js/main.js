@@ -160,7 +160,7 @@ function loadListeners() {
         var lang = get_currlang();
         setUrlAttr("lt", lang);
         $("#search_button").click();
-    });
+    });    
 
     // var searchTop = $("#header-background").offset().top;
     // $(window).scroll(function(){ 
@@ -208,20 +208,26 @@ function fetch(kind, lang_out, async, languages, trans) {
                     var $baselang = $("<div/>", { class: "lang" });
                     $baselang.append("<div class='wordline lang-header'><div class='cell word'>" + available_langs[lang] + "</div>");
                     var $lang = $("<div/>", { class: "lang_link", id: lang }).appendTo($baselang);
+                    $table = $("<table/>", {class: "table table-hover table-condensed"}).appendTo($baselang);
+                    $tbody = $("<tbody/>");
 
                     for (var i = 0; i < data['array'][lang].length; i++) {
-                        var $word = $("<div/>", { class: "wordline" });
-                        var $input = $("<div/>", { class: "cell word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
-                        $input = $("<div/>", { class: "cell transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
-                        $input = $("<div/>", { class: "cell translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
+                        var $word = $("<tr/>");
+                        var $input = $("<td/>", { class: "dislike" }).html("<span title='bad word' class='glyphicon glyphicon-minus' aria-hidden='true'></span>").appendTo($word);
+                        $input = $("<td/>", { class: "word" }).html(data['array'][lang][i][0]['word']).appendTo($word);
+                        $input = $("<td/>", { class: "transcript" }).html("[" + data['array'][lang][i][0]['transcription'] + "]").appendTo($word);
+                        $input = $("<td/>", { class: "translate" }).html(data['array'][lang][i][0]['meaning']).appendTo($word);
                         var percent = data['array'][lang][i][1].toFixed(1);
-                        $input = $("<div/>", { class: "cell percent" });
+                        $input = $("<td/>", { class: "percent" }).appendTo($word);
                         var $progress = $("<div/>", { class: "progressbar" }).appendTo($input);
                         var $ch = $("<div/>", { width: percent + "%" }).css("background-color", colors[parseInt(percent / 34)]).appendTo($progress);
-                        $input.appendTo($word);
-                        $baselang.append($word);
+                        $input = $("<td/>", { class: "like" }).html("<span title='good word' class='glyphicon glyphicon-plus' aria-hidden='true'></span>").appendTo($word);
+                        $tbody.append($word);
                     }
-                    $baselang.append($("<div/>", { class: "loadmore", id: "more_" + lang }).html("загрузить больше результатов"));
+
+                    $tbody.append($("<div/>", { class: "loadmore", id: "more_" + lang }).html("загрузить больше результатов"));
+                    $table.append($tbody);
+                    $baselang.append($table);
                     $output.append($baselang);
                     if (data['hide_morebutton'][lang]) {
                         $("#more_" + lang).css("display", "none");

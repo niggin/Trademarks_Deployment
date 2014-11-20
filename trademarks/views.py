@@ -83,7 +83,7 @@ def search(request):
             else:
                 final.pop(lang)
     if session_id:
-        res = cache.set(session_id, final, cache_time)
+        res = cache.set(session_id + user_input, final, cache_time)
         cache.set(session_id + "findme", user_input + lang_skip + ''.join(shown_langs), cache_time)
         cache.set(session_id + "position", position, cache_time)
         #Session
@@ -106,7 +106,7 @@ def load_more(request):
     session_id = request.session.session_key
     #print (id,file=sys.stderr)
     fromcache = cache.get(session_id + "findme")
-    final = cache.get(session_id)
+    final = cache.get(session_id + request.GET['findme'])
     #cache.set(id, final)
     if final:
         langs = final.keys()
@@ -173,3 +173,4 @@ def send_user_reaction(request):
         reaction.dislike += 1
     reaction.save()
     return HttpResponse(json.dumps({}), content_type='application/json')
+

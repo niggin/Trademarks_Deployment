@@ -270,7 +270,7 @@ function getReady() {
     });
 
     $(".loadmore").click(function () {
-        fetch_more($(this).attr('id').substring(5));
+        fetch_more($(this).attr('id').substring(5), $("#resultmode").val());
     });
 
     $(".lang-header .word").click(function () {
@@ -278,11 +278,11 @@ function getReady() {
     });
 }
 
-function fetch_more(lang_out) {
+function fetch_more(lang_out, word) {
     var request = $.ajax({
         url: URL_LOAD_MORE,
         type: "GET",
-        data: { lang: lang_out },
+        data: { lang: lang_out, findme: word },
         dataType: "json",
         async: false,
         success: function (data) {

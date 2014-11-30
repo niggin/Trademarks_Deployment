@@ -397,7 +397,7 @@ wohtml, body {
 #results .loadmore {
 	position: absolute;
 	text-align: center;
-	width: 	697px;
+	width: 	100%;
 	padding: 2px 0;
 	color: #bbb;
 	cursor: pointer;

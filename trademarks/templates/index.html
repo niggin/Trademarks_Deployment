@@ -75,28 +75,30 @@
                 <div class="cell word"></div> <!-- Language title-->
             </div>
             <div class="lang_link"></div> <!-- id must be 'ru' or 'en' for lang picture -->
-            <table class="table table-hover table-condensed">
-                <tbody> <!-- insert words in this tbody -->
-                    <tr id="word_template" style="display: none">
-                        <td class="word"></td> <!-- word -->
-                        <td class="transcript"></td> <!-- transcription -->
-                        <td class="translate"></td> <!-- translation -->
-                        <td class="dislike">
-                            <span title="не созвучно" class="glyphicon glyphicon-minus" aria-hidden="true"
-                                  onclick="send_user_reaction.call(this, false)"></span>
-                        </td>
-                        <td class="percent">
-                            <div class="progressbar">
-                                <div class="inner_progressbar" style="width: 100%; background-color: rgb(255, 204, 102);"></div>
-                            </div>
-                        </td>
-                        <td class="like">
-                            <span title="созвучно" class="glyphicon glyphicon-plus" aria-hidden="true"
-                                    onclick="send_user_reaction.call(this, true)"></span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-hover table-condensed">
+                    <tbody> <!-- insert words in this tbody -->
+                        <tr id="word_template" style="display: none">
+                            <td class="word"></td> <!-- word -->
+                            <td class="transcript"></td> <!-- transcription -->
+                            <td class="translate"></td> <!-- translation -->
+                            <td class="dislike">
+                                <span title="не созвучно" class="glyphicon glyphicon-minus" aria-hidden="true"
+                                      onclick="send_user_reaction.call(this, false)"></span>
+                            </td>
+                            <td class="percent">
+                                <div class="progressbar">
+                                    <div class="inner_progressbar" style="width: 100%; background-color: rgb(255, 204, 102);"></div>
+                                </div>
+                            </td>
+                            <td class="like">
+                                <span title="созвучно" class="glyphicon glyphicon-plus" aria-hidden="true"
+                                        onclick="send_user_reaction.call(this, true)"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 

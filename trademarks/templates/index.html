@@ -23,7 +23,7 @@
         </form>
 
         <div id="search-menu">
-            <li>
+            <div class="li">
                 <div class="switcher-text">Язык перевода: </div>
                 <div class="onoffswitch" id="lang-switcher">
                     <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chooselang" checked>
@@ -32,9 +32,9 @@
                         <div class="onoffswitch-switch chooselang"></div>
                     </label>
                 </div>
-            </li>
-            <li class="separator"></li>
-            <li>
+            </div>
+            <div class="separator"></div>
+            <div class="li">
                 <div class="switcher-text" id="transcription-text">Транскрипция: </div>
                 <div class="onoffswitch" id="transcript-switcher">
                     <input type="checkbox" name="onoffswitch2" class="onoffswitch-checkbox" id="showtranscript" checked>
@@ -43,9 +43,9 @@
                         <div class="onoffswitch-switch transcription"></div>
                     </label>
                 </div>
-            </li>
-            <li class="separator" ></li>
-            <li>
+            </div>
+            <div class="separator" ></div>
+            <div class="li">
                 <div class="switcher-text" id="sort-by">Сортировать по: </div>
                 <div class="onoffswitch" id="sort-by-switcher">
                     <input type="checkbox" name="onoffswitch2" class="onoffswitch-checkbox" id="sort-by-button" checked>
@@ -54,7 +54,8 @@
                         <div class="onoffswitch-switch sort-by"></div>
                     </label>
                 </div>
-            </li>
+            </div>
+            <br class="clear"/>
         </div>
 </div>
 {% block results %}

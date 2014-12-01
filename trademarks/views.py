@@ -50,64 +50,46 @@ def search(request):
         p_fullipa = p_fullipa[0].fullipa
     else:
         p_fullipa = analyzer(user_input, p)
-    
-    langs = list()
+
     position = dict()
-    fromcache = cache.get(session_id + "findme")
-    session_request = user_input + lang_skip + ''.join(shown_langs)
-    if 1:#if not fromcache or input + lang_skip + ''.join(shown_langs) != fromcache:
-        #print ("not from cache",file=sys.stderr)
-        final = dict()
-        if p != '':
-            #raw = list(Word.objects.raw('SELECT * FROM trademarks_word WHERE ("' 
-            #                             + p + '" LIKE CONCAT("%%",ipa,"%%") OR ipa LIKE "%%' 
-            #                             + p + '%%") AND lang IN (' + ", ".join('"%s"'% arg for arg in shown_langs) + ')'))
-            if shown_langs[0] == "all":
-                raw = list(Word.objects.filter(ipa__contains=p))
+    final = dict()
+    if p != '':
+        if shown_langs[0] == "all":
+            raw = list(Word.objects.filter(ipa__contains=p))
+        else:
+            raw = list(Word.objects.filter(ipa__contains=p, lang__in=shown_langs))
+        for item in shown_langs:
+            final[item] = list()
+        for item in raw:
+            if lang_skip == "en":
+                item.meaning = item.meaning_eng
+            if item.lang == lang_skip and shown_langs[0] != "all":
+                item.meaning = ''#item.word
+            elif item.lang == lang_skip:
+                item.meaning = item.word
+            if item.fullipa:
+                item_fullipa = item.fullipa
             else:
-                raw = list(Word.objects.filter(ipa__contains=p, lang__in=shown_langs))
-            #print ("fetched",file=sys.stderr)
-            for item in shown_langs:
-                final[item] = list()
-            for item in raw:
-                if lang_skip == "en":
-                    item.meaning = item.meaning_eng
-                if item.lang == lang_skip and shown_langs[0] != "all":
-                    item.meaning = ''#item.word
-                elif item.lang == lang_skip:
-                    item.meaning = item.word
-                if item.fullipa:
-                    item_fullipa = item.fullipa
-                else:
-                    item_fullipa = analyzer(item.word,item.ipa)
-                score = metricOfTranscriptions(p_fullipa, item_fullipa)
-                if shown_langs[0] == "all":
-                    final["all"].append([item.serialize(), func(score)])
-                else:
-                    final[item.lang].append([item.serialize(), func(score)])#math.exp(-score*gamma) * 100])
-            #print ("metric executed",file=sys.stderr)
-            for lang in shown_langs:
-                if len(final[lang]) > 0:
-                    final[lang] = sorted(final[lang], key=lambda l: l[1], reverse=True)[:1000]
-                    position[lang] = min(10, len(final[lang]))
-                else:
-                    final.pop(lang)
-            #print ("sorted",file=sys.stderr)
-        res = cache.set(session_id, final, cache_time)
+                item_fullipa = analyzer(item.word,item.ipa)
+            score = metricOfTranscriptions(p_fullipa, item_fullipa)
+            if shown_langs[0] == "all":
+                final["all"].append([item.serialize(), func(score)])
+            else:
+                final[item.lang].append([item.serialize(), func(score)])
+        for lang in shown_langs:
+            if len(final[lang]) > 0:
+                final[lang] = sorted(final[lang], key=lambda l: l[1], reverse=True)[:1000]
+                position[lang] = min(10, len(final[lang]))
+            else:
+                final.pop(lang)
+    if session_id:
+        res = cache.set(session_id + user_input, final, cache_time)
         cache.set(session_id + "findme", user_input + lang_skip + ''.join(shown_langs), cache_time)
         cache.set(session_id + "position", position, cache_time)
-    """else:
-        print >>sys.stderr, "from cache"
-        final = cache.get(fromcache)
-        for lang in final:
-            position[lang] = min(10,len(final[lang]))
-        cache.set(id + "position", position)
-        #position = cache.get(str(request.user.id) + "position")"""
+        #Session
+        user_request = Session(word=history, user_id=session_id)
+        user_request.save()
     output = dict()
-
-    #Session
-    user_request = Session(word=history, user_id=session_id)
-    user_request.save()
 
  
     for item in final:
@@ -124,7 +106,7 @@ def load_more(request):
     session_id = request.session.session_key
     #print (id,file=sys.stderr)
     fromcache = cache.get(session_id + "findme")
-    final = cache.get(session_id)
+    final = cache.get(session_id + request.GET['findme'])
     #cache.set(id, final)
     if final:
         langs = final.keys()
@@ -191,3 +173,4 @@ def send_user_reaction(request):
         reaction.dislike += 1
     reaction.save()
     return HttpResponse(json.dumps({}), content_type='application/json')
+

@@ -4,8 +4,8 @@ wohtml, body {
 
 #header-background {
 	background-color: #fff;
-	z-index: 1000;
 	padding: 10px 0;
+	position: relative;
 }
 
 .container .header {
@@ -28,25 +28,24 @@ wohtml, body {
 }
 
 #search-menu {
-	height: 30px;
 	position: relative;
 	width: 98%;
 	margin: 0 auto;
-	padding: 5px 5px ;
-	list-style: none;
+	padding: 5px 5px;
 	text-align: left;
 }
 
-#search-menu li {
+#search-menu .li {
+	height: 30px;
+	float: left;
 	position: relative;
 	margin-right: 10px;
-	height: 20px;
 	color: #555;
 	font: normal 12px/20px 'sans', 'trebuchet MS', 'Tahoma';
 	display: inline-block;
 }
 
-#search-menu li.separator {
+#search-menu .li.separator {
 	position: absolute;
 	display: inline-block;
 	width: 1px;
@@ -54,13 +53,19 @@ wohtml, body {
 	border-right: 1px solid #d1d1d1;
 }
 
+.clear {
+	clear: both; 
+}
+
 #search-menu #transcription-text, #search-menu #sort-by {
 	margin-left: 12px;
 }
 
 #results {
+	position: relative;
 	width: 100%;
 	margin: 0 auto;
+	margin-top: -50px !important;
     overflow: inherit;
     font: normal 12px/20px 'sans', 'trebuchet MS', 'Tahoma';
     letter-spacing: 1px;
@@ -262,10 +267,8 @@ wohtml, body {
 
 
 #results .lang_link {
-	position: absolute;
 	width: 25px;
 	height: 25px;
-	margin-top: -35px;
 	margin-left: -25px;
 	background-color: #f1f1f1 !important;
 	border-top: 1px solid #ddd;
@@ -280,7 +283,7 @@ wohtml, body {
 	position: relative;
 	width: 100%;
 	z-index: 10;
-	padding: 0 5px 50px 5px;
+	padding: 0 5px 20px 5px;
 }
 
 #results .hidewords {
@@ -372,7 +375,6 @@ wohtml, body {
 	border-bottom: 1px solid #ddd;
 	background-color: #f1f1f1;
 	height: 25px;
-	margin-top: -35px;
 	width: 100%;
 }
 
@@ -397,7 +399,7 @@ wohtml, body {
 #results .loadmore {
 	position: absolute;
 	text-align: center;
-	width: 	697px;
+	width: 	100%;
 	padding: 2px 0;
 	color: #bbb;
 	cursor: pointer;

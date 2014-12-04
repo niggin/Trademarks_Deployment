@@ -15,25 +15,25 @@ class WordAdmin(admin.ModelAdmin):
 
 class HistoryAdmin(admin.ModelAdmin):
     fieldssets = [
-        (None, {'fields': ['word', 'requests']}),
+        (None, {'fields': ['word', 'requests', 'date']}),
     ]
-    list_display = ('word', 'requests')
+    list_display = ('word', 'requests', 'date')
     search_field = ['word']
 
 
 class SessionAdmin(admin.ModelAdmin):
     fieldssets = [
-        (None, {'fields': ['word', 'user_id']}),
+        (None, {'fields': ['word', 'user_id', 'date']}),
     ]
-    list_display = ('word', 'user_id')
+    list_display = ('word', 'user_id', 'date')
     search_field = ['word', 'user_id']
 
 class UserReactionAdmin(admin.ModelAdmin):
     fieldssets = [
-        (None, {'fields': ['input_word', 'to_word', 'like', 'dislike']}),
+        (None, {'fields': ['user_word', 'to_word', 'like', 'dislike', 'date']}),
     ]
-    list_display = ('input_word', 'to_word', 'like', 'dislike')
-    search_field = ['input_word', 'to_word']
+    list_display = ('user_word', 'to_word', 'like', 'dislike', 'date')
+    search_field = ['user_word', 'to_word']
 
 
 admin.site.register(Word, WordAdmin)

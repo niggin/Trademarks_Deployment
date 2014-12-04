@@ -31,6 +31,7 @@ class Word(models.Model):
 class History(models.Model):
     word = models.CharField(max_length=50, unique=True)
     requests = models.IntegerField(default=0)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.word
@@ -42,6 +43,7 @@ class History(models.Model):
 class Session(models.Model):
     word = models.ForeignKey(History)
     user_id = models.CharField(max_length=40)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.word
@@ -51,11 +53,11 @@ class Session(models.Model):
 
 
 class UserReaction(models.Model):
-    input_word = models.CharField(max_length=50)
+    user_word = models.ForeignKey(History)
     to_word = models.ForeignKey(Word)
     like = models.IntegerField(default=0)
     dislike = models.IntegerField(default=0)
-
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.input_word

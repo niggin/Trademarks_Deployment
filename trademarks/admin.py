@@ -15,9 +15,9 @@ class WordAdmin(admin.ModelAdmin):
 
 class HistoryAdmin(admin.ModelAdmin):
     fieldssets = [
-        (None, {'fields': ['word', 'requests', 'date']}),
+        (None, {'fields': ['word', 'requests']}),
     ]
-    list_display = ('word', 'requests', 'date')
+    list_display = ('word', 'requests')
     search_field = ['word']
 
 
@@ -30,9 +30,9 @@ class SessionAdmin(admin.ModelAdmin):
 
 class UserReactionAdmin(admin.ModelAdmin):
     fieldssets = [
-        (None, {'fields': ['user_word', 'to_word', 'like', 'dislike', 'date']}),
+        (None, {'fields': ['user_word', 'to_word', 'like', 'dislike']}),
     ]
-    list_display = ('user_word', 'to_word', 'like', 'dislike', 'date')
+    list_display = ('user_word', 'to_word', 'like', 'dislike')
     search_field = ['user_word', 'to_word']
 
 
